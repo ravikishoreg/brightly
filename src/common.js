@@ -438,8 +438,9 @@ class CommonQuizManager {
 
     let answerInputHTML = '';
     if (isSingleChoice) {
-      // Single choice (radio)
-      const optionsHTML = question.options
+      // Single choice (radio) - shuffle options if not answered
+      const optionsToShow = isAnswered ? question.options : shuffleArray(question.options);
+      const optionsHTML = optionsToShow
         .map((option, index) => {
           const isSelected = isAnswered && quizResult.userAnswer === option;
           const isDisabled = isAnswered ? 'disabled' : '';
@@ -457,9 +458,10 @@ class CommonQuizManager {
         </div>
       `;
     } else if (isMultipleChoice) {
-      // Multiple choice (checkbox)
+      // Multiple choice (checkbox) - shuffle options if not answered
       const userAnswers = isAnswered && Array.isArray(quizResult.userAnswer) ? quizResult.userAnswer : [];
-      const optionsHTML = question.options
+      const optionsToShow = isAnswered ? question.options : shuffleArray(question.options);
+      const optionsHTML = optionsToShow
         .map((option, index) => {
           const isChecked = userAnswers.includes(option);
           const isDisabled = isAnswered ? 'disabled' : '';
@@ -485,17 +487,35 @@ class CommonQuizManager {
       `;
     }
 
-    this.questionContainer.innerHTML = `
-      <div class="question">
-        <h3><span class="question-label">Q.</span> ${question.question}</h3>
-        <div class="answer-input">
-          <div class="answer-label">A.</div>
-          ${answerInputHTML}
-          <button id="submit-answer" class="primary-btn" ${isAnswered ? 'disabled' : ''}>Submit Answer</button>
+    if (isSingleChoice || isMultipleChoice) {
+      // MCQ: Render label and options in a flex row, submit button below and aligned with options
+      this.questionContainer.innerHTML = `
+        <div class="question">
+          <h3><span class="question-label">Q.</span> ${question.question}</h3>
+          <div class="answer-input">
+            <div class="mcq-row">
+              <div class="answer-label">A.</div>
+              ${answerInputHTML}
+            </div>
+            <button id="submit-answer" class="primary-btn mcq-submit" ${isAnswered ? 'disabled' : ''}>Submit Answer</button>
+          </div>
+          <div id="answer-feedback"></div>
         </div>
-        <div id="answer-feedback"></div>
-      </div>
-    `;
+      `;
+    } else {
+      // Number input: keep label above input and button
+      this.questionContainer.innerHTML = `
+        <div class="question">
+          <h3><span class="question-label">Q.</span> ${question.question}</h3>
+          <div class="answer-input">
+            <div class="answer-label">A.</div>
+            ${answerInputHTML}
+            <button id="submit-answer" class="primary-btn" ${isAnswered ? 'disabled' : ''}>Submit Answer</button>
+          </div>
+          <div id="answer-feedback"></div>
+        </div>
+      `;
+    }
 
     // Bind answer submission only if not answered
     if (!isAnswered) {
@@ -915,6 +935,16 @@ class CommonQuizManager {
 document.addEventListener('DOMContentLoaded', () => {
   GitHubAuth.loadUser();
 });
+
+// Utility function to shuffle an array
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
 
 // Export for use in other modules
 window.GitHubAuth = GitHubAuth;

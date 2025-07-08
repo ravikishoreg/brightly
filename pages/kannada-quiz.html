@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Math Multiplication - Brightly</title>
+    <title>Kannada Quiz - Brightly</title>
   </head>
   <body>
     <div id="app">
       <div class="quiz-header">
-        <h2 class="quiz-title">Math Multiplication Practice</h2>
+        <h2 class="quiz-title">Kannada Quiz</h2>
         <div class="quiz-info">
           <span id="question-counter" class="question-counter">Question 1 of 10</span>
           <span id="timer-display" class="timer"></span>
@@ -22,11 +22,10 @@
           <div class="config-item">
             <label for="difficulty">Difficulty:</label>
             <select id="difficulty">
-              <option value="single">Single Digit (1-9)</option>
-              <option value="double">Double Digit (10-99)</option>
-              <option value="triple">Triple Digit (100-999)</option>
-              <option value="quad">Quad Digit (1000-9999)</option>
-              <option value="mixed">Mixed (1-9999)</option>
+              <option value="relationships">Relationships</option>
+              <option value="numbers">Numbers</option>
+              <option value="basic-words">Basic Words</option>
+              <option value="mixed" selected>Mixed</option>
             </select>
           </div>
           <div id="common-config"></div>
@@ -57,7 +56,6 @@
       </div>
     </div>
 
-    <script type="module" src="/src/common.js"></script>
-    <script type="module" src="/src/math-multiplication.js"></script>
+    <script type="module" src="/src/kannada-quiz.js"></script>
   </body>
-</html>
+</html> 

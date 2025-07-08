@@ -9,11 +9,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        'math-addition': 'pages/math-addition.html',
-        'math-subtraction': 'pages/math-subtraction.html',
-        'math-multiplication': 'pages/math-multiplication.html',
-        'math-division': 'pages/math-division.html',
+        'math-basics': 'pages/math-basics.html',
         'example-grammar-quiz': 'pages/example-grammar-quiz.html',
+        'habits-quiz': 'pages/habits-quiz.html',
+        'kannada-quiz': 'pages/kannada-quiz.html',
+        'hindi-quiz': 'pages/hindi-quiz.html',
         'auth-callback': 'auth-callback.html',
       },
     },

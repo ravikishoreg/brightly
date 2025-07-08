@@ -1,3 +1,5 @@
 - Tricky complex ones as well.
 - Habits - less questions only available then also no duplicates, but less questions only.
-- Github integration for submit to github.
+- Github integration for submit to github. - For now hiding - in quiz results page, hide submit to github and submit debug for the time being.
+- Social: Countries and capitals category, basic category like continents, oceans, planets, anything else?
+- 

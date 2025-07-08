@@ -7,7 +7,7 @@ console.log('Grammar Quiz page loaded');
 // Grammar Question Generator
 class GrammarQuestionGenerator {
   constructor() {
-    this.difficulty = 'basic';
+    // Don't set defaults here - will read from HTML dropdowns
   }
 
   generateQuestions(count) {
@@ -1843,13 +1843,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Create question generator
   const questionGenerator = new GrammarQuestionGenerator();
 
+  // Read initial values from HTML dropdowns
+  const difficultySelect = document.getElementById('difficulty');
+  
+  if (difficultySelect) {
+    questionGenerator.difficulty = difficultySelect.value;
+  }
+
   // Create quiz manager
   const quizManager = new CommonQuizManager();
   quizManager.setQuestionGenerator(questionGenerator);
   quizManager.setQuizTitle('English Grammar Quiz');
 
   // Bind difficulty change (if it exists)
-  const difficultySelect = document.getElementById('difficulty');
   if (difficultySelect) {
     difficultySelect.addEventListener('change', (e) => {
       questionGenerator.updateDifficulty(e.target.value);

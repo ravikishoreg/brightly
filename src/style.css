@@ -181,6 +181,22 @@ button:focus-visible {
   color: #28a745;
 }
 
+.habits-card {
+  border-left: 4px solid #ffc107;
+}
+
+.habits-card h3 {
+  color: #ffc107;
+}
+
+.language-card {
+  border-left: 4px solid #17a2b8;
+}
+
+.language-card h3 {
+  color: #17a2b8;
+}
+
 .page-item h3 {
   margin-top: 0;
   color: #646cff;
@@ -416,6 +432,7 @@ button:focus-visible {
   align-items: center;
   gap: 1rem;
   margin-top: 1rem;
+  flex-direction: row !important;
 }
 
 /* Results section */
@@ -690,10 +707,6 @@ button:focus-visible {
     flex-direction: column !important;
   }
 
-  .quiz-controls {
-    flex-direction: column;
-  }
-
   .results-actions {
     flex-direction: column;
   }
@@ -715,4 +728,33 @@ button:focus-visible {
 #submit-to-github,
 #submit-debug {
   display: none !important;
+}
+
+.mcq-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+.mcq-row .answer-label {
+  margin-top: 0.5rem;
+  min-width: 2.5rem;
+}
+.mcq-row .options {
+  margin-top: 0;
+}
+@media (max-width: 768px) {
+  .mcq-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.mcq-submit {
+  margin-left: 4rem;
+}
+@media (max-width: 768px) {
+  .mcq-submit {
+    margin-left: 0;
+  }
 }
