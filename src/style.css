@@ -1285,3 +1285,17 @@ button:focus-visible {
     min-width: auto;
   }
 }
+
+/* Page-specific: Grammar Quiz config row layout */
+.grammar-config-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.grammar-config-row .config-item {
+  flex: 1 1 0;
+  min-width: 200px;
+  max-width: 350px;
+}

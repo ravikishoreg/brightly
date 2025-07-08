@@ -244,7 +244,7 @@ class GrammarQuestionGenerator {
       { question: "Choose the interrogative sentence:", options: ['I am tired.', 'Please sit down.', 'Where are you going?', 'What a day!',], correctAnswer: 'Where are you going?', explanation: 'Interrogative sentences ask questions', },
       { question: "Which is an imperative sentence?", options: ['The door is open.', 'Close the door.', 'Is the door open?', 'What a door!',], correctAnswer: 'Close the door.', explanation: 'Imperative sentences give commands', },
       { question: "Choose the exclamatory sentence:", options: ['I am happy.', 'Are you happy?', 'Be happy.', 'How happy I am!',], correctAnswer: 'How happy I am!', explanation: 'Exclamatory sentences express strong emotion', },
-      { question: "Which sentence has correct word order?", options: ['Yesterday I went to the store.', 'I yesterday went to the store.', 'I went yesterday to the store.', 'I went to the store yesterday.',], correctAnswer: 'I went to the store yesterday.', explanation: 'Time expressions usually go at the end', },
+      { question: "Which sentence has correct word order?", options: ['Yesterday I went to the store.', 'I went yesterday to the store.', 'I went to the store yesterday.', 'I went to the store yesterday.',], correctAnswer: 'I went to the store yesterday.', explanation: 'Time expressions usually go at the end', },
 
       // Vocabulary and Word Choice
       { question: "Choose the correct word: 'The weather is _____ today.'", options: ['good', 'well', 'better', 'best'], correctAnswer: 'good', explanation: 'Good is an adjective describing weather', },
@@ -395,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Populate common configuration
   const commonConfigContainer = document.getElementById('common-config');
   if (commonConfigContainer) {
+    commonConfigContainer.classList.add('grammar-config-row');
     commonConfigContainer.innerHTML = generateCommonConfigHTML();
   }
 
