@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="../vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Math Basics Quiz - Brightly</title>
-    <script type="module" crossorigin src="../assets/math-basics-DSedRsIs.js"></script>
+    <title>General Knowledge Quiz - Brightly</title>
+    <script type="module" crossorigin src="../assets/general-knowledge-BxxNwOm4.js"></script>
     <link rel="modulepreload" crossorigin href="../assets/style-DMDr5Rx3.js">
     <link rel="modulepreload" crossorigin href="../assets/header-D8eS3KwV.js">
     <link rel="modulepreload" crossorigin href="../assets/quiz-storage-DIh2LGXt.js">
@@ -15,7 +15,7 @@
   <body>
     <div id="app">
       <div class="quiz-header">
-        <h2 class="quiz-title">Math Basics Quiz</h2>
+        <h2 class="quiz-title">General Knowledge Quiz</h2>
         <div class="quiz-info">
           <span id="question-counter" class="question-counter">Question 1 of 10</span>
           <span id="timer-display" class="timer"></span>
@@ -26,25 +26,15 @@
         <h2>Quiz Configuration</h2>
         <div class="config-grid">
           <div class="config-item">
-            <label for="operation">Operation:</label>
-            <select id="operation">
-              <option value="addition">Addition</option>
-              <option value="subtraction">Subtraction</option>
-              <option value="multiplication">Multiplication</option>
-              <option value="division">Division</option>
-              <option value="mixed" selected>Mixed Operations</option>
+            <label for="topic">Topic:</label>
+            <select id="topic">
+              <option value="countries">Countries & Capitals</option>
+              <option value="basic-gk">Basic GK</option>
+              <option value="india">India</option>
+              <option value="mixed" selected>Mixed</option>
             </select>
           </div>
-          <div class="config-item">
-            <label for="difficulty">Difficulty:</label>
-            <select id="difficulty">
-              <option value="single" selected>Single Digit (1-9)</option>
-              <option value="double">Double Digit (10-99)</option>
-              <option value="triple">Triple Digit (100-999)</option>
-              <option value="quad">Quad Digit (1000-9999)</option>
-              <option value="mixed">Mixed (1-9999)</option>
-            </select>
-          </div>
+
           <div id="common-config"></div>
         </div>
         <button id="generate-quiz" class="primary-btn">Generate Quiz</button>

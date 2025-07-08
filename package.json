@@ -9,6 +9,9 @@
     "preview": "vite preview",
     "prepare": "husky install"
   },
+  "dependencies": {
+    "lz-string": "^1.4.4"
+  },
   "devDependencies": {
     "husky": "^9.1.7",
     "prettier": "^3.6.2",

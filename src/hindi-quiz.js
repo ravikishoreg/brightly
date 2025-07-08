@@ -1,6 +1,6 @@
 import './style.css';
 import { insertHeader } from './header.js';
-import { generateCommonConfigHTML } from './common.js';
+import { generateCommonConfigHTML, generateQuestionKey, getAvailableQuestions } from './common.js';
 
 // Hindi Quiz functionality
 console.log('Hindi Quiz page loaded');
@@ -11,18 +11,19 @@ class HindiQuestionGenerator {
     // Don't set defaults here - will read from HTML dropdowns
   }
 
-  generateQuestions(count) {
+  generateQuestions(count, usedQuestions = new Set()) {
     const questions = [];
 
     for (let i = 0; i < count; i++) {
-      const question = this.generateQuestion();
+      const question = this.generateQuestion(usedQuestions);
       questions.push(question);
+      usedQuestions.add(generateQuestionKey(question));
     }
 
     return questions;
   }
 
-  generateQuestion() {
+  generateQuestion(usedQuestions = new Set()) {
     const relationshipsQuestions = [
       { question: "What do you call mother in Hindi?", options: ["माँ", "पिता", "बहन", "भाई"], correctAnswer: "माँ" },
       { question: "What do you call father in Hindi?", options: ["माँ", "पिता", "बहन", "भाई"], correctAnswer: "पिता" },
@@ -240,7 +241,16 @@ class HindiQuestionGenerator {
         questionPool = allCategoriesDefault;
     }
 
-    return questionPool[Math.floor(Math.random() * questionPool.length)];
+    // Get available questions (filter out already used ones in this quiz)
+    const availableQuestions = getAvailableQuestions(questionPool, usedQuestions);
+    
+    // If no available questions, use all questions
+    if (availableQuestions.length === 0) {
+      return questionPool[Math.floor(Math.random() * questionPool.length)];
+    }
+    
+    // Return a random available question
+    return availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
   }
 
   updateCategory(category) {

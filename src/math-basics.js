@@ -1,6 +1,6 @@
 import './style.css';
 import { insertHeader } from './header.js';
-import { generateCommonConfigHTML } from './common.js';
+import { generateCommonConfigHTML, generateQuestionKey, getAvailableQuestions } from './common.js';
 
 // Math Basics Quiz functionality
 console.log('Math Basics page loaded');
@@ -9,20 +9,22 @@ console.log('Math Basics page loaded');
 class MathBasicsQuestionGenerator {
   constructor() {
     // Don't set defaults here - will read from HTML dropdowns
+    this.generatedProblems = new Set(); // Track generated problems to avoid duplicates
   }
 
-  generateQuestions(count) {
+  generateQuestions(count, usedQuestions = new Set()) {
     const questions = [];
 
     for (let i = 0; i < count; i++) {
-      const question = this.generateQuestion();
+      const question = this.generateQuestion(usedQuestions);
       questions.push(question);
+      usedQuestions.add(generateQuestionKey(question));
     }
 
     return questions;
   }
 
-  generateQuestion() {
+  generateQuestion(usedQuestions = new Set()) {
     let operation = this.operation;
     
     // If operation is mixed, randomly select one of the four operations
@@ -31,44 +33,57 @@ class MathBasicsQuestionGenerator {
       operation = operations[Math.floor(Math.random() * operations.length)];
     }
     
-    return this.generateOperationQuestion(operation);
+    return this.generateOperationQuestion(operation, usedQuestions);
   }
 
-  generateOperationQuestion(operation) {
-    const { num1, num2 } = this.generateNumbers();
+  generateOperationQuestion(operation, usedQuestions = new Set()) {
+    let question, correctAnswer;
+    let attempts = 0;
+    const maxAttempts = 50; // Prevent infinite loops
     
-    switch (operation) {
-      case 'addition':
-        return {
-          question: `${num1} + ${num2} = ?`,
-          correctAnswer: num1 + num2,
-        };
-      case 'subtraction':
-        // Ensure positive result for subtraction
-        const larger = Math.max(num1, num2);
-        const smaller = Math.min(num1, num2);
-        return {
-          question: `${larger} - ${smaller} = ?`,
-          correctAnswer: larger - smaller,
-        };
-      case 'multiplication':
-        return {
-          question: `${num1} × ${num2} = ?`,
-          correctAnswer: num1 * num2,
-        };
-      case 'division':
-        // Ensure clean division (no remainders)
-        const product = num1 * num2;
-        return {
-          question: `${product} ÷ ${num1} = ?`,
-          correctAnswer: num2,
-        };
-      default:
-        return {
-          question: `${num1} + ${num2} = ?`,
-          correctAnswer: num1 + num2,
-        };
-    }
+    do {
+      const { num1, num2 } = this.generateNumbers();
+      
+      switch (operation) {
+        case 'addition':
+          question = `${num1} + ${num2} = ?`;
+          correctAnswer = num1 + num2;
+          break;
+        case 'subtraction':
+          // Ensure positive result for subtraction
+          const larger = Math.max(num1, num2);
+          const smaller = Math.min(num1, num2);
+          question = `${larger} - ${smaller} = ?`;
+          correctAnswer = larger - smaller;
+          break;
+        case 'multiplication':
+          question = `${num1} × ${num2} = ?`;
+          correctAnswer = num1 * num2;
+          break;
+        case 'division':
+          // Ensure clean division (no remainders)
+          const product = num1 * num2;
+          question = `${product} ÷ ${num1} = ?`;
+          correctAnswer = num2;
+          break;
+        default:
+          question = `${num1} + ${num2} = ?`;
+          correctAnswer = num1 + num2;
+      }
+      
+      attempts++;
+      
+      // If we've tried too many times, clear the set and start fresh
+      if (attempts >= maxAttempts) {
+        this.generatedProblems.clear();
+        break;
+      }
+    } while (this.generatedProblems.has(question) || usedQuestions.has(generateQuestionKey({ question, correctAnswer })));
+    
+    // Mark this problem as generated
+    this.generatedProblems.add(question);
+    
+    return { question, correctAnswer };
   }
 
   generateNumbers() {

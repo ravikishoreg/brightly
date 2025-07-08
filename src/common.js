@@ -1,5 +1,18 @@
 // Common functionality for all pages
 import './style.css';
+import { quizStorage } from './quiz-storage.js';
+
+// Helper function to generate a unique key for a question
+export function generateQuestionKey(question) {
+  // Create a hash based on question text and correct answer
+  const key = `${question.question.toLowerCase().trim()}_${question.correctAnswer.toLowerCase().trim()}`;
+  return key.replace(/[^a-z0-9_]/g, '');
+}
+
+// Helper function to get available questions from a pool (filter out used ones)
+export function getAvailableQuestions(questionPool, usedQuestions) {
+  return questionPool.filter(question => !usedQuestions.has(generateQuestionKey(question)));
+}
 
 // GitHub OAuth configuration
 const GITHUB_CLIENT_ID = 'your-github-client-id'; // You'll need to set this up
@@ -54,6 +67,8 @@ export function generateCommonConfigHTML() {
           .join('')}
       </select>
     </div>
+    
+
   `;
 }
 
@@ -318,6 +333,7 @@ class CommonQuizManager {
     this.quizStartTime = null;
     this.elapsedTimeInterval = null;
     this.questionGenerator = null;
+    this.usedQuestions = new Set(); // Track used questions for current quiz
 
     this.initializeElements();
     this.bindEvents();
@@ -356,6 +372,8 @@ class CommonQuizManager {
     this.submitBtn.addEventListener('click', () => this.submitToGitHub());
     this.newQuizBtn.addEventListener('click', () => this.resetQuiz());
     if (this.debugBtn) this.debugBtn.addEventListener('click', () => this.showDebugData());
+    
+
   }
 
   setQuestionGenerator(generator) {
@@ -377,7 +395,12 @@ class CommonQuizManager {
     const questionCount = parseInt(document.getElementById('questionCount').value);
     const timeLimit = parseInt(document.getElementById('timeLimit').value);
 
-    this.questions = this.questionGenerator.generateQuestions(questionCount);
+    // Reset used questions for a new quiz
+    this.usedQuestions.clear();
+    
+    // Generate questions with duplicate prevention within this quiz
+    this.questions = this.questionGenerator.generateQuestions(questionCount, this.usedQuestions);
+    
     this.currentQuestionIndex = 0;
 
     // Initialize quiz results
@@ -733,6 +756,9 @@ class CommonQuizManager {
 
     const results = this.quizResults.getResults();
     
+    // Save quiz results to storage
+    this.saveQuizResults(results);
+    
     // Calculate additional time statistics
     const answeredQuestions = this.quizResults.questions.filter(q => q.timeSpent);
     const totalTimeSpent = answeredQuestions.reduce((sum, q) => sum + q.timeSpent, 0);
@@ -920,6 +946,41 @@ class CommonQuizManager {
 
   setQuizTitle(title) {
     this.quizTitle = title;
+  }
+
+  // Save quiz results to storage
+  saveQuizResults(results) {
+    try {
+      const quizData = {
+        totalQuestions: results.total,
+        correctAnswers: results.correct,
+        incorrectAnswers: results.incorrect,
+        score: results.percentage,
+        timeSpent: results.duration,
+        questions: this.quizResults.questions.map((q, index) => ({
+          question: this.questions[index]?.question || 'Unknown question',
+          correctAnswer: q.correctAnswer,
+          userAnswer: q.userAnswer,
+          isCorrect: q.status === 'correct',
+          timeSpent: q.timeSpent || 0
+        })),
+        configuration: {
+          questionCount: this.questions.length,
+          timeLimit: this.timeLimit || 0
+        }
+      };
+
+      const formattedResult = quizStorage.formatQuizResult(quizData, this.quizTitle || 'Quiz');
+      const success = quizStorage.saveResult(formattedResult);
+      
+      if (success) {
+        console.log('Quiz results saved successfully');
+      } else {
+        console.warn('Failed to save quiz results - storage may be full');
+      }
+    } catch (error) {
+      console.error('Error saving quiz results:', error);
+    }
   }
 
   // Helper to determine question type
