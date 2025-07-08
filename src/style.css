@@ -710,3 +710,9 @@ button:focus-visible {
   font-style: italic;
   margin-bottom: 1.5rem;
 }
+
+/* Hide GitHub and Debug buttons temporarily */
+#submit-to-github,
+#submit-debug {
+  display: none !important;
+}

@@ -1,8 +1,8 @@
-function a(){return`
+function t(){return`
     <header class="app-header">
       <div class="header-content">
         <div class="header-left">
-          <a href="/" class="home-link">🏠 Home</a>
+          <a href="${window.location.pathname.includes("/pages/")?"../index.html":"index.html"}" class="home-link">🏠 Home</a>
         </div>
         <div class="header-right">
           <div id="auth-section">
@@ -11,4 +11,4 @@ function a(){return`
         </div>
       </div>
     </header>
-  `}function t(){const e=a();document.body.insertAdjacentHTML("afterbegin",e)}export{t as i};
+  `}function a(){const e=t();document.body.insertAdjacentHTML("afterbegin",e)}export{a as i};
