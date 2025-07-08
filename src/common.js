@@ -9,8 +9,8 @@ const GITHUB_SCOPE = 'repo';
 // Common configuration options
 const COMMON_CONFIG_OPTIONS = {
   questionCount: [
-    { value: '2', label: '2 Questions', selected: true },
-    { value: '5', label: '5 Questions' },
+    { value: '2', label: '2 Questions' },
+    { value: '5', label: '5 Questions', selected: true },
     { value: '10', label: '10 Questions' },
     { value: '15', label: '15 Questions' },
     { value: '20', label: '20 Questions' },
@@ -586,7 +586,7 @@ class CommonQuizManager {
       } else {
         isCorrect = userAnswer === question.correctAnswer;
       }
-      const delay = isCorrect ? 500 : 1500; // - 2 seconds for correct, 5 seconds for incorrect
+      const delay = isCorrect ? 1000 : 2000; // - 2 seconds for correct, 5 seconds for incorrect
 
       // Create progress indicator on Next button
       const nextBtn = document.getElementById('next-question');
