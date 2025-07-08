@@ -1,0 +1,7 @@
+- Change timer minutes - add more options.
+- Generate readme and update instructions on how to push to gh pages.
+- Math division, subtraction as well.
+- Math addition, multiplication ensure they are covering bigger numbers as well.
+- Tricky complex ones as well.
+- Habits 
+- Timer elapsed at each question level.

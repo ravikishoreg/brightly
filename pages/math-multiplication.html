@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Multiplication - Brightly</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="quiz-header">
+        <h2 class="quiz-title">Math Multiplication Practice</h2>
+        <div class="quiz-info">
+          <span id="question-counter" class="question-counter">Question 1 of 10</span>
+          <span id="timer-display" class="timer"></span>
+        </div>
+      </div>
+      <!-- Configuration Section -->
+      <div class="config-section" id="config-section">
+        <h2>Quiz Configuration</h2>
+        <div class="config-grid">
+          <div class="config-item">
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+              <option value="single">Single Digit (1-9)</option>
+              <option value="double">Double Digit (10-99)</option>
+              <option value="mixed">Mixed (1-99)</option>
+            </select>
+          </div>
+          <div id="common-config"></div>
+        </div>
+        <button id="generate-quiz" class="primary-btn">Generate Quiz</button>
+      </div>
+
+      <!-- Quiz Section (hidden initially) -->
+      <div class="quiz-section" id="quiz-section" style="display: none">
+        <div class="question-container" id="question-container"></div>
+        <div class="quiz-controls">
+          <button id="prev-question" class="secondary-btn">Previous</button>
+          <button id="next-question" class="primary-btn"><span>Next</span></button>
+          <button id="finish-quiz" class="primary-btn" style="display: none">Finish Quiz</button>
+        </div>
+      </div>
+
+      <!-- Results Section (hidden initially) -->
+      <div class="results-section" id="results-section" style="display: none">
+        <h2>Quiz Results</h2>
+        <div class="results-summary" id="results-summary"></div>
+        <div class="results-details" id="results-details"></div>
+        <div class="results-actions">
+          <button id="submit-to-github" class="primary-btn">Submit to GitHub</button>
+          <button id="new-quiz" class="secondary-btn">Start New Quiz</button>
+          <button id="submit-debug" class="secondary-btn">Submit Debug</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/common.js"></script>
+    <script type="module" src="/src/math-multiplication.js"></script>
+  </body>
+</html>

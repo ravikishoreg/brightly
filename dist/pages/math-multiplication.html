@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Multiplication - Vite App</title>
+    <script type="module" crossorigin src="/assets/math-multiplication-UCKx25JO.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/style-BGZcYuD9.js">
+    <link rel="modulepreload" crossorigin href="/assets/common-DQ_kKoyr.js">
+    <link rel="modulepreload" crossorigin href="/assets/header-BYA7KTQE.js">
+    <link rel="stylesheet" crossorigin href="/assets/style-ey341haG.css">
+  </head>
+  <body>
+    <div id="app">
+      <h1>Math Multiplication Practice</h1>
+      
+      <!-- Configuration Section -->
+      <div class="config-section" id="config-section">
+        <h2>Quiz Configuration</h2>
+        <div class="config-grid">
+          <div class="config-item">
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+              <option value="single">Single Digit (1-9)</option>
+              <option value="double">Double Digit (10-99)</option>
+              <option value="mixed">Mixed (1-99)</option>
+            </select>
+          </div>
+          
+          <div class="config-item">
+            <label for="questionCount">Number of Questions:</label>
+            <select id="questionCount">
+              <option value="5">5 Questions</option>
+              <option value="10" selected>10 Questions</option>
+              <option value="15">15 Questions</option>
+              <option value="20">20 Questions</option>
+            </select>
+          </div>
+          
+          <div class="config-item">
+            <label for="timeLimit">Time Limit (minutes):</label>
+            <select id="timeLimit">
+              <option value="0">No Limit</option>
+              <option value="5">5 Minutes</option>
+              <option value="10" selected>10 Minutes</option>
+              <option value="15">15 Minutes</option>
+              <option value="20">20 Minutes</option>
+            </select>
+          </div>
+        </div>
+        
+        <button id="generate-quiz" class="primary-btn">Generate Quiz</button>
+      </div>
+
+      <!-- Quiz Section (hidden initially) -->
+      <div class="quiz-section" id="quiz-section" style="display: none;">
+        <div class="quiz-header">
+          <h2>Multiplication Quiz</h2>
+          <div class="quiz-info">
+            <span id="question-counter">Question 1 of 10</span>
+            <span id="timer-display" class="timer"></span>
+          </div>
+        </div>
+
+        <div class="question-container" id="question-container">
+          <!-- Questions will be generated here -->
+        </div>
+
+        <div class="quiz-controls">
+          <button id="prev-question" class="secondary-btn">Previous</button>
+          <button id="next-question" class="primary-btn">Next</button>
+          <button id="finish-quiz" class="primary-btn" style="display: none;">Finish Quiz</button>
+        </div>
+      </div>
+
+      <!-- Results Section (hidden initially) -->
+      <div class="results-section" id="results-section" style="display: none;">
+        <h2>Quiz Results</h2>
+        <div class="results-summary" id="results-summary">
+          <!-- Results summary will be shown here -->
+        </div>
+        
+        <div class="results-details" id="results-details">
+          <!-- Detailed results will be shown here -->
+        </div>
+
+        <div class="results-actions">
+          <button id="submit-to-github" class="primary-btn">Submit to GitHub</button>
+          <button id="new-quiz" class="secondary-btn">Start New Quiz</button>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>
