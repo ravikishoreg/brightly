@@ -17,6 +17,10 @@ const COMMON_CONFIG_OPTIONS = {
   ],
   timeLimit: [
     { value: '0', label: 'No Limit', selected: true },
+    { value: '1', label: '1 Minute' },
+    { value: '2', label: '2 Minutes' },
+    { value: '3', label: '3 Minutes' },
+    { value: '4', label: '4 Minutes' },
     { value: '5', label: '5 Minutes' },
     { value: '10', label: '10 Minutes' },
     { value: '15', label: '15 Minutes' },
@@ -311,6 +315,8 @@ class CommonQuizManager {
     this.quizResults = new QuizResults();
     this.timer = null;
     this.questionStartTime = null;
+    this.quizStartTime = null;
+    this.elapsedTimeInterval = null;
     this.questionGenerator = null;
 
     this.initializeElements();
@@ -362,6 +368,12 @@ class CommonQuizManager {
       return;
     }
 
+    // Stop any existing timer or elapsed time tracking
+    if (this.timer) {
+      this.timer.stop();
+    }
+    this.stopElapsedTimeTracking();
+
     const questionCount = parseInt(document.getElementById('questionCount').value);
     const timeLimit = parseInt(document.getElementById('timeLimit').value);
 
@@ -382,6 +394,10 @@ class CommonQuizManager {
         () => this.timeUp()
       );
       this.timer.start();
+    } else {
+      // Start elapsed time tracking when no time limit
+      this.quizStartTime = Date.now();
+      this.startElapsedTimeTracking();
     }
 
     this.quizResults.startQuiz();
@@ -648,12 +664,38 @@ class CommonQuizManager {
     if (this.timer) {
       this.timer.stop();
     }
+    this.stopElapsedTimeTracking();
     this.showResults();
   }
 
   timeUp() {
     alert('Time is up! Quiz will be submitted automatically.');
     this.finishQuiz();
+  }
+
+  startElapsedTimeTracking() {
+    this.elapsedTimeInterval = setInterval(() => {
+      const elapsed = Date.now() - this.quizStartTime;
+      this.updateElapsedTime(elapsed);
+    }, 1000);
+  }
+
+  stopElapsedTimeTracking() {
+    if (this.elapsedTimeInterval) {
+      clearInterval(this.elapsedTimeInterval);
+      this.elapsedTimeInterval = null;
+    }
+    // Clear timer display when stopping elapsed time tracking
+    if (this.timerDisplay) {
+      this.timerDisplay.textContent = '';
+    }
+  }
+
+  updateElapsedTime(elapsedMs) {
+    const elapsedSeconds = Math.floor(elapsedMs / 1000);
+    const minutes = Math.floor(elapsedSeconds / 60);
+    const seconds = elapsedSeconds % 60;
+    this.timerDisplay.textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   updateTimer(timeLeft) {
@@ -670,6 +712,20 @@ class CommonQuizManager {
     this.resultsSection.style.display = 'block';
 
     const results = this.quizResults.getResults();
+    
+    // Calculate additional time statistics
+    const answeredQuestions = this.quizResults.questions.filter(q => q.timeSpent);
+    const totalTimeSpent = answeredQuestions.reduce((sum, q) => sum + q.timeSpent, 0);
+    const avgTimePerQuestion = answeredQuestions.length > 0 ? totalTimeSpent / answeredQuestions.length : 0;
+    const fastestQuestion = answeredQuestions.length > 0 ? Math.min(...answeredQuestions.map(q => q.timeSpent)) : 0;
+    const slowestQuestion = answeredQuestions.length > 0 ? Math.max(...answeredQuestions.map(q => q.timeSpent)) : 0;
+
+    const formatTime = (ms) => {
+      const seconds = Math.round(ms / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return minutes > 0 ? `${minutes}m ${remainingSeconds}s` : `${seconds}s`;
+    };
 
     this.resultsSummary.innerHTML = `
       <div class="results-stats">
@@ -694,9 +750,23 @@ class CommonQuizManager {
           <span class="stat-value">${results.percentage}%</span>
         </div>
         <div class="stat">
-          <span class="stat-label">Time Taken:</span>
-          <span class="stat-value">${Math.round(results.duration / 1000)}s</span>
+          <span class="stat-label">Total Time:</span>
+          <span class="stat-value">${formatTime(results.duration)}</span>
         </div>
+        ${answeredQuestions.length > 0 ? `
+        <div class="stat">
+          <span class="stat-label">Avg Time/Question:</span>
+          <span class="stat-value">${formatTime(avgTimePerQuestion)}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Fastest Question:</span>
+          <span class="stat-value">${formatTime(fastestQuestion)}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Slowest Question:</span>
+          <span class="stat-value">${formatTime(slowestQuestion)}</span>
+        </div>
+        ` : ''}
       </div>
     `;
 
@@ -731,6 +801,7 @@ class CommonQuizManager {
           }
 
           const timeSpent = q.timeSpent ? Math.round(q.timeSpent / 1000) : 0;
+          const timeFormatted = q.timeSpent ? formatTime(q.timeSpent) : 'Not answered';
           const isIncorrect = q.status === 'incorrect';
           const correctAnswerDisplay = isIncorrect ? `<strong>${correctAnswerText}</strong>` : correctAnswerText;
           
@@ -740,7 +811,7 @@ class CommonQuizManager {
               <div class="answer-details">
                 <span>Your Answer: ${userAnswerText}</span>
                 <span>Correct Answer: ${correctAnswerDisplay}</span>
-                <span>Time: ${timeSpent}s</span>
+                <span>Time: ${timeFormatted}</span>
                 <span class="status ${q.status}">${q.status.toUpperCase()}</span>
               </div>
             </div>
@@ -813,11 +884,18 @@ class CommonQuizManager {
     if (this.timer) {
       this.timer.stop();
     }
+    this.stopElapsedTimeTracking();
+
+    // Clear timer display
+    if (this.timerDisplay) {
+      this.timerDisplay.textContent = '';
+    }
 
     this.questions = [];
     this.currentQuestionIndex = 0;
     this.quizResults = null;
     this.timer = null;
+    this.quizStartTime = null;
   }
 
   setQuizTitle(title) {

@@ -10,16 +10,6 @@ git clone https://github.com/yourusername/brightly.git
 cd brightly
 npm install
 
-# Development
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
 ## Development Commands
 
 ```bash
@@ -29,80 +19,9 @@ npm run preview      # Preview production build
 ```
 
 ## Deployment to GitHub Pages
-
-### Method 1: GitHub Actions (Recommended)
-
-Create `.github/workflows/deploy.yml`:
-
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build
-    - uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
-```
-
-Then enable GitHub Pages in repository settings → Pages → Source: "GitHub Actions"
-
-### Method 2: Manual Deployment
-
-```bash
-# Build project
-npm run build
-
-# Create gh-pages branch
-git checkout -b gh-pages
-
-# Remove source files, keep only dist
-git rm -rf src pages public index.html package.json package-lock.json vite.config.js
-cp -r dist/* .
-rm -rf dist
-
-# Deploy
-git add .
-git commit -m "Deploy to GitHub Pages"
-git push origin gh-pages
-git checkout main
-```
+Github pages configured from docs page, so it will automatically deploy.
 
 Then configure GitHub Pages: Settings → Pages → Source: "Deploy from a branch" → Branch: "gh-pages"
-
-### Method 3: Using gh-pages Package
-
-```bash
-npm install --save-dev gh-pages
-```
-
-Add to `package.json`:
-```json
-{
-  "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  }
-}
-```
-
-Then run:
-```bash
-npm run deploy
-```
 
 ## GitHub OAuth Setup
 
@@ -183,7 +102,7 @@ brightly/
 │   ├── math-addition.js
 │   └── style.css
 ├── pages/                 # Quiz pages
-├── dist/                  # Production build (generated)
+├── docs/                  # Production build (generated)
 ├── index.html
 └── package.json
 ``` 

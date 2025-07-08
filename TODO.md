@@ -1,7 +1,4 @@
-- Change timer minutes - add more options.
-- Generate readme and update instructions on how to push to gh pages.
-- Math division, subtraction as well.
-- Math addition, multiplication ensure they are covering bigger numbers as well.
 - Tricky complex ones as well.
-- Habits 
+- Habits - less questions only available then also no duplicates, but less questions only.
 - Timer elapsed at each question level.
+- Github integration for submit to github.

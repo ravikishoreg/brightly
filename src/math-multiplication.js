@@ -38,9 +38,17 @@ class MultiplicationQuestionGenerator {
         num1 = Math.floor(Math.random() * 90) + 10;
         num2 = Math.floor(Math.random() * 90) + 10;
         break;
+      case 'triple':
+        num1 = Math.floor(Math.random() * 900) + 100;
+        num2 = Math.floor(Math.random() * 900) + 100;
+        break;
+      case 'quad':
+        num1 = Math.floor(Math.random() * 9000) + 1000;
+        num2 = Math.floor(Math.random() * 9000) + 1000;
+        break;
       case 'mixed':
-        num1 = Math.floor(Math.random() * 99) + 1;
-        num2 = Math.floor(Math.random() * 99) + 1;
+        num1 = Math.floor(Math.random() * 9999) + 1;
+        num2 = Math.floor(Math.random() * 9999) + 1;
         break;
       default:
         num1 = Math.floor(Math.random() * 9) + 1;

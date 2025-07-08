@@ -2,11 +2,11 @@ import './style.css';
 import { insertHeader } from './header.js';
 import { generateCommonConfigHTML } from './common.js';
 
-// Math Addition Quiz functionality
-console.log('Math Addition page loaded');
+// Math Subtraction Quiz functionality
+console.log('Math Subtraction page loaded');
 
-// Addition Question Generator
-class AdditionQuestionGenerator {
+// Subtraction Question Generator
+class SubtractionQuestionGenerator {
   constructor() {
     this.difficulty = 'single';
   }
@@ -18,8 +18,8 @@ class AdditionQuestionGenerator {
       const { num1, num2 } = this.generateNumbers();
 
       questions.push({
-        question: `${num1} + ${num2} = ?`,
-        correctAnswer: num1 + num2,
+        question: `${num1} - ${num2} = ?`,
+        correctAnswer: num1 - num2,
       });
     }
 
@@ -32,27 +32,27 @@ class AdditionQuestionGenerator {
     switch (this.difficulty) {
       case 'single':
         num1 = Math.floor(Math.random() * 9) + 1;
-        num2 = Math.floor(Math.random() * 9) + 1;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
         break;
       case 'double':
         num1 = Math.floor(Math.random() * 90) + 10;
-        num2 = Math.floor(Math.random() * 90) + 10;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
         break;
       case 'triple':
         num1 = Math.floor(Math.random() * 900) + 100;
-        num2 = Math.floor(Math.random() * 900) + 100;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
         break;
       case 'quad':
         num1 = Math.floor(Math.random() * 9000) + 1000;
-        num2 = Math.floor(Math.random() * 9000) + 1000;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
         break;
       case 'mixed':
         num1 = Math.floor(Math.random() * 9999) + 1;
-        num2 = Math.floor(Math.random() * 9999) + 1;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
         break;
       default:
         num1 = Math.floor(Math.random() * 9) + 1;
-        num2 = Math.floor(Math.random() * 9) + 1;
+        num2 = Math.floor(Math.random() * num1) + 1; // Ensure positive result
     }
 
     return { num1, num2 };
@@ -75,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Create question generator
-  const questionGenerator = new AdditionQuestionGenerator();
+  const questionGenerator = new SubtractionQuestionGenerator();
 
   // Create quiz manager
   const quizManager = new CommonQuizManager();
   quizManager.setQuestionGenerator(questionGenerator);
-  quizManager.setQuizTitle('Math Addition Quiz');
+  quizManager.setQuizTitle('Math Subtraction Quiz');
 
   // Bind difficulty change
   const difficultySelect = document.getElementById('difficulty');
@@ -89,13 +89,4 @@ document.addEventListener('DOMContentLoaded', () => {
       questionGenerator.updateDifficulty(e.target.value);
     });
   }
-
-  // Add triple and quad options if not present
-  if (difficultySelect && !difficultySelect.querySelector('option[value="triple"]')) {
-    difficultySelect.innerHTML += `
-      <option value="triple">Triple Digit (100-999)</option>
-      <option value="quad">Quad Digit (1000-9999)</option>
-      <option value="mixed">Mixed (1-9999)</option>
-    `;
-  }
-});
+}); 
