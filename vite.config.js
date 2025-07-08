@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite';
+import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 export default defineConfig({
   build: {
@@ -15,4 +17,15 @@ export default defineConfig({
       },
     },
   },
+  plugins: [
+    {
+      name: 'create-nojekyll',
+      closeBundle() {
+        // Create .nojekyll file in the docs folder
+        const nojekyllPath = join('docs', '.nojekyll');
+        writeFileSync(nojekyllPath, '');
+        console.log('Created .nojekyll file in docs folder');
+      },
+    },
+  ],
 });

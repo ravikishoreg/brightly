@@ -1,4 +1,3 @@
 - Tricky complex ones as well.
 - Habits - less questions only available then also no duplicates, but less questions only.
-- Timer elapsed at each question level.
 - Github integration for submit to github.
