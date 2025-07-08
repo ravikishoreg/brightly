@@ -221,7 +221,7 @@ class HindiQuestionGenerator {
     ];
 
     let questionPool;
-    switch (this.difficulty) {
+    switch (this.category) {
       case 'relationships':
         questionPool = relationshipsQuestions;
         break;
@@ -243,8 +243,8 @@ class HindiQuestionGenerator {
     return questionPool[Math.floor(Math.random() * questionPool.length)];
   }
 
-  updateDifficulty(difficulty) {
-    this.difficulty = difficulty;
+  updateCategory(category) {
+    this.category = category;
   }
 }
 
@@ -263,10 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const questionGenerator = new HindiQuestionGenerator();
 
   // Read initial values from HTML dropdowns
-  const difficultySelect = document.getElementById('difficulty');
+  const categorySelect = document.getElementById('difficulty');
   
-  if (difficultySelect) {
-    questionGenerator.difficulty = difficultySelect.value;
+  if (categorySelect) {
+    questionGenerator.category = categorySelect.value;
   }
 
   // Create quiz manager
@@ -274,10 +274,10 @@ document.addEventListener('DOMContentLoaded', () => {
   quizManager.setQuestionGenerator(questionGenerator);
   quizManager.setQuizTitle('Hindi Quiz');
 
-  // Bind difficulty change
-  if (difficultySelect) {
-    difficultySelect.addEventListener('change', (e) => {
-      questionGenerator.updateDifficulty(e.target.value);
+  // Bind category change
+  if (categorySelect) {
+    categorySelect.addEventListener('change', (e) => {
+      questionGenerator.updateCategory(e.target.value);
     });
   }
 }); 
