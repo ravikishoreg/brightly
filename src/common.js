@@ -5,7 +5,12 @@ import { quizStorage } from './quiz-storage.js';
 // Helper function to generate a unique key for a question
 export function generateQuestionKey(question) {
   // Create a hash based on question text and correct answer
-  const key = `${question.question.toLowerCase().trim()}_${question.correctAnswer.toLowerCase().trim()}`;
+  let answerKey = question.correctAnswer;
+  if (Array.isArray(answerKey)) {
+    answerKey = answerKey.join(',');
+  }
+  answerKey = String(answerKey);
+  const key = `${question.question.toLowerCase().trim()}_${answerKey.toLowerCase().trim()}`;
   return key.replace(/[^a-z0-9_]/g, '');
 }
 
