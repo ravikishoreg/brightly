@@ -459,6 +459,7 @@ class CommonQuizManager {
     const isMultipleChoice = type === 'multiple';
     const isSingleChoice = type === 'single';
     const isNumber = type === 'number';
+    const isText = type === 'text';
 
     // Check if this question was already answered
     const quizResult = this.quizResults.questions[this.currentQuestionIndex];
@@ -506,6 +507,13 @@ class CommonQuizManager {
           ${optionsHTML}
         </div>
       `;
+    } else if (isText) {
+      // Text input
+      const value = isAnswered ? quizResult.userAnswer : '';
+      const disabled = isAnswered ? 'disabled' : '';
+      answerInputHTML = `
+        <input type="text" id="answer-input" placeholder="" value="${value}" ${disabled} autocomplete="off">
+      `;
     } else {
       // Number input
       const value = isAnswered ? quizResult.userAnswer : '';
@@ -550,8 +558,8 @@ class CommonQuizManager {
       const submitAnswerBtn = document.getElementById('submit-answer');
       submitAnswerBtn.addEventListener('click', () => this.submitAnswer());
 
-      // For number input, bind Enter key and focus
-      if (isNumber) {
+      // For number or text input, bind Enter key and focus
+      if (isNumber || isText) {
         const answerInput = document.getElementById('answer-input');
         answerInput.addEventListener('keypress', (e) => {
           if (e.key === 'Enter') {
@@ -579,6 +587,7 @@ class CommonQuizManager {
     const isMultipleChoice = type === 'multiple';
     const isSingleChoice = type === 'single';
     const isNumber = type === 'number';
+    const isText = type === 'text';
     const feedback = document.getElementById('answer-feedback');
 
     let userAnswer;
@@ -597,6 +606,13 @@ class CommonQuizManager {
         return;
       }
       userAnswer = checkedOptions.map((el) => el.value);
+    } else if (isText) {
+      const answerInput = document.getElementById('answer-input');
+      userAnswer = answerInput.value.trim();
+      if (!userAnswer) {
+        feedback.innerHTML = '<span class="error">Please enter an answer</span>';
+        return;
+      }
     } else {
       const answerInput = document.getElementById('answer-input');
       userAnswer = parseInt(answerInput.value);
@@ -632,7 +648,7 @@ class CommonQuizManager {
           userAnswer.every((ans) => correct.includes(ans)) &&
           correct.every((ans) => userAnswer.includes(ans));
       } else {
-        isCorrect = userAnswer === question.correctAnswer;
+        isCorrect = this.checkAnswerEquivalence(userAnswer, question.correctAnswer, question);
       }
       const delay = isCorrect ? 1000 : 2000; // - 2 seconds for correct, 5 seconds for incorrect
 
@@ -661,12 +677,54 @@ class CommonQuizManager {
     }
   }
 
+  // Helper function to check if answers are equivalent (for fractions, etc.)
+  checkAnswerEquivalence(userAnswer, correctAnswer, question) {
+    // Direct equality check first
+    if (userAnswer === correctAnswer) {
+      return true;
+    }
+
+    // Check for fraction equivalency
+    if (typeof correctAnswer === 'string' && correctAnswer.includes('/')) {
+      // Parse the correct fraction
+      const [num, den] = correctAnswer.split('/').map(Number);
+      const fractionValue = num / den;
+      
+      // Check if user answer is the decimal equivalent
+      if (typeof userAnswer === 'number') {
+        return Math.abs(userAnswer - fractionValue) < 0.001;
+      }
+      
+      // Check if user answer is the whole number equivalent (for fractions like 3/3 = 1)
+      if (num === den && userAnswer === 1) {
+        return true;
+      }
+      
+      // Check if user answer is the simplified fraction
+      if (typeof userAnswer === 'string' && userAnswer.includes('/')) {
+        const [userNum, userDen] = userAnswer.split('/').map(Number);
+        return Math.abs((userNum / userDen) - fractionValue) < 0.001;
+      }
+    }
+
+    // Check for number equivalency (e.g., "1" vs 1)
+    if (typeof correctAnswer === 'number' && typeof userAnswer === 'string') {
+      const parsedUserAnswer = parseFloat(userAnswer);
+      if (!isNaN(parsedUserAnswer)) {
+        return Math.abs(parsedUserAnswer - correctAnswer) < 0.001;
+      }
+    }
+
+    return false;
+  }
+
   showAnswerFeedback(question, quizResult) {
+    const feedback = document.getElementById('answer-feedback');
     const type = this.getQuestionType(question);
     const isMultipleChoice = type === 'multiple';
     const isSingleChoice = type === 'single';
     const isNumber = type === 'number';
-    const feedback = document.getElementById('answer-feedback');
+    const isText = type === 'text';
     let isCorrect;
     if (isMultipleChoice) {
       const correct = Array.isArray(question.correctAnswer) ? question.correctAnswer : [];
@@ -676,7 +734,7 @@ class CommonQuizManager {
         user.every((ans) => correct.includes(ans)) &&
         correct.every((ans) => user.includes(ans));
     } else {
-      isCorrect = quizResult.userAnswer === question.correctAnswer;
+      isCorrect = this.checkAnswerEquivalence(quizResult.userAnswer, question.correctAnswer, question);
     }
 
     let feedbackHTML = `
@@ -830,6 +888,7 @@ class CommonQuizManager {
           const isMultipleChoice = type === 'multiple';
           const isSingleChoice = type === 'single';
           const isNumber = type === 'number';
+          const isText = type === 'text';
 
           let userAnswerText = 'Not answered';
           let correctAnswerText = q.correctAnswer;
@@ -845,6 +904,11 @@ class CommonQuizManager {
             }
             correctAnswerText = q.correctAnswer;
           } else if (isNumber) {
+            if (q.userAnswer !== null && q.userAnswer !== undefined) {
+              userAnswerText = q.userAnswer;
+            }
+            correctAnswerText = q.correctAnswer;
+          } else if (isText) {
             if (q.userAnswer !== null && q.userAnswer !== undefined) {
               userAnswerText = q.userAnswer;
             }
@@ -993,6 +1057,8 @@ class CommonQuizManager {
     if (question.type) return question.type;
     if (Array.isArray(question.correctAnswer)) return 'multiple';
     if (question.options && typeof question.correctAnswer === 'string') return 'single';
+    // Check if answer is a string that's not a number (for text answers)
+    if (typeof question.correctAnswer === 'string' && isNaN(question.correctAnswer)) return 'text';
     return 'number';
   }
 }
