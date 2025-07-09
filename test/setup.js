@@ -49,9 +49,9 @@ Object.defineProperty(document, 'querySelectorAll', {
 });
 
 // Mock console methods to reduce noise in tests
-global.console = {
-  ...console,
-  log: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn()
-}; 
+// global.console = {
+//   ...console,
+//   log: vi.fn(),
+//   warn: vi.fn(),
+//   error: vi.fn()
+// }; 

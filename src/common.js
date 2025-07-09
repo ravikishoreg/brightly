@@ -615,7 +615,7 @@ class CommonQuizManager {
       }
     } else {
       const answerInput = document.getElementById('answer-input');
-      userAnswer = parseInt(answerInput.value);
+      userAnswer = parseFloat(answerInput.value);
       if (isNaN(userAnswer)) {
         feedback.innerHTML = '<span class="error">Please enter a valid number</span>';
         return;
@@ -655,6 +655,12 @@ class CommonQuizManager {
       // Create progress indicator on Next button
       const nextBtn = document.getElementById('next-question');
       if (nextBtn) {
+        // Remove any existing progress overlays first
+        const existingProgress = nextBtn.querySelector('.next-btn-progress');
+        if (existingProgress) {
+          existingProgress.remove();
+        }
+        
         // Add progress overlay to Next button
         const progressOverlay = document.createElement('div');
         progressOverlay.className = 'next-btn-progress';
@@ -670,6 +676,10 @@ class CommonQuizManager {
 
           if (progress >= 100) {
             clearInterval(progressInterval);
+            // Remove the progress overlay when animation completes
+            if (progressOverlay.parentNode) {
+              progressOverlay.remove();
+            }
             this.nextQuestion();
           }
         }, 50); // Update every 50ms for smooth animation

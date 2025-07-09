@@ -1,6 +1,7 @@
 import './style.css';
 import { insertHeader } from './header.js';
 import { generateCommonConfigHTML, generateQuestionKey, getAvailableQuestions } from './common.js';
+import dayjs from 'dayjs';
 
 // Math Basics Quiz functionality
 console.log('Math Basics page loaded');
@@ -10,6 +11,23 @@ class MathBasicsQuestionGenerator {
   constructor() {
     // Don't set defaults here - will read from HTML dropdowns
     this.generatedProblems = new Set(); // Track generated problems to avoid duplicates
+  }
+
+  // Helper method to standardize question return format
+  _createQuestionResult(question, correctAnswer, template, templateKeys, questionSubtype, options = null) {
+    const result = {
+      question,
+      correctAnswer,
+      template,
+      templateKeys,
+      questionSubtype
+    };
+    
+    if (options) {
+      result.options = options;
+    }
+    
+    return result;
   }
 
   generateQuestions(count, usedQuestions = new Set()) {
@@ -41,96 +59,83 @@ class MathBasicsQuestionGenerator {
   }
 
   generateOperationQuestion(operation, usedQuestions = new Set()) {
-    let question, correctAnswer;
+    let question, correctAnswer, template, templateKeys, questionSubtype, options;
     let attempts = 0;
     const maxAttempts = 50; // Prevent infinite loops
     
+    // Mapping of operations to their question generators
+    const operationGenerators = {
+      'roman-numerals': () => this.generateRomanNumeralQuestion(),
+      'fractions': () => this.generateFractionQuestion(),
+      'place-value': () => this.generatePlaceValueQuestion(),
+      'word-problems': () => this.generateWordProblemQuestion(),
+      'money': () => this.generateMoneyQuestion(),
+      'counting': () => this.generateCountingQuestion(),
+      'patterns': () => this.generatePatternQuestion(),
+      'shapes': () => this.generateShapeQuestion(),
+      'measurement': () => this.generateMeasurementQuestion(),
+      'time': () => this.generateTimeQuestion(),
+      'odd-even': () => this.generateOddEvenQuestion()
+    };
+    
     do {
-      switch (operation) {
-        case 'addition':
-          const { num1, num2 } = this.generateNumbers();
-          question = `${num1} + ${num2} = ?`;
-          correctAnswer = num1 + num2;
-          break;
-        case 'subtraction':
-          // Ensure positive result for subtraction
-          const { num1: subNum1, num2: subNum2 } = this.generateNumbers();
-          const larger = Math.max(subNum1, subNum2);
-          const smaller = Math.min(subNum1, subNum2);
-          question = `${larger} - ${smaller} = ?`;
-          correctAnswer = larger - smaller;
-          break;
-        case 'multiplication':
-          const { num1: mulNum1, num2: mulNum2 } = this.generateNumbers();
-          question = `${mulNum1} × ${mulNum2} = ?`;
-          correctAnswer = mulNum1 * mulNum2;
-          break;
-        case 'division':
-          // Ensure clean division (no remainders)
-          const { num1: divNum1, num2: divNum2 } = this.generateNumbers();
-          const product = divNum1 * divNum2;
-          question = `${product} ÷ ${divNum1} = ?`;
-          correctAnswer = divNum2;
-          break;
-        case 'roman-numerals':
-          const romanResult = this.generateRomanNumeralQuestion();
-          question = romanResult.question;
-          correctAnswer = romanResult.correctAnswer;
-          break;
-        case 'fractions':
-          const fractionResult = this.generateFractionQuestion();
-          question = fractionResult.question;
-          correctAnswer = fractionResult.correctAnswer;
-          break;
-        case 'place-value':
-          const placeValueResult = this.generatePlaceValueQuestion();
-          question = placeValueResult.question;
-          correctAnswer = placeValueResult.correctAnswer;
-          break;
-        case 'word-problems':
-          const wordProblemResult = this.generateWordProblemQuestion();
-          question = wordProblemResult.question;
-          correctAnswer = wordProblemResult.correctAnswer;
-          break;
-        case 'money':
-          const moneyResult = this.generateMoneyQuestion();
-          question = moneyResult.question;
-          correctAnswer = moneyResult.correctAnswer;
-          break;
-        case 'counting':
-          const countingResult = this.generateCountingQuestion();
-          question = countingResult.question;
-          correctAnswer = countingResult.correctAnswer;
-          break;
-        case 'patterns':
-          const patternResult = this.generatePatternQuestion();
-          question = patternResult.question;
-          correctAnswer = patternResult.correctAnswer;
-          break;
-        case 'shapes':
-          const shapeResult = this.generateShapeQuestion();
-          question = shapeResult.question;
-          correctAnswer = shapeResult.correctAnswer;
-          break;
-        case 'measurement':
-          const measurementResult = this.generateMeasurementQuestion();
-          question = measurementResult.question;
-          correctAnswer = measurementResult.correctAnswer;
-          break;
-        case 'time':
-          const timeResult = this.generateTimeQuestion();
-          question = timeResult.question;
-          correctAnswer = timeResult.correctAnswer;
-          break;
-        case 'odd-even':
-          const oddEvenResult = this.generateOddEvenQuestion();
-          question = oddEvenResult.question;
-          correctAnswer = oddEvenResult.correctAnswer;
-          break;
-        default:
-          const { num1: defNum1, num2: defNum2 } = this.generateNumbers();
-          question = `${defNum1} + ${defNum2} = ?`;
-          correctAnswer = defNum1 + defNum2;
+      // Check if operation has a dedicated generator
+      if (operationGenerators[operation]) {
+        const result = operationGenerators[operation]();
+        question = result.question;
+        correctAnswer = result.correctAnswer;
+        template = result.template;
+        templateKeys = result.templateKeys;
+        questionSubtype = result.questionSubtype;
+        options = result.options;
+      } else {
+        // Handle basic arithmetic operations
+        const { num1, num2 } = this.generateNumbers();
+        
+        switch (operation) {
+          case 'addition':
+            template = '{num1} + {num2} = ?';
+            correctAnswer = num1 + num2;
+            question = template.replace('{num1}', num1).replace('{num2}', num2);
+            questionSubtype = 'addition';
+            break;
+          case 'subtraction':
+            // Ensure positive result for subtraction
+            const larger = Math.max(num1, num2);
+            const smaller = Math.min(num1, num2);
+            template = '{larger} - {smaller} = ?';
+            correctAnswer = larger - smaller;
+            question = template.replace('{larger}', larger).replace('{smaller}', smaller);
+            templateKeys = { larger, smaller };
+            questionSubtype = 'subtraction';
+            break;
+          case 'multiplication':
+            template = '{num1} × {num2} = ?';
+            correctAnswer = num1 * num2;
+            question = template.replace('{num1}', num1).replace('{num2}', num2);
+            questionSubtype = 'multiplication';
+            break;
+          case 'division':
+            // Ensure clean division (no remainders)
+            const product = num1 * num2;
+            template = '{product} ÷ {divisor} = ?';
+            correctAnswer = num2;
+            question = template.replace('{product}', product).replace('{divisor}', num1);
+            templateKeys = { product, divisor: num1 };
+            questionSubtype = 'division';
+            break;
+          default:
+            // Fallback to addition
+            template = '{num1} + {num2} = ?';
+            correctAnswer = num1 + num2;
+            question = template.replace('{num1}', num1).replace('{num2}', num2);
+            questionSubtype = 'default';
+        }
+        
+        // Set templateKeys for operations that don't set it explicitly
+        if (!templateKeys) {
+          templateKeys = { num1, num2 };
+        }
       }
       
       attempts++;
@@ -145,7 +150,7 @@ class MathBasicsQuestionGenerator {
     // Mark this problem as generated
     this.generatedProblems.add(question);
     
-    return { question, correctAnswer };
+    return this._createQuestionResult(question, correctAnswer, template, templateKeys, questionSubtype, options);
   }
 
   generateNumbers() {
@@ -206,7 +211,7 @@ class MathBasicsQuestionGenerator {
         break;
       case 'mixed':
         minNum = 1;
-        maxNum = 999;
+        maxNum = 9999;
         break;
       default:
         minNum = 1;
@@ -224,16 +229,24 @@ class MathBasicsQuestionGenerator {
 
     if (questionType) {
       // Convert number to Roman numeral
-      return {
-        question: `What is ${randomNumber} in Roman numerals?`,
-        correctAnswer: romanNumeral
-      };
+      const template = 'What is {number} in Roman numerals?';
+      return this._createQuestionResult(
+        template.replace('{number}', randomNumber),
+        romanNumeral,
+        template,
+        { number: randomNumber },
+        'number_to_roman'
+      );
     } else {
       // Convert Roman numeral to number
-      return {
-        question: `What number is Roman numeral ${romanNumeral}?`,
-        correctAnswer: randomNumber
-      };
+      const template = 'What number is Roman numeral {roman}?';
+      return this._createQuestionResult(
+        template.replace('{roman}', romanNumeral),
+        randomNumber,
+        template,
+        { roman: romanNumeral },
+        'roman_to_number'
+      );
     }
   }
 
@@ -383,8 +396,7 @@ class MathBasicsQuestionGenerator {
     if (useDynamic) {
       const questionType = dynamicTemplates[Math.floor(Math.random() * dynamicTemplates.length)];
       const template = questionType.templates[Math.floor(Math.random() * questionType.templates.length)];
-      
-      let question, correctAnswer, options;
+      let question, correctAnswer, options, templateKeys, questionSubtype = questionType.type;
 
       switch (questionType.type) {
         case 'fraction_of_number': {
@@ -410,13 +422,18 @@ class MathBasicsQuestionGenerator {
           if (result > 0 && Math.abs(exactResult - result) < 0.001) {
             question = template.replace('{num}', wholeNumber);
             correctAnswer = result;
+            templateKeys = { num: wholeNumber, fraction: fraction.fraction, fractionValue: fraction.value };
+            questionSubtype = 'fraction_of_number';
           } else {
             // Fallback to static question
             const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
-            return {
-              question: randomQuestion.question,
-              correctAnswer: randomQuestion.answer
-            };
+            return this._createQuestionResult(
+              randomQuestion.question,
+              randomQuestion.answer,
+              randomQuestion.question,
+              null,
+              'static'
+            );
           }
           break;
         }
@@ -457,6 +474,8 @@ class MathBasicsQuestionGenerator {
           options = options.sort(() => Math.random() - 0.5);
           
           question = template.replace('{frac1}', frac1).replace('{frac2}', frac2);
+          templateKeys = { frac1, frac2 };
+          questionSubtype = 'fraction_comparison';
           break;
         }
         
@@ -497,31 +516,40 @@ class MathBasicsQuestionGenerator {
           options = options.sort(() => Math.random() - 0.5);
           
           question = template.replace('{frac1}', frac1).replace('{frac2}', frac2);
+          templateKeys = { frac1, frac2 };
+          questionSubtype = 'fraction_addition';
           break;
         }
       }
 
-      return {
-        question: question,
-        correctAnswer: correctAnswer,
-        options: options
-      };
+      return this._createQuestionResult(
+        question,
+        correctAnswer,
+        template,
+        templateKeys,
+        questionSubtype,
+        options
+      );
     } else {
       // Use static question
       const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
-      
-      // If the question has options, return as MCQ
       if (randomQuestion.options) {
-        return {
-          question: randomQuestion.question,
-          correctAnswer: randomQuestion.answer,
-          options: randomQuestion.options
-        };
+        return this._createQuestionResult(
+          randomQuestion.question,
+          randomQuestion.answer,
+          randomQuestion.question,
+          null,
+          'static',
+          randomQuestion.options
+        );
       } else {
-        return {
-          question: randomQuestion.question,
-          correctAnswer: randomQuestion.answer
-        };
+        return this._createQuestionResult(
+          randomQuestion.question,
+          randomQuestion.answer,
+          randomQuestion.question,
+          null,
+          'static'
+        );
       }
     }
   }
@@ -591,70 +619,75 @@ class MathBasicsQuestionGenerator {
     ];
     
     const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
-    let question, correctAnswer;
+    let question, correctAnswer, templateKeys, questionSubtype;
 
     switch (questionType) {
-      case 'digit_value':
-        // What is the value of the digit 3 in the number 34?
+      case 'digit_value': {
         const position1 = Math.floor(Math.random() * numStr.length);
         const digit1 = getDigitAtPosition(number, position1);
         const placeValue1 = getPlaceValue(number, position1);
         question = `What is the value of the digit ${digit1} in the number ${number}?`;
         correctAnswer = placeValue1;
+        templateKeys = { digit: digit1, number };
+        questionSubtype = 'digit_value';
         break;
-
-      case 'digit_value_alt':
-        // In the number 72, what is the value of the 7?
+      }
+      case 'digit_value_alt': {
         const position2 = Math.floor(Math.random() * numStr.length);
         const digit2 = getDigitAtPosition(number, position2);
         const placeValue2 = getPlaceValue(number, position2);
         question = `In the number ${number}, what is the place value of the ${digit2}?`;
         correctAnswer = placeValue2;
+        templateKeys = { number, digit: digit2 };
+        questionSubtype = 'digit_value_alt';
         break;
-
-      case 'count_place':
-        // How many tens are in the number 56?
-        const placeToCount = Math.floor(Math.random() * Math.min(numStr.length, 3)); // ones, tens, hundreds
+      }
+      case 'count_place': {
+        const placeToCount = Math.floor(Math.random() * Math.min(numStr.length, 3));
         const placeName = getPlaceName(placeToCount);
         const count = getDigitAtPosition(number, placeToCount);
         question = `How many ${placeName} are in the number ${number}?`;
         correctAnswer = count;
+        templateKeys = { place: placeName, number };
+        questionSubtype = 'count_place';
         break;
-
-      case 'build_number':
-        // What number is made up of 4 tens and 3 ones?
+      }
+      case 'build_number': {
         if (this.difficulty === 'single') {
-          // For single digit, just ask about ones
           const ones = Math.floor(Math.random() * 9) + 1;
           question = `What number is made up of ${ones} ones?`;
           correctAnswer = ones;
+          templateKeys = { ones };
+          questionSubtype = 'build_number_ones';
         } else {
-          // For other difficulties, ask about tens and ones
           const tens = Math.floor(Math.random() * 9) + 1;
           const ones = Math.floor(Math.random() * 10);
           if (this.difficulty === 'triple' || this.difficulty === 'quad' || this.difficulty === 'mixed') {
-            // Add hundreds for larger numbers
             const hundreds = Math.floor(Math.random() * 9) + 1;
             question = `What number is made up of ${hundreds} hundreds, ${tens} tens, and ${ones} ones?`;
             correctAnswer = buildNumberFromPlaces(tens, ones, hundreds);
+            templateKeys = { hundreds, tens, ones };
+            questionSubtype = 'build_number_hundreds_tens_ones';
           } else {
             question = `What number is made up of ${tens} tens and ${ones} ones?`;
             correctAnswer = buildNumberFromPlaces(tens, ones);
+            templateKeys = { tens, ones };
+            questionSubtype = 'build_number_tens_ones';
           }
         }
         break;
-
-      case 'digit_value_simple':
-        // In the number 89, what is the value of the 9?
+      }
+      case 'digit_value_simple': {
         const position3 = Math.floor(Math.random() * numStr.length);
         const digit3 = getDigitAtPosition(number, position3);
         const placeValue3 = getPlaceValue(number, position3);
         question = `In the number ${number}, what is the value of the ${digit3}?`;
         correctAnswer = placeValue3;
+        templateKeys = { number, digit: digit3 };
+        questionSubtype = 'digit_value_simple';
         break;
-
-      case 'compare_places':
-        // Which digit has the greatest value in the number 234?
+      }
+      case 'compare_places': {
         const digits = numStr.split('').map(d => parseInt(d));
         const placeValues = digits.map((digit, index) => digit * Math.pow(10, digits.length - 1 - index));
         const maxValue = Math.max(...placeValues);
@@ -662,28 +695,30 @@ class MathBasicsQuestionGenerator {
         const maxDigit = digits[maxIndex];
         question = `Which digit has the greatest value in the number ${number}?`;
         correctAnswer = maxDigit;
+        templateKeys = { number };
+        questionSubtype = 'compare_places';
         break;
-
-      case 'missing_digit':
-        // In the number 2_4, what digit goes in the blank to make 3 tens?
+      }
+      case 'missing_digit': {
         if (this.difficulty === 'single') {
-          // Fallback to simple question for single digit
           const position = Math.floor(Math.random() * numStr.length);
           const digit = getDigitAtPosition(number, position);
           const placeValue = getPlaceValue(number, position);
           question = `What is the value of the digit ${digit} in the number ${number}?`;
           correctAnswer = placeValue;
+          templateKeys = { digit, number };
+          questionSubtype = 'missing_digit_single';
         } else {
           const tens = Math.floor(Math.random() * 9) + 1;
           const ones = Math.floor(Math.random() * 10);
-          const missingNumber = tens * 10 + ones;
           question = `In the number _${ones}, what digit goes in the blank to make ${tens} tens?`;
           correctAnswer = tens;
+          templateKeys = { ones, tens };
+          questionSubtype = 'missing_digit_tens';
         }
         break;
-
-      case 'expanded_form':
-        // What is the expanded form of the number 234?
+      }
+      case 'expanded_form': {
         const expandedParts = [];
         for (let i = 0; i < numStr.length; i++) {
           const digit = parseInt(numStr[i]);
@@ -695,52 +730,63 @@ class MathBasicsQuestionGenerator {
         }
         question = `What is the expanded form of the number ${number}?`;
         correctAnswer = expandedParts.join(' + ');
+        templateKeys = { number };
+        questionSubtype = 'expanded_form';
         break;
-
-      case 'place_swap':
-        // If you swap the tens and ones digits in 45, what number do you get?
+      }
+      case 'place_swap': {
         if (numStr.length >= 2) {
           const digits = numStr.split('').map(d => parseInt(d));
           const swapped = [...digits];
-          // Swap last two digits
           [swapped[swapped.length - 1], swapped[swapped.length - 2]] = [swapped[swapped.length - 2], swapped[swapped.length - 1]];
           const swappedNumber = parseInt(swapped.join(''));
           question = `If you swap the tens and ones digits in ${number}, what number do you get?`;
           correctAnswer = swappedNumber;
+          templateKeys = { number };
+          questionSubtype = 'place_swap';
         } else {
-          // Fallback for single digit
           question = `What is the value of the digit ${number} in the number ${number}?`;
           correctAnswer = number;
+          templateKeys = { number };
+          questionSubtype = 'place_swap_fallback';
         }
         break;
-
-      case 'round_to_place':
-        // Round the number 234 to the nearest ten
+      }
+      case 'round_to_place': {
         const roundTo = Math.random() < 0.5 ? 'ten' : 'hundred';
         let roundedNumber;
         if (roundTo === 'ten') {
           roundedNumber = Math.round(number / 10) * 10;
           question = `Round the number ${number} to the nearest ten.`;
+          templateKeys = { number };
+          questionSubtype = 'round_to_ten';
         } else {
           roundedNumber = Math.round(number / 100) * 100;
           question = `Round the number ${number} to the nearest hundred.`;
+          templateKeys = { number };
+          questionSubtype = 'round_to_hundred';
         }
         correctAnswer = roundedNumber;
         break;
-
-      default:
-        // Fallback to original question type
+      }
+      default: {
         const position = Math.floor(Math.random() * numStr.length);
         const digit = getDigitAtPosition(number, position);
         const placeValue = getPlaceValue(number, position);
         question = `What is the value of the digit ${digit} in the number ${number}?`;
         correctAnswer = placeValue;
+        templateKeys = { digit, number };
+        questionSubtype = 'default';
+      }
     }
 
-    return {
-      question: question,
-      correctAnswer: correctAnswer
-    };
+    return this._createQuestionResult(
+      question,
+      correctAnswer,
+      question, // For place value questions, the question itself serves as the template
+      templateKeys,
+      questionSubtype || 'static'
+    );
   }
 
   // Helper function to get appropriate number ranges based on difficulty
@@ -934,45 +980,56 @@ class MathBasicsQuestionGenerator {
     const problemType = problemTemplates[Math.floor(Math.random() * problemTemplates.length)];
     const template = problemType.templates[Math.floor(Math.random() * problemType.templates.length)];
     
-    let question, correctAnswer, numbers;
+    let question, correctAnswer, numbers, templateKeys, questionSubtype;
 
     switch (problemType.type) {
-      case 'addition':
+      case 'addition': {
         const addRange = this._getNumberRange(this.difficulty, 'addition');
         const num1 = this._getRandomNumber(addRange.min, addRange.max);
         const num2 = this._getRandomNumber(addRange.min, addRange.max);
         correctAnswer = num1 + num2;
         question = template.replace('{num1}', num1).replace('{num2}', num2);
+        templateKeys = { num1, num2 };
+        questionSubtype = 'addition';
         break;
-
-      case 'subtraction':
+      }
+      case 'subtraction': {
         const subRange = this._getNumberRange(this.difficulty, 'subtraction');
         const subNumbers = this._getSubtractionNumbers(subRange);
         correctAnswer = subNumbers.num1 - subNumbers.num2;
         question = template.replace('{num1}', subNumbers.num1).replace('{num2}', subNumbers.num2);
+        templateKeys = { num1: subNumbers.num1, num2: subNumbers.num2 };
+        questionSubtype = 'subtraction';
         break;
-
-      case 'multiplication':
+      }
+      case 'multiplication': {
         const mulRange = this._getNumberRange(this.difficulty, 'multiplication');
-        // Use smaller numbers for multiplication to keep results manageable
         const mulNum1 = this._getRandomNumber(1, Math.min(12, mulRange.max));
         const mulNum2 = this._getRandomNumber(1, Math.min(12, mulRange.max));
         correctAnswer = mulNum1 * mulNum2;
         question = template.replace('{num1}', mulNum1).replace('{num2}', mulNum2);
+        templateKeys = { num1: mulNum1, num2: mulNum2 };
+        questionSubtype = 'multiplication';
         break;
-
-      case 'division':
+      }
+      case 'division': {
         const divRange = this._getNumberRange(this.difficulty, 'division');
         const divNumbers = this._getDivisionNumbers(divRange);
         correctAnswer = divNumbers.quotient;
         question = template.replace('{dividend}', divNumbers.dividend).replace('{divisor}', divNumbers.divisor);
+        templateKeys = { dividend: divNumbers.dividend, divisor: divNumbers.divisor };
+        questionSubtype = 'division';
         break;
+      }
     }
 
-    return {
-      question: question,
-      correctAnswer: correctAnswer
-    };
+    return this._createQuestionResult(
+      question,
+      correctAnswer,
+      template,
+      templateKeys,
+      questionSubtype
+    );
   }
 
   // Money (Rupees and Paisa) - dynamically generated based on difficulty
@@ -1023,6 +1080,7 @@ class MathBasicsQuestionGenerator {
       // Conversion questions
       {
         type: 'conversion',
+        subtype: 'rupee_paisa_conversion',
         templates: [
           'How many paisa are in {rupees} rupees?',
           'How many rupees are in {paisa} paisa?',
@@ -1041,6 +1099,7 @@ class MathBasicsQuestionGenerator {
       // Addition questions
       {
         type: 'addition',
+        subtype: 'money_addition',
         templates: [
           'Starting with {money1}, you discover {money2} more. What\'s your total?',
           'Your wallet contains {money1}, then you earn {money2}. What do you have now?',
@@ -1071,6 +1130,7 @@ class MathBasicsQuestionGenerator {
       // Subtraction questions
       {
         type: 'subtraction',
+        subtype: 'money_subtraction',
         templates: [
           'Your {money1} decreases by {money2} when you make a purchase. What remains?',
           'Buying a new toy costs {money2} from your {money1}. What\'s left?',
@@ -1102,6 +1162,7 @@ class MathBasicsQuestionGenerator {
       // Change questions
       {
         type: 'change',
+        subtype: 'money_change',
         templates: [
           'Paying {money2} for an item from your {money1} leaves what change?',
           'Shopping for groceries costs {money2} from your {money1}. What\'s your change?',
@@ -1132,6 +1193,7 @@ class MathBasicsQuestionGenerator {
       // Comparison questions
       {
         type: 'comparison',
+        subtype: 'money_comparison',
         templates: [
           'Between {money1} and {money2}, which represents more money?',
           'Comparing {money1} with {money2}, which costs more?',
@@ -1165,26 +1227,48 @@ class MathBasicsQuestionGenerator {
     const questionType = moneyTemplates[Math.floor(Math.random() * moneyTemplates.length)];
     const template = questionType.templates[Math.floor(Math.random() * questionType.templates.length)];
     
-    let question, correctAnswer;
+    let question, correctAnswer, templateKeys;
 
     switch (questionType.type) {
-      case 'conversion':
+      case 'conversion': {
         const range = getMoneyRange(this.difficulty);
-        if (Math.random() < 0.5) {
-          // Convert rupees to paisa
-          const rupees = this._getRandomNumber(range.minRupees, range.maxRupees);
-          correctAnswer = rupees * 100;
+        // Generate both rupees and paisa for full template replacement
+        const rupees = this._getRandomNumber(range.minRupees, range.maxRupees);
+        const paisa = rupees * 100;
+        let usedRupees = rupees;
+        let usedPaisa = paisa;
+        // Decide which conversion to use based on template
+        if (template.includes('{rupees}') && template.includes('{paisa}')) {
+          // If both present, randomly decide which is the input and which is the output
+          if (Math.random() < 0.5) {
+            // rupees to paisa
+            question = template.replace('{rupees}', rupees).replace('{paisa}', rupees * 100);
+            correctAnswer = rupees * 100;
+            templateKeys = { rupees, paisa: rupees * 100 };
+          } else {
+            // paisa to rupees
+            question = template.replace('{paisa}', paisa).replace('{rupees}', rupees);
+            correctAnswer = rupees;
+            templateKeys = { paisa, rupees };
+          }
+        } else if (template.includes('{rupees}')) {
           question = template.replace('{rupees}', rupees);
-        } else {
-          // Convert paisa to rupees (use multiples of 100 for clean conversion)
-          const rupees = this._getRandomNumber(range.minRupees, Math.min(range.maxRupees, 50));
-          const paisa = rupees * 100;
-          correctAnswer = rupees;
+          correctAnswer = rupees * 100;
+          templateKeys = { rupees };
+        } else if (template.includes('{paisa}')) {
           question = template.replace('{paisa}', paisa);
+          correctAnswer = rupees;
+          templateKeys = { paisa };
+        } else {
+          // fallback: just use rupees
+          question = template.replace('{rupees}', rupees);
+          correctAnswer = rupees * 100;
+          templateKeys = { rupees };
         }
         break;
+      }
 
-      case 'addition':
+      case 'addition': {
         const addRange = getMoneyRange(this.difficulty);
         const addRupees1 = this._getRandomNumber(addRange.minRupees, addRange.maxRupees);
         const addPaisa1 = this._getRandomNumber(addRange.minPaisa, addRange.maxPaisa);
@@ -1195,12 +1279,14 @@ class MathBasicsQuestionGenerator {
         const result = toRupeesAndPaisa(totalPaisa);
         correctAnswer = result.rupees + (result.paisa / 100);
         
-        question = template
-          .replace('{money1}', formatMoney(addRupees1, addPaisa1))
-          .replace('{money2}', formatMoney(addRupees2, addPaisa2));
+        const money1 = formatMoney(addRupees1, addPaisa1);
+        const money2 = formatMoney(addRupees2, addPaisa2);
+        question = template.replace('{money1}', money1).replace('{money2}', money2);
+        templateKeys = { money1, money2 };
         break;
+      }
 
-      case 'subtraction':
+      case 'subtraction': {
         const subRange = getMoneyRange(this.difficulty);
         const subRupees1 = this._getRandomNumber(subRange.minRupees, subRange.maxRupees);
         const subPaisa1 = this._getRandomNumber(subRange.minPaisa, subRange.maxPaisa);
@@ -1222,12 +1308,14 @@ class MathBasicsQuestionGenerator {
         const remaining = toRupeesAndPaisa(total1 - total2);
         correctAnswer = remaining.rupees + (remaining.paisa / 100);
         
-        question = template
-          .replace('{money1}', formatMoney(subRupees1, subPaisa1))
-          .replace('{money2}', formatMoney(subRupees2, subPaisa2));
+        const money1 = formatMoney(subRupees1, subPaisa1);
+        const money2 = formatMoney(subRupees2, subPaisa2);
+        question = template.replace('{money1}', money1).replace('{money2}', money2);
+        templateKeys = { money1, money2 };
         break;
+      }
 
-      case 'change':
+      case 'change': {
         const changeRange = getMoneyRange(this.difficulty);
         const changeRupees1 = this._getRandomNumber(changeRange.minRupees, changeRange.maxRupees);
         const changePaisa1 = this._getRandomNumber(changeRange.minPaisa, changeRange.maxPaisa);
@@ -1250,12 +1338,14 @@ class MathBasicsQuestionGenerator {
         const changeResult = toRupeesAndPaisa(changeTotal);
         correctAnswer = changeResult.rupees + (changeResult.paisa / 100);
         
-        question = template
-          .replace('{money1}', formatMoney(changeRupees1, changePaisa1))
-          .replace('{money2}', formatMoney(changeRupees2, changePaisa2));
+        const money1 = formatMoney(changeRupees1, changePaisa1);
+        const money2 = formatMoney(changeRupees2, changePaisa2);
+        question = template.replace('{money1}', money1).replace('{money2}', money2);
+        templateKeys = { money1, money2 };
         break;
+      }
 
-      case 'comparison':
+      case 'comparison': {
         const compRange = getMoneyRange(this.difficulty);
         const compRupees1 = this._getRandomNumber(compRange.minRupees, compRange.maxRupees);
         const compPaisa1 = this._getRandomNumber(compRange.minPaisa, compRange.maxPaisa);
@@ -1265,22 +1355,28 @@ class MathBasicsQuestionGenerator {
         const compTotal1 = toPaisa(compRupees1, compPaisa1);
         const compTotal2 = toPaisa(compRupees2, compPaisa2);
         
+        // Use decimal format for correctAnswer
         if (compTotal1 > compTotal2) {
-          correctAnswer = formatMoney(compRupees1, compPaisa1);
+          correctAnswer = compRupees1 + (compPaisa1 / 100);
         } else {
-          correctAnswer = formatMoney(compRupees2, compPaisa2);
+          correctAnswer = compRupees2 + (compPaisa2 / 100);
         }
         
-        question = template
-          .replace('{money1}', formatMoney(compRupees1, compPaisa1))
-          .replace('{money2}', formatMoney(compRupees2, compPaisa2));
+        const money1 = formatMoney(compRupees1, compPaisa1);
+        const money2 = formatMoney(compRupees2, compPaisa2);
+        question = template.replace('{money1}', money1).replace('{money2}', money2);
+        templateKeys = { money1, money2 };
         break;
+      }
     }
 
-    return {
-      question: question,
-      correctAnswer: correctAnswer
-    };
+    return this._createQuestionResult(
+      question,
+      correctAnswer,
+      template,
+      templateKeys,
+      questionType.subtype
+    );
   }
 
   // Counting - dynamically generated based on difficulty
@@ -1297,6 +1393,7 @@ class MathBasicsQuestionGenerator {
       // Forward counting templates
       {
         type: 'forward',
+        subtype: 'next_number',
         templates: [
           'What number comes after {number}?',
           'If you count forward from {number}, what comes next?',
@@ -1318,6 +1415,7 @@ class MathBasicsQuestionGenerator {
       // Backward counting templates
       {
         type: 'backward',
+        subtype: 'previous_number',
         templates: [
           'What number comes before {number}?',
           'If you count backward from {number}, what comes before it?',
@@ -1339,6 +1437,7 @@ class MathBasicsQuestionGenerator {
       // Skip counting templates (templatized for any skip value)
       {
         type: 'skip',
+        subtype: 'skip_counting',
         templates: [
           'What number is {skip} more than {number}?',
           'If you count by {skip}s starting from {number}, what comes next?',
@@ -1376,6 +1475,7 @@ class MathBasicsQuestionGenerator {
       // Missing number templates
       {
         type: 'missing',
+        subtype: 'missing_number',
         templates: [
           'What number is missing: {number1}, __, {number2}?',
           'Fill in the blank: {number1}, __, {number2}',
@@ -1399,47 +1499,54 @@ class MathBasicsQuestionGenerator {
     // Select a random question type
     let questionType = countingTemplates[Math.floor(Math.random() * countingTemplates.length)];
     let template = questionType.templates[Math.floor(Math.random() * questionType.templates.length)];
-    let question, correctAnswer, number, number1, number2, skip;
+    let question, correctAnswer, templateKeys;
 
     switch (questionType.type) {
       case 'forward': {
         const forwardRange = this._getNumberRange(this.difficulty, 'counting');
-        number = this._getRandomNumber(forwardRange.min, Math.min(forwardRange.max - 1, 98));
+        const number = this._getRandomNumber(forwardRange.min, Math.min(forwardRange.max - 1, 98));
         correctAnswer = number + 1;
         question = template.replace('{number}', number);
+        templateKeys = { number };
         break;
       }
       case 'backward': {
         const backwardRange = this._getNumberRange(this.difficulty, 'counting');
-        number = this._getRandomNumber(backwardRange.min + 1, backwardRange.max);
+        const number = this._getRandomNumber(backwardRange.min + 1, backwardRange.max);
         correctAnswer = number - 1;
         question = template.replace('{number}', number);
+        templateKeys = { number };
         break;
       }
       case 'skip': {
         // Choose a skip value (2-10, can be customized)
         const possibleSkips = [2, 3, 4, 5, 6, 7, 8, 9, 10];
-        skip = possibleSkips[Math.floor(Math.random() * possibleSkips.length)];
+        const skip = possibleSkips[Math.floor(Math.random() * possibleSkips.length)];
         const skipRange = getSkipCountingRange(this.difficulty, skip);
-        number = this._getRandomNumber(skipRange.min, Math.min(skipRange.max - skip, 100 - skip));
+        const number = this._getRandomNumber(skipRange.min, Math.min(skipRange.max - skip, 100 - skip));
         correctAnswer = number + skip;
         question = template.replace('{number}', number).replace(/{skip}/g, skip);
+        templateKeys = { number, skip };
         break;
       }
       case 'missing': {
         const missingRange = this._getNumberRange(this.difficulty, 'counting');
-        number1 = this._getRandomNumber(missingRange.min, Math.min(missingRange.max - 2, 98));
-        number2 = number1 + 2;
+        const number1 = this._getRandomNumber(missingRange.min, Math.min(missingRange.max - 2, 98));
+        const number2 = number1 + 2;
         correctAnswer = number1 + 1;
         question = template.replace('{number1}', number1).replace('{number2}', number2);
+        templateKeys = { number1, number2 };
         break;
       }
     }
 
-    return {
-      question: question,
-      correctAnswer: correctAnswer
-    };
+    return this._createQuestionResult(
+      question,
+      correctAnswer,
+      template,
+      templateKeys,
+      questionType.subtype
+    );
   }
 
   // Patterns
@@ -1467,7 +1574,7 @@ class MathBasicsQuestionGenerator {
     };
     const range = diffRanges[this.difficulty] || diffRanges.single;
 
-    let question = '', correctAnswer = '';
+    let question = '', correctAnswer = '', template = '', templateKeys, questionSubtype;
 
     // Templates for variety
     const numberTemplates = [
@@ -1562,31 +1669,52 @@ class MathBasicsQuestionGenerator {
     if (patternType === 'arithmetic') {
       // e.g., 2, 4, 6, 8, __
       const step = range.step[Math.floor(Math.random() * range.step.length)] * (Math.random() < 0.5 ? 1 : -1);
-      const start = this._getRandomNumber(range.min, range.max - 4 * Math.abs(step));
+      // Prevent negative numbers in the sequence
+      let start = this._getRandomNumber(Math.max(range.min, 0), range.max - 4 * Math.abs(step));
+      if (start < 0) start = 0;
       const seq = [start, start + step, start + 2 * step, start + 3 * step];
+      // If any value in seq is negative, regenerate
+      if (seq.some(n => n < 0)) {
+        return this.generatePatternQuestion();
+      }
       correctAnswer = start + 4 * step;
-      const template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
+      template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'arithmetic_sequence';
     } else if (patternType === 'geometric') {
       // e.g., 2, 4, 8, 16, __
       const possibleRatios = [2, 3, 4, 5];
       const ratio = possibleRatios[Math.floor(Math.random() * possibleRatios.length)] * (Math.random() < 0.5 ? 1 : -1);
-      let start = this._getRandomNumber(Math.max(1, range.min), Math.max(2, Math.floor(range.max / Math.pow(Math.abs(ratio), 4))));
-      if (start === 0) start = 1;
+      let start = this._getRandomNumber(Math.max(1, range.min, 0), Math.max(2, Math.floor(range.max / Math.pow(Math.abs(ratio), 4))));
+      if (start < 0) start = 1;
       const seq = [start];
       for (let i = 1; i < 4; i++) seq.push(seq[i - 1] * ratio);
+      // If any value in seq is negative, regenerate
+      if (seq.some(n => n < 0)) {
+        return this.generatePatternQuestion();
+      }
       correctAnswer = seq[3] * ratio;
-      const template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
+      template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'geometric_sequence';
     } else if (patternType === 'alternating') {
-      // e.g., 1, 3, 2, 4, 3, 5, __ (alternating +1, +2)
+      // True alternating sequence: a, a+b, a, a+b, ...
       const step1 = range.step[Math.floor(Math.random() * range.step.length)];
       const step2 = range.step[Math.floor(Math.random() * range.step.length)];
-      const start = this._getRandomNumber(range.min, range.max - 3 * (step1 + step2));
-      const seq = [start, start + step1, start + step1 + step2, start + 2 * step1 + step2];
-      correctAnswer = start + 2 * step1 + 2 * step2;
-      const template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
+      let start = this._getRandomNumber(Math.max(range.min, 0), range.max - 2 * Math.max(step1, step2));
+      if (start < 0) start = 0;
+      // Alternating: start, start+step1, start, start+step1
+      const seq = [start, start + step1, start, start + step1];
+      if (seq.some(n => n < 0)) {
+        return this.generatePatternQuestion();
+      }
+      correctAnswer = start;
+      template = numberTemplates[Math.floor(Math.random() * numberTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'alternating_sequence';
     } else if (patternType === 'shape') {
       // e.g., circle, square, circle, square, __
       const patternLen = this.difficulty === 'single' ? 2 : (this.difficulty === 'double' ? 3 : 4);
@@ -1596,8 +1724,10 @@ class MathBasicsQuestionGenerator {
       const seq = [];
       for (let i = 0; i < 4; i++) seq.push(pattern[i % patternLen]);
       correctAnswer = pattern[4 % patternLen];
-      const template = shapeTemplates[Math.floor(Math.random() * shapeTemplates.length)];
+      template = shapeTemplates[Math.floor(Math.random() * shapeTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'shape_pattern';
     } else if (patternType === 'color') {
       // e.g., red, blue, red, blue, __
       const patternLen = this.difficulty === 'single' ? 2 : (this.difficulty === 'double' ? 3 : 4);
@@ -1607,8 +1737,10 @@ class MathBasicsQuestionGenerator {
       const seq = [];
       for (let i = 0; i < 4; i++) seq.push(pattern[i % patternLen]);
       correctAnswer = pattern[4 % patternLen];
-      const template = colorTemplates[Math.floor(Math.random() * colorTemplates.length)];
+      template = colorTemplates[Math.floor(Math.random() * colorTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'color_pattern';
     } else if (patternType === 'letter') {
       // e.g., A, B, A, B, __
       const patternLen = this.difficulty === 'single' ? 2 : (this.difficulty === 'double' ? 3 : 4);
@@ -1618,76 +1750,81 @@ class MathBasicsQuestionGenerator {
       const seq = [];
       for (let i = 0; i < 4; i++) seq.push(pattern[i % patternLen]);
       correctAnswer = pattern[4 % patternLen];
-      const template = letterTemplates[Math.floor(Math.random() * letterTemplates.length)];
+      template = letterTemplates[Math.floor(Math.random() * letterTemplates.length)];
       question = template.replace('{seq}', seq.join(', '));
+      templateKeys = { seq: seq.join(', ') };
+      questionSubtype = 'letter_pattern';
     }
 
-    return {
+    return this._createQuestionResult(
       question,
-      correctAnswer
-    };
+      correctAnswer,
+      template,
+      templateKeys,
+      questionSubtype
+    );
   }
 
   // Shapes and Geometry
   generateShapeQuestion() {
     const shapeQuestions = [
       // Basic 2D shape identification
-      { question: 'How many sides does a triangle have?', answer: 3 },
-      { question: 'How many sides does a square have?', answer: 4 },
-      { question: 'How many sides does a rectangle have?', answer: 4 },
-      { question: 'How many sides does a pentagon have?', answer: 5 },
-      { question: 'How many sides does a hexagon have?', answer: 6 },
-      { question: 'How many sides does an octagon have?', answer: 8 },
-      { question: 'How many sides does a circle have?', answer: 0 },
-      { question: 'How many sides does a diamond have?', answer: 4 },
-      { question: 'How many sides does a star have?', answer: 5 },
-      { question: 'How many sides does a heart have?', answer: 0 },
+      { question: 'How many sides does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many sides does a square have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a rectangle have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a pentagon have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many sides does a hexagon have?', answer: 6, options: [5, 6, 7, 8] },
+      { question: 'How many sides does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many sides does a circle have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many sides does a diamond have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a star have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many sides does a heart have?', answer: 0, options: [0, 1, 2, 3] },
       
       // Shape properties - corners/vertices
-      { question: 'How many corners (vertices) does a triangle have?', answer: 3 },
-      { question: 'How many corners (vertices) does a square have?', answer: 4 },
-      { question: 'How many corners (vertices) does a rectangle have?', answer: 4 },
-      { question: 'How many corners (vertices) does a pentagon have?', answer: 5 },
-      { question: 'How many corners (vertices) does a hexagon have?', answer: 6 },
-      { question: 'How many corners (vertices) does an octagon have?', answer: 8 },
-      { question: 'How many corners (vertices) does a circle have?', answer: 0 },
-      { question: 'How many corners (vertices) does a diamond have?', answer: 4 },
-      { question: 'How many corners (vertices) does a star have?', answer: 5 },
-      { question: 'How many corners (vertices) does a heart have?', answer: 0 },
+      { question: 'How many corners (vertices) does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many corners (vertices) does a square have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a rectangle have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a pentagon have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many corners (vertices) does a hexagon have?', answer: 6, options: [5, 6, 7, 8] },
+      { question: 'How many corners (vertices) does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many corners (vertices) does a circle have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many corners (vertices) does a diamond have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a star have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many corners (vertices) does a heart have?', answer: 0, options: [0, 1, 2, 3] },
       
       // 3D shapes - faces
-      { question: 'How many faces does a cube have?', answer: 6 },
-      { question: 'How many faces does a rectangular prism have?', answer: 6 },
-      { question: 'How many faces does a triangular prism have?', answer: 5 },
-      { question: 'How many faces does a pyramid have?', answer: 5 },
-      { question: 'How many faces does a sphere have?', answer: 0 },
-      { question: 'How many faces does a cylinder have?', answer: 3 },
-      { question: 'How many faces does a cone have?', answer: 2 },
-      { question: 'How many faces does a triangular pyramid have?', answer: 4 },
-      { question: 'How many faces does a square pyramid have?', answer: 5 },
-      { question: 'How many faces does a hexagonal prism have?', answer: 8 },
+      { question: 'How many faces does a cube have?', answer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many faces does a rectangular prism have?', answer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many faces does a triangular prism have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a pyramid have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many faces does a cylinder have?', answer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many faces does a cone have?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many faces does a triangular pyramid have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many faces does a square pyramid have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a hexagonal prism have?', answer: 8, options: [6, 7, 8, 9] },
       
       // 3D shapes - edges
-      { question: 'How many edges does a cube have?', answer: 12 },
-      { question: 'How many edges does a rectangular prism have?', answer: 12 },
-      { question: 'How many edges does a triangular prism have?', answer: 9 },
-      { question: 'How many edges does a pyramid have?', answer: 8 },
-      { question: 'How many edges does a sphere have?', answer: 0 },
-      { question: 'How many edges does a cylinder have?', answer: 2 },
-      { question: 'How many edges does a cone have?', answer: 1 },
-      { question: 'How many edges does a triangular pyramid have?', answer: 6 },
-      { question: 'How many edges does a square pyramid have?', answer: 8 },
+      { question: 'How many edges does a cube have?', answer: 12, options: [8, 10, 12, 14] },
+      { question: 'How many edges does a rectangular prism have?', answer: 12, options: [8, 10, 12, 14] },
+      { question: 'How many edges does a triangular prism have?', answer: 9, options: [6, 8, 9, 10] },
+      { question: 'How many edges does a pyramid have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many edges does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many edges does a cylinder have?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many edges does a cone have?', answer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many edges does a triangular pyramid have?', answer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many edges does a square pyramid have?', answer: 8, options: [6, 7, 8, 9] },
       
       // 3D shapes - vertices
-      { question: 'How many vertices does a cube have?', answer: 8 },
-      { question: 'How many vertices does a rectangular prism have?', answer: 8 },
-      { question: 'How many vertices does a triangular prism have?', answer: 6 },
-      { question: 'How many vertices does a pyramid have?', answer: 5 },
-      { question: 'How many vertices does a sphere have?', answer: 0 },
-      { question: 'How many vertices does a cylinder have?', answer: 0 },
-      { question: 'How many vertices does a cone have?', answer: 1 },
-      { question: 'How many vertices does a triangular pyramid have?', answer: 4 },
-      { question: 'How many vertices does a square pyramid have?', answer: 5 },
+      { question: 'How many vertices does a cube have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many vertices does a rectangular prism have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many vertices does a triangular prism have?', answer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many vertices does a pyramid have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many vertices does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a cylinder have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a cone have?', answer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a triangular pyramid have?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many vertices does a square pyramid have?', answer: 5, options: [4, 5, 6, 7] },
       
       // Shape identification by properties
       { question: 'What shape has 4 equal sides and 4 right angles?', answer: 'square', options: ['triangle', 'square', 'rectangle', 'diamond'] },
@@ -1756,28 +1893,28 @@ class MathBasicsQuestionGenerator {
       { question: 'Which of these shapes has right angles: circle, triangle, square?', answer: 'square', options: ['circle', 'triangle', 'square'] },
       
       // Shape properties - angles
-      { question: 'How many right angles does a square have?', answer: 4 },
-      { question: 'How many right angles does a rectangle have?', answer: 4 },
-      { question: 'How many right angles does a triangle have?', answer: 0 },
-      { question: 'How many right angles does a circle have?', answer: 0 },
-      { question: 'How many right angles does a pentagon have?', answer: 0 },
-      { question: 'How many right angles does a hexagon have?', answer: 0 },
-      { question: 'How many right angles does an octagon have?', answer: 0 },
-      { question: 'How many right angles does a diamond have?', answer: 0 },
-      { question: 'How many right angles does a star have?', answer: 0 },
-      { question: 'How many right angles does a heart have?', answer: 0 },
+      { question: 'How many right angles does a square have?', answer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many right angles does a rectangle have?', answer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many right angles does a triangle have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a circle have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a pentagon have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a hexagon have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does an octagon have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a diamond have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a star have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a heart have?', answer: 0, options: [0, 1, 2, 3] },
       
       // Shape counting
-      { question: 'How many triangles are in a star?', answer: 5 },
-      { question: 'How many squares are in a cube?', answer: 6 },
-      { question: 'How many rectangles are in a rectangular prism?', answer: 6 },
-      { question: 'How many triangles are in a triangular prism?', answer: 2 },
-      { question: 'How many triangles are in a triangular pyramid?', answer: 4 },
-      { question: 'How many squares are in a square pyramid?', answer: 1 },
-      { question: 'How many circles are in a cylinder?', answer: 2 },
-      { question: 'How many circles are in a cone?', answer: 1 },
-      { question: 'How many triangles are in a pyramid?', answer: 4 },
-      { question: 'How many rectangles are in a rectangular prism?', answer: 6 },
+      { question: 'How many triangles are in a star?', answer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many squares are in a cube?', answer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many rectangles are in a rectangular prism?', answer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many triangles are in a triangular prism?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many triangles are in a triangular pyramid?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many squares are in a square pyramid?', answer: 1, options: [1, 2, 3, 4] },
+      { question: 'How many circles are in a cylinder?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many circles are in a cone?', answer: 1, options: [1, 2, 3, 4] },
+      { question: 'How many triangles are in a pyramid?', answer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many rectangles are in a rectangular prism?', answer: 6, options: [4, 5, 6, 8] },
       
       // Shape patterns and sequences
       { question: 'What shape comes next: triangle, square, triangle, square, __?', answer: 'triangle', options: ['square', 'triangle', 'circle', 'star'] },
@@ -1794,16 +1931,16 @@ class MathBasicsQuestionGenerator {
       { question: 'Which shape does not belong: cone, pyramid, sphere, rectangle?', answer: 'rectangle', options: ['cone', 'pyramid', 'sphere', 'rectangle'] },
       
       // Shape symmetry
-      { question: 'How many lines of symmetry does a square have?', answer: 4 },
-      { question: 'How many lines of symmetry does a rectangle have?', answer: 2 },
-      { question: 'How many lines of symmetry does a triangle have?', answer: 3 },
+      { question: 'How many lines of symmetry does a square have?', answer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many lines of symmetry does a rectangle have?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many lines of symmetry does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
       { question: 'How many lines of symmetry does a circle have?', answer: 'infinite', options: ['2', '4', 'infinite', '8'] },
-      { question: 'How many lines of symmetry does a pentagon have?', answer: 5 },
-      { question: 'How many lines of symmetry does a hexagon have?', answer: 6 },
-      { question: 'How many lines of symmetry does a star have?', answer: 5 },
-      { question: 'How many lines of symmetry does a heart have?', answer: 1 },
-      { question: 'How many lines of symmetry does a diamond have?', answer: 2 },
-      { question: 'How many lines of symmetry does an octagon have?', answer: 8 },
+      { question: 'How many lines of symmetry does a pentagon have?', answer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many lines of symmetry does a hexagon have?', answer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many lines of symmetry does a star have?', answer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many lines of symmetry does a heart have?', answer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many lines of symmetry does a diamond have?', answer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many lines of symmetry does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
       
       // Advanced shape properties
       { question: 'What shape has all sides equal and all angles equal?', answer: 'square', options: ['rectangle', 'square', 'diamond', 'triangle'] },
@@ -1820,11 +1957,14 @@ class MathBasicsQuestionGenerator {
 
     const randomQuestion = shapeQuestions[Math.floor(Math.random() * shapeQuestions.length)];
     
-    return {
-      question: randomQuestion.question,
-      correctAnswer: randomQuestion.answer,
-      options: randomQuestion.options || null
-    };
+    return this._createQuestionResult(
+      randomQuestion.question,
+      randomQuestion.answer,
+      randomQuestion.question,
+      null, // Static questions have no template keys
+      'static',
+      randomQuestion.options || null
+    );
   }
 
   // Measurement
@@ -1875,9 +2015,9 @@ class MathBasicsQuestionGenerator {
 
     // Question templates for dynamic generation
     const questionTemplates = [
-      // Length comparison templates
+      // Length comparison templates - longer/taller/wider
       {
-        type: 'length_comparison',
+        type: 'length_comparison_longer',
         templates: [
           'If a pencil is {num1} cm long and a ruler is {num2} cm long, which one is longer?',
           'Which is longer: a {num1} cm stick or a {num2} cm stick?',
@@ -1891,36 +2031,62 @@ class MathBasicsQuestionGenerator {
           'A river is {num1} kilometers long and a lake is {num2} kilometers long. Which is longer?'
         ]
       },
-      // Weight comparison templates
+      // Length comparison templates - shorter
       {
-        type: 'weight_comparison',
+        type: 'length_comparison_shorter',
+        templates: [
+          'Which is shorter: a {num1} cm stick or a {num2} cm stick?',
+          'A pencil is {num1} cm long and a ruler is {num2} cm long. Which is shorter?',
+          'A book is {num1} cm wide and a notebook is {num2} cm wide. Which is narrower?',
+          'A table is {num1} cm tall and a chair is {num2} cm tall. Which is shorter?',
+          'A door is {num1} cm wide and a window is {num2} cm wide. Which is narrower?'
+        ]
+      },
+      // Weight comparison templates - heavier
+      {
+        type: 'weight_comparison_heavier',
         templates: [
           'Which is heavier: a {num1} kg bag or a {num2} kg bag?',
-          'A {num1} kg box and a {num2} kg box - which is lighter?',
           'Which weighs more: a {num1} kg book or a {num2} kg book?',
           'A {num1} kg ball and a {num2} kg ball - which is heavier?',
-          'Which is lighter: a {num1} kg toy or a {num2} kg toy?',
           'A {num1} g apple and a {num2} g apple - which is heavier?',
           'Which weighs more: a {num1} g candy or a {num2} g candy?',
-          'A {num1} g coin and a {num2} g coin - which is lighter?',
           'Which is heavier: a {num1} g stone or a {num2} g stone?',
           'A {num1} g feather and a {num2} g feather - which weighs more?'
         ]
       },
-      // Capacity comparison templates
+      // Weight comparison templates - lighter
       {
-        type: 'capacity_comparison',
+        type: 'weight_comparison_lighter',
+        templates: [
+          'A {num1} kg box and a {num2} kg box - which is lighter?',
+          'Which is lighter: a {num1} kg toy or a {num2} kg toy?',
+          'A {num1} g coin and a {num2} g coin - which is lighter?',
+          'Which is lighter: a {num1} kg book or a {num2} kg book?',
+          'A {num1} g ball and a {num2} g ball - which is lighter?'
+        ]
+      },
+      // Capacity comparison templates - more/bigger/larger
+      {
+        type: 'capacity_comparison_more',
         templates: [
           'Which holds more: a {num1} liter bottle or a {num2} liter bottle?',
-          'A {num1} liter jug and a {num2} liter jug - which holds less?',
           'Which container is bigger: {num1} liter or {num2} liter?',
           'A {num1} ml cup and a {num2} ml cup - which holds more?',
-          'Which bottle is smaller: {num1} ml or {num2} ml?',
-          'A {num1} ml glass and a {num2} ml glass - which holds less?',
           'Which tank is larger: {num1} liter or {num2} liter?',
           'A {num1} liter bucket and a {num2} liter bucket - which is bigger?',
-          'Which holds more water: {num1} ml or {num2} ml?',
-          'A {num1} liter pot and a {num2} liter pot - which is smaller?'
+          'Which holds more water: {num1} ml or {num2} ml?'
+        ]
+      },
+      // Capacity comparison templates - less/smaller
+      {
+        type: 'capacity_comparison_less',
+        templates: [
+          'A {num1} liter jug and a {num2} liter jug - which holds less?',
+          'Which bottle is smaller: {num1} ml or {num2} ml?',
+          'A {num1} ml glass and a {num2} ml glass - which holds less?',
+          'A {num1} liter pot and a {num2} liter pot - which is smaller?',
+          'Which container holds less: {num1} liter or {num2} liter?'
         ]
       },
       // Unit conversion templates
@@ -1945,20 +2111,30 @@ class MathBasicsQuestionGenerator {
           'Convert {num1} weeks to days.'
         ]
       },
-      // Addition/subtraction templates
+      // Addition templates
       {
-        type: 'measurement_math',
+        type: 'measurement_math_add',
         templates: [
           'If you have {num1} liters of water and add {num2} liters, how much do you have?',
           'If you have {num1} kg of rice and buy {num2} kg more, how much do you have?',
+          'If you have {num1} g of sugar and add {num2} g, how much do you have?',
+          'If you have {num1} meters of rope and get {num2} meters more, how much do you have?',
+          'If you have {num1} cm of paper and buy {num2} cm more, how much do you have?',
+          'If you have {num1} ml of juice and pour {num2} ml more, how much do you have?'
+        ]
+      },
+      // Subtraction templates
+      {
+        type: 'measurement_math_subtract',
+        templates: [
           'If you have {num1} meters of rope and cut {num2} meters, how much is left?',
           'If you have {num1} cm of paper and use {num2} cm, how much remains?',
           'If you have {num1} ml of juice and drink {num2} ml, how much is left?',
-          'If you have {num1} g of sugar and add {num2} g, how much do you have?',
           'If you have {num1} hours of work and spend {num2} hours, how much time is left?',
           'If you have {num1} days of vacation and use {num2} days, how many days remain?',
-          'If you have {num1} weeks of school and {num2} weeks are left, how many weeks have passed?',
-          'If you have {num1} minutes of break and use {num2} minutes, how much time is left?'
+          'If you have {num1} minutes of break and use {num2} minutes, how much time is left?',
+          'If you have {num1} kg of flour and use {num2} kg, how much is left?',
+          'If you have {num1} liters of milk and drink {num2} liters, how much is left?'
         ]
       },
       // Real-world application templates
@@ -2064,532 +2240,495 @@ class MathBasicsQuestionGenerator {
       const questionType = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
       const template = questionType.templates[Math.floor(Math.random() * questionType.templates.length)];
       
-      let question, correctAnswer;
+      let question, correctAnswer, templateKeys, questionSubtype;
       const range = getMeasurementRange(this.difficulty, 'measurement');
 
       switch (questionType.type) {
-        case 'length_comparison': {
-          const num1 = getRandomNumber(range.min, range.max);
-          const num2 = getRandomNumber(range.min, range.max);
+        case 'length_comparison_longer': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
           correctAnswer = Math.max(num1, num2);
           question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'length_comparison_longer';
           break;
         }
-        case 'weight_comparison': {
-          const num1 = getRandomNumber(range.min, range.max);
-          const num2 = getRandomNumber(range.min, range.max);
-          correctAnswer = Math.max(num1, num2);
+        case 'length_comparison_shorter': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
+          correctAnswer = Math.min(num1, num2);
           question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'length_comparison_shorter';
           break;
         }
-        case 'capacity_comparison': {
-          const num1 = getRandomNumber(range.min, range.max);
-          const num2 = getRandomNumber(range.min, range.max);
+        case 'weight_comparison_heavier': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
           correctAnswer = Math.max(num1, num2);
           question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'weight_comparison_heavier';
+          break;
+        }
+        case 'weight_comparison_lighter': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
+          correctAnswer = Math.min(num1, num2);
+          question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'weight_comparison_lighter';
+          break;
+        }
+        case 'capacity_comparison_more': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
+          correctAnswer = Math.max(num1, num2);
+          question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'capacity_comparison_more';
+          break;
+        }
+        case 'capacity_comparison_less': {
+          let num1 = getRandomNumber(range.min, range.max);
+          let num2 = getRandomNumber(range.min, range.max);
+          while (num2 === num1) {
+            num2 = getRandomNumber(range.min, range.max);
+          }
+          correctAnswer = Math.min(num1, num2);
+          question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'capacity_comparison_less';
           break;
         }
         case 'unit_conversion': {
-          const num1 = getRandomNumber(range.min, Math.min(range.max, 50));
-          let conversionType = Math.floor(Math.random() * 6);
+          let num1 = getRandomNumber(range.min, Math.min(range.max, 50));
+          let conversionType = Math.floor(Math.random() * 7);
           switch (conversionType) {
             case 0: // m to cm
               correctAnswer = num1 * 100;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_m_to_cm';
               break;
             case 1: // km to m
               correctAnswer = num1 * 1000;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_km_to_m';
               break;
             case 2: // l to ml
               correctAnswer = num1 * 1000;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_l_to_ml';
               break;
             case 3: // kg to g
               correctAnswer = num1 * 1000;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_kg_to_g';
               break;
             case 4: // hours to min
               correctAnswer = num1 * 60;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_hours_to_min';
               break;
             case 5: // weeks to days
               correctAnswer = num1 * 7;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_weeks_to_days';
+              break;
+            case 6: // minutes to hours
+              // For kid-friendly questions, only use multiples of 15
+              const minuteMultiples = [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
+              num1 = minuteMultiples[Math.floor(Math.random() * minuteMultiples.length)];
+              correctAnswer = num1 / 60;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'unit_conversion_minutes_to_hours';
               break;
           }
           break;
         }
-        case 'measurement_math': {
+        case 'measurement_math_add': {
+          const num1 = getRandomNumber(range.min, range.max);
+          const num2 = getRandomNumber(range.min, range.max);
+          correctAnswer = num1 + num2;
+          question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'measurement_math_add';
+          break;
+        }
+        case 'measurement_math_subtract': {
           const num1 = getRandomNumber(range.min, range.max);
           const num2 = getRandomNumber(range.min, Math.min(num1, range.max));
-          const operation = Math.random() < 0.5 ? 'add' : 'subtract';
-          if (operation === 'add') {
-            correctAnswer = num1 + num2;
-          } else {
-            correctAnswer = num1 - num2;
-          }
+          correctAnswer = num1 - num2;
           question = template.replace('{num1}', num1).replace('{num2}', num2);
+          templateKeys = { num1, num2 };
+          questionSubtype = 'measurement_math_subtract';
           break;
         }
         case 'real_world': {
           const num1 = getRandomNumber(range.min, Math.min(range.max, 20));
-          const conversionType = Math.floor(Math.random() * 5);
+          const conversionType = Math.floor(Math.random() * 10);
           switch (conversionType) {
             case 0: // cups in liters
               correctAnswer = num1 * 4;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_cups_in_liters';
               break;
             case 1: // tablespoons in cups
               correctAnswer = num1 * 16;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_tablespoons_in_cups';
               break;
             case 2: // teaspoons in tablespoons
               correctAnswer = num1 * 3;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_teaspoons_in_tablespoons';
               break;
             case 3: // inches in feet
               correctAnswer = num1 * 12;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_inches_in_feet';
               break;
             case 4: // feet in yards
               correctAnswer = num1 * 3;
               question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_feet_in_yards';
               break;
+            case 5: // ounces in pounds
+              correctAnswer = num1 * 16;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_ounces_in_pounds';
+              break;
+            case 6: // pounds in tons
+              correctAnswer = num1 * 2000;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_pounds_in_tons';
+              break;
+            case 7: // seconds in minutes
+              correctAnswer = num1 * 60;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_seconds_in_minutes';
+              break;
+            case 8: // minutes in hours
+              correctAnswer = num1 * 60;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_minutes_in_hours';
+              break;
+            case 9: // hours in days
+              correctAnswer = num1 * 24;
+              question = template.replace('{num1}', num1);
+              templateKeys = { num1 };
+              questionSubtype = 'real_world_hours_in_days';
+              break;
+            default:
+              throw new Error(`Unexpected real_world conversion type: ${conversionType}`);
           }
           break;
         }
       }
 
-      return {
-        question: question,
-        correctAnswer: correctAnswer
-      };
+      return this._createQuestionResult(
+        question,
+        correctAnswer,
+        template,
+        templateKeys,
+        questionSubtype
+      );
     } else {
       // Use static question
       const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
-      return {
-        question: randomQuestion.question,
-        correctAnswer: randomQuestion.answer
-      };
+      return this._createQuestionResult(
+        randomQuestion.question,
+        randomQuestion.answer,
+        randomQuestion.question,
+        null,
+        'static'
+      );
     }
   }
 
-  // Time
   generateTimeQuestion() {
-    // Helper function to get time ranges based on difficulty
-    const getTimeRange = (difficulty) => {
-      switch (difficulty) {
-        case 'single':
-          return { minHours: 1, maxHours: 9, minMinutes: 0, maxMinutes: 30 };
-        case 'double':
-          return { minHours: 1, maxHours: 12, minMinutes: 0, maxMinutes: 59 };
-        case 'triple':
-          return { minHours: 1, maxHours: 24, minMinutes: 0, maxMinutes: 59 };
-        case 'quad':
-          return { minHours: 1, maxHours: 48, minMinutes: 0, maxMinutes: 59 };
-        case 'mixed':
-          const difficulties = ['single', 'double', 'triple', 'quad'];
-          const randomDifficulty = difficulties[Math.floor(Math.random() * difficulties.length)];
-          return getTimeRange(randomDifficulty);
-        default:
-          return { minHours: 1, maxHours: 12, minMinutes: 0, maxMinutes: 30 };
+    // Helper functions for time operations
+    const timeHelpers = {
+      // Generate random time in 24-hour format
+      getRandomTime: (minHour = 0, maxHour = 23, minMinute = 0, maxMinute = 59) => {
+        const hour = this._getRandomNumber(minHour, maxHour);
+        const minute = this._getRandomNumber(minMinute, maxMinute);
+        return { hour, minute };
+      },
+
+      // Format time in 12-hour format
+      formatTime12: (hour, minute) => {
+        const period = hour >= 12 ? 'PM' : 'AM';
+        const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+        return `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`;
+      },
+
+      // Create dayjs object from hour and minute
+      createTime: (hour, minute) => {
+        return dayjs().hour(hour).minute(minute).second(0).millisecond(0);
+      },
+
+      // Add time to a dayjs object
+      addTime: (time, hours = 0, minutes = 0) => {
+        return time.add(hours, 'hour').add(minutes, 'minute');
+      },
+
+      // Subtract time from a dayjs object
+      subtractTime: (time, hours = 0, minutes = 0) => {
+        return time.subtract(hours, 'hour').subtract(minutes, 'minute');
+      },
+
+      // Get time difference in hours between two times
+      getTimeDifference: (startTime, endTime) => {
+        return endTime.diff(startTime, 'hour', true);
+      },
+
+      // Get random template from array
+      getRandomTemplate: (templates) => {
+        return templates[Math.floor(Math.random() * templates.length)];
+      },
+
+      // Replace template placeholders
+      replaceTemplate: (template, replacements) => {
+        let result = template;
+        Object.entries(replacements).forEach(([key, value]) => {
+          result = result.replace(new RegExp(`{${key}}`, 'g'), value);
+        });
+        return result;
       }
     };
 
-    // Helper function to generate random number in range
-    const getRandomNumber = (min, max) => {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+    // Time question templates organized by subtype
+    const timeTemplatesBySubtype = {
+      static: [
+        // Basic time units (truly static knowledge)
+        { question: 'How many seconds are in one minute?', answer: 60 },
+        { question: 'How many minutes are in one hour?', answer: 60 },
+        { question: 'How many hours are in one day?', answer: 24 },
+        { question: 'How many days are in one week?', answer: 7 },
+        { question: 'How many weeks are in one month?', answer: 4 },
+        { question: 'How many months are in one year?', answer: 12 },
+        { question: 'How many years are in one decade?', answer: 10 },
+        { question: 'How many years are in one century?', answer: 100 },
+        { question: 'How many decades are in one century?', answer: 10 },
+        
+        // Common time fractions
+        { question: 'How many minutes are in half an hour?', answer: 30 },
+        { question: 'How many minutes are in a quarter hour?', answer: 15 },
+        { question: 'How many seconds are in half a minute?', answer: 30 },
+        
+        // Standard times in 12-hour format
+        { question: 'What time is midnight?', answer: '12:00 AM' },
+        { question: 'What time is noon?', answer: '12:00 PM' },
+        { question: 'What time is lunch time typically?', answer: '12:00 PM' },
+        { question: 'What time is dinner time typically?', answer: '7:00 PM' },
+        { question: 'What time is bedtime typically?', answer: '9:00 PM' },
+        { question: 'What time is wake up time typically?', answer: '7:00 AM' },
+        
+        // Time boundaries
+        { question: 'What time comes after 11:59 PM?', answer: '12:00 AM' },
+        { question: 'What time comes before 12:00 AM?', answer: '11:59 PM' }
+      ],
+      clock_reading: [
+        'What time is shown on a clock with the hour hand at {hour} and the minute hand at {minute}?',
+        'If the hour hand points to {hour} and the minute hand points to {minute}, what time is it?',
+        'A clock shows the hour hand at {hour} and minute hand at {minute}. What time is displayed?',
+        'What time does the clock show when the hour hand is at {hour} and minute hand is at {minute}? AM',
+        'If you see the hour hand on {hour} and minute hand on {minute}, what time is it?'
+      ],
+      adding_time_hours: [
+        'If it is {startTime} now, what time will it be in {hours} hours?',
+        'Starting at {startTime}, what time will it be after {hours} hours?',
+        'If the current time is {startTime}, what time will it be in {hours} hours?',
+        'What time will it be {hours} hours after {startTime}?'
+      ],
+      adding_time_minutes: [
+        'If it is {startTime} now, what time will it be in {minutes} minutes?',
+        'Starting at {startTime}, what time will it be after {minutes} minutes?',
+        'If the current time is {startTime}, what time will it be in {minutes} minutes?',
+        'What time will it be {minutes} minutes after {startTime}?'
+      ],
+      adding_time_hours_minutes: [
+        'If it is {startTime} now, what time will it be in {hours} hours and {minutes} minutes?',
+        'Starting at {startTime}, what time will it be after {hours} hours and {minutes} minutes?',
+        'If the current time is {startTime}, what time will it be in {hours} hours and {minutes} minutes?',
+        'What time will it be {hours} hours and {minutes} minutes after {startTime}?'
+      ],
+      subtracting_time_hours: [
+        'If it is {endTime} now, what time was it {hours} hours ago?',
+        'If the current time is {endTime}, what time was it {hours} hours ago?',
+        'What time was it {hours} hours before {endTime}?'
+      ],
+      subtracting_time_minutes: [
+        'If it is {endTime} now, what time was it {minutes} minutes ago?',
+        'If the current time is {endTime}, what time was it {minutes} minutes ago?',
+        'What time was it {minutes} minutes before {endTime}?'
+      ],
+      subtracting_time_hours_minutes: [
+        'If it is {endTime} now, what time was it {hours} hours and {minutes} minutes ago?',
+        'If the current time is {endTime}, what time was it {hours} hours and {minutes} minutes ago?',
+        'What time was it {hours} hours and {minutes} minutes before {endTime}?'
+      ],
+      // time_difference: [
+      //   'How many hours are there from {startTime} to {endTime}?',
+      //   'What is the time difference between {startTime} and {endTime}?',
+      //   'How many hours pass from {startTime} to {endTime}?',
+      //   'How long is it from {startTime} to {endTime}?'
+      // ]
     };
 
-    // Helper function to format time
-    const formatTime = (hours, minutes, use24Hour = false) => {
-      if (use24Hour) {
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-      } else {
-        const period = hours >= 12 ? 'PM' : 'AM';
-        const displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
-        return `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`;
-      }
-    };
-
-    // Helper function to add hours to time
-    const addHours = (hours, minutes, addHours) => {
-      let newHours = hours + addHours;
-      let newMinutes = minutes;
+    // Helper function to generate time question based on subtype
+    const generateTimeQuestionBySubtype = (subtype) => {
+      const templates = timeTemplatesBySubtype[subtype];
+      const template = timeHelpers.getRandomTemplate(templates);
       
-      if (newHours >= 24) {
-        newHours = newHours % 24;
-      }
-      
-      return { hours: newHours, minutes: newMinutes };
-    };
-
-    // Helper function to subtract hours from time
-    const subtractHours = (hours, minutes, subHours) => {
-      let newHours = hours - subHours;
-      let newMinutes = minutes;
-      
-      if (newHours < 0) {
-        newHours = newHours + 24;
-      }
-      
-      return { hours: newHours, minutes: newMinutes };
-    };
-
-    // Helper function to calculate time difference
-    const timeDifference = (hours1, minutes1, hours2, minutes2) => {
-      const totalMinutes1 = hours1 * 60 + minutes1;
-      const totalMinutes2 = hours2 * 60 + minutes2;
-      return Math.abs(totalMinutes2 - totalMinutes1) / 60;
-    };
-
-    // Question templates for dynamic generation
-    const questionTemplates = [
-      // Clock reading templates
-      {
-        type: 'clock_reading',
-        templates: [
-          'What time is shown on a clock with the hour hand at {hour} and the minute hand at {minute}?',
-          'If the hour hand points to {hour} and the minute hand points to {minute}, what time is it?',
-          'A clock shows the hour hand at {hour} and minute hand at {minute}. What time is displayed?',
-          'What time does the clock show when the hour hand is at {hour} and minute hand is at {minute}?',
-          'If you see the hour hand on {hour} and minute hand on {minute}, what time is it?',
-          'A digital clock displays {time}. What time is this in 12-hour format?',
-          'What time is {time} in 24-hour format?',
-          'Convert {time} to 12-hour format.',
-          'Convert {time} to 24-hour format.'
-        ]
-      },
-      // Adding time templates
-      {
-        type: 'adding_time',
-        templates: [
-          'If it is {startTime} now, what time will it be in {hours} hours?',
-          'Starting at {startTime}, what time will it be after {hours} hours?',
-          'If the current time is {startTime}, what time will it be in {hours} hours?',
-          'What time will it be {hours} hours after {startTime}?',
-          'If it is {startTime} now, what time will it be in {hours} hours and {minutes} minutes?',
-          'Starting at {startTime}, what time will it be after {hours} hours and {minutes} minutes?',
-          'If the current time is {startTime}, what time will it be in {hours} hours and {minutes} minutes?',
-          'What time will it be {hours} hours and {minutes} minutes after {startTime}?',
-          'If it is {startTime} now, what time will it be in {minutes} minutes?',
-          'Starting at {startTime}, what time will it be after {minutes} minutes?',
-          'If the current time is {startTime}, what time will it be in {minutes} minutes?',
-          'What time will it be {minutes} minutes after {startTime}?'
-        ]
-      },
-      // Subtracting time templates
-      {
-        type: 'subtracting_time',
-        templates: [
-          'If it is {endTime} now, what time was it {hours} hours ago?',
-          'If the current time is {endTime}, what time was it {hours} hours ago?',
-          'What time was it {hours} hours before {endTime}?',
-          'If it is {endTime} now, what time was it {hours} hours and {minutes} minutes ago?',
-          'If the current time is {endTime}, what time was it {hours} hours and {minutes} minutes ago?',
-          'What time was it {hours} hours and {minutes} minutes before {endTime}?',
-          'If it is {endTime} now, what time was it {minutes} minutes ago?',
-          'If the current time is {endTime}, what time was it {minutes} minutes ago?',
-          'What time was it {minutes} minutes before {endTime}?'
-        ]
-      },
-      // Time difference templates
-      {
-        type: 'time_difference',
-        templates: [
-          'How many hours are there from {startTime} to {endTime}?',
-          'What is the time difference between {startTime} and {endTime}?',
-          'How many hours pass from {startTime} to {endTime}?',
-          'How long is it from {startTime} to {endTime}?',
-          'How many hours are there between {startTime} and {endTime}?',
-          'What is the duration from {startTime} to {endTime}?',
-          'How many hours and minutes are there from {startTime} to {endTime}?',
-          'What is the time difference in hours and minutes between {startTime} and {endTime}?',
-          'How long is it from {startTime} to {endTime} in hours and minutes?'
-        ]
-      },
-      // Real-world time templates
-      {
-        type: 'real_world_time',
-        templates: [
-          'What time does a school bus typically leave at {time}?',
-          'If a movie starts at {time}, what time will it end if it lasts {hours} hours?',
-          'A train departs at {time} and arrives {hours} hours later. What time does it arrive?',
-          'If a meeting starts at {time} and lasts {hours} hours, what time does it end?',
-          'A flight takes off at {time} and lands {hours} hours later. What time does it land?',
-          'If a class begins at {time} and runs for {hours} hours, what time does it finish?',
-          'A concert starts at {time} and ends {hours} hours later. What time does it end?',
-          'If a party starts at {time} and goes on for {hours} hours, what time does it end?',
-          'A game begins at {time} and lasts {hours} hours. What time does it finish?',
-          'If a workshop starts at {time} and runs for {hours} hours, what time does it end?',
-          'A doctor appointment is at {time} and takes {minutes} minutes. What time does it finish?',
-          'If a haircut appointment is at {time} and takes {minutes} minutes, what time does it end?',
-          'A dental cleaning starts at {time} and takes {minutes} minutes. What time does it finish?',
-          'If a massage session is at {time} and lasts {minutes} minutes, what time does it end?',
-          'A therapy session begins at {time} and takes {minutes} minutes. What time does it finish?'
-        ]
-      },
-      // Time conversion templates
-      {
-        type: 'time_conversion',
-        templates: [
-          'How many seconds are in {minutes} minutes?',
-          'How many minutes are in {hours} hours?',
-          'How many hours are in {days} days?',
-          'How many days are in {weeks} weeks?',
-          'How many weeks are in {months} months?',
-          'How many months are in {years} years?',
-          'How many years are in {decades} decades?',
-          'How many decades are in {centuries} centuries?',
-          'Convert {minutes} minutes to seconds.',
-          'Convert {hours} hours to minutes.',
-          'Convert {days} days to hours.',
-          'Convert {weeks} weeks to days.',
-          'Convert {months} months to weeks.',
-          'Convert {years} years to months.',
-          'Convert {decades} decades to years.',
-          'Convert {centuries} centuries to decades.'
-        ]
-      }
-    ];
-
-    // Static questions for variety
-    const staticQuestions = [
-      // Basic time facts
-      { question: 'How many seconds are in one minute?', answer: 60 },
-      { question: 'How many minutes are in one hour?', answer: 60 },
-      { question: 'How many hours are in one day?', answer: 24 },
-      { question: 'How many days are in one week?', answer: 7 },
-      { question: 'How many weeks are in one month?', answer: 4 },
-      { question: 'How many months are in one year?', answer: 12 },
-      { question: 'How many years are in one decade?', answer: 10 },
-      { question: 'How many years are in one century?', answer: 100 },
-      { question: 'How many decades are in one century?', answer: 10 },
-      { question: 'How many minutes are in half an hour?', answer: 30 },
-      { question: 'How many minutes are in a quarter hour?', answer: 15 },
-      { question: 'How many seconds are in half a minute?', answer: 30 },
-      
-      // Clock reading
-      { question: 'What time is shown on a clock with the hour hand at 3 and the minute hand at 12?', answer: '3:00' },
-      { question: 'What time is shown on a clock with the hour hand at 6 and the minute hand at 12?', answer: '6:00' },
-      { question: 'What time is shown on a clock with the hour hand at 9 and the minute hand at 12?', answer: '9:00' },
-      { question: 'What time is shown on a clock with the hour hand at 12 and the minute hand at 12?', answer: '12:00' },
-      { question: 'What time is shown on a clock with the hour hand at 3 and the minute hand at 6?', answer: '3:30' },
-      { question: 'What time is shown on a clock with the hour hand at 6 and the minute hand at 6?', answer: '6:30' },
-      { question: 'What time is shown on a clock with the hour hand at 9 and the minute hand at 6?', answer: '9:30' },
-      { question: 'What time is shown on a clock with the hour hand at 12 and the minute hand at 6?', answer: '12:30' },
-      
-      // AM/PM conversions
-      { question: 'What is 3:00 PM in 24-hour format?', answer: '15:00' },
-      { question: 'What is 10:00 AM in 24-hour format?', answer: '10:00' },
-      { question: 'What is 8:00 PM in 24-hour format?', answer: '20:00' },
-      { question: 'What is 12:00 PM in 24-hour format?', answer: '12:00' },
-      { question: 'What is 12:00 AM in 24-hour format?', answer: '00:00' },
-      { question: 'What is 15:00 in 12-hour format?', answer: '3:00 PM' },
-      { question: 'What is 10:00 in 12-hour format?', answer: '10:00 AM' },
-      { question: 'What is 20:00 in 12-hour format?', answer: '8:00 PM' },
-      { question: 'What is 12:00 in 12-hour format?', answer: '12:00 PM' },
-      { question: 'What is 00:00 in 12-hour format?', answer: '12:00 AM' },
-      
-      // Simple time calculations
-      { question: 'If it is 3:00 PM now, what time will it be in 2 hours?', answer: '5:00 PM' },
-      { question: 'If it is 10:00 AM now, what time will it be in 3 hours?', answer: '1:00 PM' },
-      { question: 'If it is 2:00 PM now, what time will it be in 4 hours?', answer: '6:00 PM' },
-      { question: 'If it is 8:00 AM now, what time will it be in 5 hours?', answer: '1:00 PM' },
-      { question: 'If it is 11:00 AM now, what time will it be in 1 hour?', answer: '12:00 PM' },
-      { question: 'If it is 5:00 PM now, what time was it 2 hours ago?', answer: '3:00 PM' },
-      { question: 'If it is 8:00 PM now, what time was it 3 hours ago?', answer: '5:00 PM' },
-      { question: 'If it is 12:00 PM now, what time was it 4 hours ago?', answer: '8:00 AM' },
-      { question: 'If it is 6:00 PM now, what time was it 5 hours ago?', answer: '1:00 PM' },
-      { question: 'If it is 9:00 PM now, what time was it 2 hours ago?', answer: '7:00 PM' },
-      
-      // Time differences
-      { question: 'How many hours are there from 9:00 AM to 3:00 PM?', answer: 6 },
-      { question: 'How many hours are there from 2:00 PM to 8:00 PM?', answer: 6 },
-      { question: 'How many hours are there from 10:00 AM to 2:00 PM?', answer: 4 },
-      { question: 'How many hours are there from 1:00 PM to 7:00 PM?', answer: 6 },
-      { question: 'How many hours are there from 8:00 AM to 12:00 PM?', answer: 4 },
-      { question: 'How many hours are there from 6:00 AM to 12:00 PM?', answer: 6 },
-      { question: 'How many hours are there from 12:00 PM to 6:00 PM?', answer: 6 },
-      { question: 'How many hours are there from 9:00 PM to 3:00 AM?', answer: 6 },
-      { question: 'How many hours are there from 11:00 PM to 5:00 AM?', answer: 6 },
-      
-      // Real-world scenarios
-      { question: 'What time does a school bus typically leave at 8:30 AM?', answer: '8:30 AM' },
-      { question: 'If a movie starts at 7:00 PM and lasts 2 hours, what time does it end?', answer: '9:00 PM' },
-      { question: 'A train departs at 10:00 AM and arrives 3 hours later. What time does it arrive?', answer: '1:00 PM' },
-      { question: 'If a meeting starts at 2:00 PM and lasts 1 hour, what time does it end?', answer: '3:00 PM' },
-      { question: 'A flight takes off at 6:00 AM and lands 4 hours later. What time does it land?', answer: '10:00 AM' },
-      { question: 'If a class begins at 9:00 AM and runs for 2 hours, what time does it finish?', answer: '11:00 AM' },
-      { question: 'A concert starts at 8:00 PM and ends 3 hours later. What time does it end?', answer: '11:00 PM' },
-      { question: 'If a party starts at 6:00 PM and goes on for 4 hours, what time does it end?', answer: '10:00 PM' },
-      { question: 'A game begins at 3:00 PM and lasts 2 hours. What time does it finish?', answer: '5:00 PM' },
-      { question: 'If a workshop starts at 10:00 AM and runs for 3 hours, what time does it end?', answer: '1:00 PM' },
-      
-      // Time zones and special times
-      { question: 'What time is midnight?', answer: '12:00 AM' },
-      { question: 'What time is noon?', answer: '12:00 PM' },
-      { question: 'What time is sunrise typically?', answer: '6:00 AM' },
-      { question: 'What time is sunset typically?', answer: '6:00 PM' },
-      { question: 'What time is lunch time typically?', answer: '12:00 PM' },
-      { question: 'What time is dinner time typically?', answer: '6:00 PM' },
-      { question: 'What time is bedtime typically?', answer: '9:00 PM' },
-      { question: 'What time is wake up time typically?', answer: '7:00 AM' },
-      
-      // Advanced time concepts
-      { question: 'How many minutes are in 2 hours?', answer: 120 },
-      { question: 'How many seconds are in 2 minutes?', answer: 120 },
-      { question: 'How many hours are in 2 days?', answer: 48 },
-      { question: 'How many days are in 2 weeks?', answer: 14 },
-      { question: 'How many weeks are in 2 months?', answer: 8 },
-      { question: 'How many months are in 2 years?', answer: 24 },
-      { question: 'How many years are in 2 decades?', answer: 20 },
-      { question: 'How many decades are in 2 centuries?', answer: 20 },
-      
-      // Time patterns
-      { question: 'What time comes after 11:59 PM?', answer: '12:00 AM' },
-      { question: 'What time comes after 11:59 AM?', answer: '12:00 PM' },
-      { question: 'What time comes before 12:00 AM?', answer: '11:59 PM' },
-      { question: 'What time comes before 12:00 PM?', answer: '11:59 AM' },
-      { question: 'What time is 30 minutes after 2:30 PM?', answer: '3:00 PM' },
-      { question: 'What time is 30 minutes before 3:00 PM?', answer: '2:30 PM' },
-      { question: 'What time is 15 minutes after 1:45 PM?', answer: '2:00 PM' },
-      { question: 'What time is 15 minutes before 2:00 PM?', answer: '1:45 PM' }
-    ];
-
-    // Decide whether to use static or dynamic question
-    const useDynamic = Math.random() < 0.7; // 70% chance for dynamic questions
-
-    if (useDynamic) {
-      // Generate dynamic question
-      const questionType = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
-      const template = questionType.templates[Math.floor(Math.random() * questionType.templates.length)];
-      
-      let question, correctAnswer;
-      const range = getTimeRange(this.difficulty);
-
-      switch (questionType.type) {
+      switch (subtype) {
         case 'clock_reading': {
-          const hour = getRandomNumber(1, 12);
-          const minute = getRandomNumber(0, 11) * 5; // 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
-          const period = hour >= 6 ? 'PM' : 'AM';
-          const displayHour = hour > 6 ? hour - 6 : hour;
-          correctAnswer = `${displayHour}:${minute.toString().padStart(2, '0')} ${period}`;
-          question = template.replace('{hour}', hour).replace('{minute}', minute);
-          break;
+          const { hour, minute } = timeHelpers.getRandomTime(1, 12, 0, 55);
+          const time = timeHelpers.createTime(hour, minute);
+          const question = timeHelpers.replaceTemplate(template, { hour, minute });
+          const correctAnswer = timeHelpers.formatTime12(hour, minute);
+          return { question, correctAnswer, templateKeys: { hour, minute } };
         }
-        case 'adding_time': {
-          const startHour = getRandomNumber(1, 12);
-          const startMinute = getRandomNumber(0, 59);
-          const addHours = getRandomNumber(1, range.maxHours);
-          const addMinutes = getRandomNumber(0, range.maxMinutes);
-          const startTime = formatTime(startHour, startMinute);
-          const result = addHours(startHour, startMinute, addHours);
-          const result2 = addHours(result.hours, result.minutes, Math.floor(addMinutes / 60));
-          const finalMinutes = (result.minutes + addMinutes) % 60;
-          correctAnswer = formatTime(result2.hours, finalMinutes);
-          
-          if (addMinutes > 0) {
-            question = template.replace('{startTime}', startTime).replace('{hours}', addHours).replace('{minutes}', addMinutes);
-          } else {
-            question = template.replace('{startTime}', startTime).replace('{hours}', addHours);
-          }
-          break;
+
+        case 'adding_time_hours': {
+          const { hour: startHour, minute: startMinute } = timeHelpers.getRandomTime(0, 23);
+          const hours = this._getRandomNumber(1, 12);
+          const startTime = timeHelpers.formatTime12(startHour, startMinute);
+          const startDateTime = timeHelpers.createTime(startHour, startMinute);
+          const resultTime = timeHelpers.addTime(startDateTime, hours);
+          const question = timeHelpers.replaceTemplate(template, { startTime, hours });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { startTime, hours, minutes: 0 } };
         }
-        case 'subtracting_time': {
-          const endHour = getRandomNumber(1, 12);
-          const endMinute = getRandomNumber(0, 59);
-          const subHours = getRandomNumber(1, range.maxHours);
-          const subMinutes = getRandomNumber(0, range.maxMinutes);
-          const endTime = formatTime(endHour, endMinute);
-          const result = subtractHours(endHour, endMinute, subHours);
-          const result2 = subtractHours(result.hours, result.minutes, Math.floor(subMinutes / 60));
-          const finalMinutes = (result.minutes - subMinutes + 60) % 60;
-          correctAnswer = formatTime(result2.hours, finalMinutes);
-          
-          if (subMinutes > 0) {
-            question = template.replace('{endTime}', endTime).replace('{hours}', subHours).replace('{minutes}', subMinutes);
-          } else {
-            question = template.replace('{endTime}', endTime).replace('{hours}', subHours);
-          }
-          break;
+
+        case 'adding_time_minutes': {
+          const { hour: startHour, minute: startMinute } = timeHelpers.getRandomTime(0, 23);
+          const minutes = this._getRandomNumber(1, 59);
+          const startTime = timeHelpers.formatTime12(startHour, startMinute);
+          const startDateTime = timeHelpers.createTime(startHour, startMinute);
+          const resultTime = timeHelpers.addTime(startDateTime, 0, minutes);
+          const question = timeHelpers.replaceTemplate(template, { startTime, minutes });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { startTime, hours: 0, minutes } };
         }
+
+        case 'adding_time_hours_minutes': {
+          const { hour: startHour, minute: startMinute } = timeHelpers.getRandomTime(0, 23);
+          const hours = this._getRandomNumber(1, 12);
+          const minutes = this._getRandomNumber(1, 59);
+          const startTime = timeHelpers.formatTime12(startHour, startMinute);
+          const startDateTime = timeHelpers.createTime(startHour, startMinute);
+          const resultTime = timeHelpers.addTime(startDateTime, hours, minutes);
+          const question = timeHelpers.replaceTemplate(template, { startTime, hours, minutes });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { startTime, hours, minutes } };
+        }
+
+        case 'subtracting_time_hours': {
+          const { hour: endHour, minute: endMinute } = timeHelpers.getRandomTime(0, 23);
+          const hours = this._getRandomNumber(1, 12);
+          const endTime = timeHelpers.formatTime12(endHour, endMinute);
+          const endDateTime = timeHelpers.createTime(endHour, endMinute);
+          const resultTime = timeHelpers.subtractTime(endDateTime, hours);
+          const question = timeHelpers.replaceTemplate(template, { endTime, hours });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { endTime, hours, minutes: 0 } };
+        }
+
+        case 'subtracting_time_minutes': {
+          const { hour: endHour, minute: endMinute } = timeHelpers.getRandomTime(0, 23);
+          const minutes = this._getRandomNumber(1, 59);
+          const endTime = timeHelpers.formatTime12(endHour, endMinute);
+          const endDateTime = timeHelpers.createTime(endHour, endMinute);
+          const resultTime = timeHelpers.subtractTime(endDateTime, 0, minutes);
+          const question = timeHelpers.replaceTemplate(template, { endTime, minutes });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { endTime, hours: 0, minutes } };
+        }
+
+        case 'subtracting_time_hours_minutes': {
+          const { hour: endHour, minute: endMinute } = timeHelpers.getRandomTime(0, 23);
+          const hours = this._getRandomNumber(1, 12);
+          const minutes = this._getRandomNumber(1, 59);
+          const endTime = timeHelpers.formatTime12(endHour, endMinute);
+          const endDateTime = timeHelpers.createTime(endHour, endMinute);
+          const resultTime = timeHelpers.subtractTime(endDateTime, hours, minutes);
+          const question = timeHelpers.replaceTemplate(template, { endTime, hours, minutes });
+          const correctAnswer = timeHelpers.formatTime12(resultTime.hour(), resultTime.minute());
+          return { question, correctAnswer, templateKeys: { endTime, hours, minutes } };
+        }
+
         case 'time_difference': {
-          const startHour = getRandomNumber(1, 12);
-          const startMinute = getRandomNumber(0, 59);
-          const endHour = getRandomNumber(startHour, Math.min(startHour + 12, 12));
-          const endMinute = getRandomNumber(0, 59);
-          const startTime = formatTime(startHour, startMinute);
-          const endTime = formatTime(endHour, endMinute);
-          const diff = timeDifference(startHour, startMinute, endHour, endMinute);
-          correctAnswer = Math.round(diff);
-          question = template.replace('{startTime}', startTime).replace('{endTime}', endTime);
-          break;
+          const { hour: startHour, minute: startMinute } = timeHelpers.getRandomTime(0, 23);
+          const { hour: endHour, minute: endMinute } = timeHelpers.getRandomTime(0, 23);
+          const startTime = timeHelpers.formatTime12(startHour, startMinute);
+          const endTime = timeHelpers.formatTime12(endHour, endMinute);
+          const startDateTime = timeHelpers.createTime(startHour, startMinute);
+          const endDateTime = timeHelpers.createTime(endHour, endMinute);
+          const diff = timeHelpers.getTimeDifference(startDateTime, endDateTime);
+          const question = timeHelpers.replaceTemplate(template, { startTime, endTime });
+          const correctAnswer = Math.round(diff);
+          return { question, correctAnswer, templateKeys: { startTime, endTime } };
         }
-        case 'real_world_time': {
-          const startHour = getRandomNumber(6, 10); // Reasonable start times
-          const startMinute = getRandomNumber(0, 59);
-          const duration = getRandomNumber(1, 4); // Reasonable durations
-          const startTime = formatTime(startHour, startMinute);
-          const result = addHours(startHour, startMinute, duration);
-          correctAnswer = formatTime(result.hours, result.minutes);
-          question = template.replace('{time}', startTime).replace('{hours}', duration);
-          break;
+
+        case 'static': {
+          const staticQuestion = template;
+          return { 
+            question: staticQuestion.question, 
+            correctAnswer: staticQuestion.answer, 
+            templateKeys: null 
+          };
         }
-        case 'time_conversion': {
-          const value = getRandomNumber(range.minHours, Math.min(range.maxHours, 20));
-          const conversionType = Math.floor(Math.random() * 8);
-          switch (conversionType) {
-            case 0: // minutes to seconds
-              correctAnswer = value * 60;
-              question = template.replace('{minutes}', value);
-              break;
-            case 1: // hours to minutes
-              correctAnswer = value * 60;
-              question = template.replace('{hours}', value);
-              break;
-            case 2: // days to hours
-              correctAnswer = value * 24;
-              question = template.replace('{days}', value);
-              break;
-            case 3: // weeks to days
-              correctAnswer = value * 7;
-              question = template.replace('{weeks}', value);
-              break;
-            case 4: // months to weeks
-              correctAnswer = value * 4;
-              question = template.replace('{months}', value);
-              break;
-            case 5: // years to months
-              correctAnswer = value * 12;
-              question = template.replace('{years}', value);
-              break;
-            case 6: // decades to years
-              correctAnswer = value * 10;
-              question = template.replace('{decades}', value);
-              break;
-            case 7: // centuries to decades
-              correctAnswer = value * 10;
-              question = template.replace('{centuries}', value);
-              break;
-          }
-          break;
+
+        default: {
+          // fallback static
+          return { 
+            question: 'How many minutes are in one hour?', 
+            correctAnswer: 60, 
+            templateKeys: null 
+          };
         }
       }
+    };
 
-      return {
-        question: question,
-        correctAnswer: correctAnswer
-      };
-    } else {
-      // Use static question
-      const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
-      return {
-        question: randomQuestion.question,
-        correctAnswer: randomQuestion.answer
-      };
-    }
+    // Select random subtype and generate question
+    const subtypes = Object.keys(timeTemplatesBySubtype);
+    const subtype = timeHelpers.getRandomTemplate(subtypes);
+    const { question, correctAnswer, templateKeys } = generateTimeQuestionBySubtype(subtype);
+
+    return this._createQuestionResult(question, correctAnswer, question, templateKeys, subtype);
   }
 
   // Odd and Even Numbers
@@ -2600,7 +2739,7 @@ class MathBasicsQuestionGenerator {
     // Question types based on difficulty
     const questionTypes = ['identification', 'next_number', 'comparison'];
     if (['double', 'triple', 'quad', 'mixed'].includes(this.difficulty)) {
-      questionTypes.push('pattern', 'sequence', 'sum');
+      questionTypes.push('pattern', 'sequence_nth', 'sequence_places', 'sum');
     }
     const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
 
@@ -2657,15 +2796,35 @@ class MathBasicsQuestionGenerator {
       'Complete the even number pattern: {seq}, __?'
     ];
 
-    const sequenceTemplates = [
+    // Helper function to convert number to ordinal
+    const toOrdinal = (num) => {
+      const j = num % 10;
+      const k = num % 100;
+      if (j === 1 && k !== 11) {
+        return num + "st";
+      }
+      if (j === 2 && k !== 12) {
+        return num + "nd";
+      }
+      if (j === 3 && k !== 13) {
+        return num + "rd";
+      }
+      return num + "th";
+    };
+
+    // Separate templates for different sequence types
+    const sequenceNthTemplates = [
       'What is the {position} odd number after {start}?',
       'Find the {position} odd number after {start}.',
       'What is the {position} even number after {start}?',
       'Find the {position} even number after {start}.',
-      'What odd number is {position} places after {start}?',
-      'What even number is {position} places after {start}?',
       'What is the {position} odd number starting from {start}?',
       'What is the {position} even number starting from {start}?'
+    ];
+
+    const sequencePlacesTemplates = [
+      'What odd number is {position} places after {start}?',
+      'What even number is {position} places after {start}?'
     ];
 
     const sumTemplates = [
@@ -2677,7 +2836,7 @@ class MathBasicsQuestionGenerator {
       'What do you get when you add the first {count} even numbers from {start}?'
     ];
 
-    let question = '', correctAnswer = '', options = null;
+    let question = '', correctAnswer = '', options = null, templateKeys = null, questionSubtype = null;
 
     if (questionType === 'identification') {
       const number = this._getRandomNumber(range.min, range.max);
@@ -2686,107 +2845,164 @@ class MathBasicsQuestionGenerator {
       const template = identificationTemplates[Math.floor(Math.random() * identificationTemplates.length)];
       question = template.replace('{number}', number);
       options = ['odd', 'even'];
+      templateKeys = { number };
+      questionSubtype = 'identification';
     } else if (questionType === 'next_number') {
       const number = this._getRandomNumber(range.min, Math.min(range.max - 2, 98));
       const isOddQuestion = Math.random() < 0.5;
-      const template = nextNumberTemplates[Math.floor(Math.random() * nextNumberTemplates.length)];
-      
       if (isOddQuestion) {
         // Find next odd number
         const nextOdd = number % 2 === 0 ? number + 1 : number + 2;
         correctAnswer = nextOdd;
+        // Use only odd number templates
+        const oddTemplates = nextNumberTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
         question = template.replace('{number}', number);
+        templateKeys = { number };
+        questionSubtype = 'next_odd_number';
       } else {
         // Find next even number
         const nextEven = number % 2 === 0 ? number + 2 : number + 1;
         correctAnswer = nextEven;
+        // Use only even number templates
+        const evenTemplates = nextNumberTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
         question = template.replace('{number}', number);
+        templateKeys = { number };
+        questionSubtype = 'next_even_number';
       }
     } else if (questionType === 'comparison') {
-      const num1 = this._getRandomNumber(range.min, range.max);
-      const num2 = this._getRandomNumber(range.min, range.max);
       const isOddQuestion = Math.random() < 0.5;
-      const template = comparisonTemplates[Math.floor(Math.random() * comparisonTemplates.length)];
-      
+      let num1, num2;
       if (isOddQuestion) {
-        // Find which is odd
-        const oddNum = num1 % 2 === 1 ? num1 : num2;
-        correctAnswer = oddNum;
+        // Generate one odd and one even number, ask for the odd one
+        num1 = this._getRandomNumber(range.min, range.max);
+        num2 = this._getRandomNumber(range.min, range.max);
+        if (num1 % 2 === 0) num1 += 1; // Make num1 odd
+        if (num2 % 2 === 1) num2 += 1; // Make num2 even
+        correctAnswer = num1; // num1 is odd
+        const oddTemplates = comparisonTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
         question = template.replace('{num1}', num1).replace('{num2}', num2);
+        templateKeys = { num1, num2 };
+        questionSubtype = 'comparison_odd';
       } else {
-        // Find which is even
-        const evenNum = num1 % 2 === 0 ? num1 : num2;
-        correctAnswer = evenNum;
+        num1 = this._getRandomNumber(range.min, range.max);
+        num2 = this._getRandomNumber(range.min, range.max);
+        if (num1 % 2 === 1) num1 += 1; // Make num1 even
+        if (num2 % 2 === 0) num2 += 1; // Make num2 odd
+        correctAnswer = num1; // num1 is even
+        const evenTemplates = comparisonTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
         question = template.replace('{num1}', num1).replace('{num2}', num2);
+        templateKeys = { num1, num2 };
+        questionSubtype = 'comparison_even';
       }
     } else if (questionType === 'pattern') {
       const isOddPattern = Math.random() < 0.5;
-      const template = patternTemplates[Math.floor(Math.random() * patternTemplates.length)];
-      
+      let seq;
       if (isOddPattern) {
-        // Generate odd number pattern
         const start = this._getRandomNumber(range.min, Math.min(range.max - 6, 94));
         const startOdd = start % 2 === 0 ? start + 1 : start;
-        const seq = [startOdd, startOdd + 2, startOdd + 4, startOdd + 6];
+        seq = [startOdd, startOdd + 2, startOdd + 4, startOdd + 6];
         correctAnswer = startOdd + 8;
+        const oddTemplates = patternTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
         question = template.replace('{seq}', seq.join(', '));
+        templateKeys = { seq: seq.join(', ') };
+        questionSubtype = 'pattern_odd';
       } else {
-        // Generate even number pattern
         const start = this._getRandomNumber(range.min, Math.min(range.max - 6, 94));
         const startEven = start % 2 === 0 ? start : start + 1;
-        const seq = [startEven, startEven + 2, startEven + 4, startEven + 6];
+        seq = [startEven, startEven + 2, startEven + 4, startEven + 6];
         correctAnswer = startEven + 8;
+        const evenTemplates = patternTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
         question = template.replace('{seq}', seq.join(', '));
+        templateKeys = { seq: seq.join(', ') };
+        questionSubtype = 'pattern_even';
       }
-    } else if (questionType === 'sequence') {
+    } else if (questionType === 'sequence_nth') {
       const start = this._getRandomNumber(range.min, Math.min(range.max - 10, 90));
       const position = this._getRandomNumber(2, 5);
       const isOddSequence = Math.random() < 0.5;
-      const template = sequenceTemplates[Math.floor(Math.random() * sequenceTemplates.length)];
-      
       if (isOddSequence) {
-        // Find nth odd number
         const startOdd = start % 2 === 0 ? start + 1 : start;
         correctAnswer = startOdd + (position - 1) * 2;
-        question = template.replace('{position}', position).replace('{start}', start);
+        const oddTemplates = sequenceNthTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
+        question = template.replace('{position}', toOrdinal(position)).replace('{start}', start);
+        templateKeys = { position, start };
+        questionSubtype = 'sequence_nth_odd';
       } else {
-        // Find nth even number
         const startEven = start % 2 === 0 ? start : start + 1;
         correctAnswer = startEven + (position - 1) * 2;
+        const evenTemplates = sequenceNthTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
+        question = template.replace('{position}', toOrdinal(position)).replace('{start}', start);
+        templateKeys = { position, start };
+        questionSubtype = 'sequence_nth_even';
+      }
+    } else if (questionType === 'sequence_places') {
+      const start = this._getRandomNumber(range.min, Math.min(range.max - 10, 90));
+      const position = this._getRandomNumber(2, 5);
+      const isOddSequence = Math.random() < 0.5;
+      if (isOddSequence) {
+        const startOdd = start % 2 === 0 ? start + 1 : start;
+        correctAnswer = startOdd + position * 2;
+        const oddTemplates = sequencePlacesTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
         question = template.replace('{position}', position).replace('{start}', start);
+        templateKeys = { position, start };
+        questionSubtype = 'sequence_places_odd';
+      } else {
+        const startEven = start % 2 === 0 ? start : start + 1;
+        correctAnswer = startEven + position * 2;
+        const evenTemplates = sequencePlacesTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
+        question = template.replace('{position}', position).replace('{start}', start);
+        templateKeys = { position, start };
+        questionSubtype = 'sequence_places_even';
       }
     } else if (questionType === 'sum') {
       const start = this._getRandomNumber(range.min, Math.min(range.max - 10, 90));
       const count = this._getRandomNumber(3, 5);
       const isOddSum = Math.random() < 0.5;
-      const template = sumTemplates[Math.floor(Math.random() * sumTemplates.length)];
-      
       if (isOddSum) {
-        // Sum of odd numbers
         const startOdd = start % 2 === 0 ? start + 1 : start;
         let sum = 0;
         for (let i = 0; i < count; i++) {
           sum += startOdd + i * 2;
         }
         correctAnswer = sum;
+        const oddTemplates = sumTemplates.filter(t => t.includes('odd'));
+        const template = oddTemplates[Math.floor(Math.random() * oddTemplates.length)];
         question = template.replace('{count}', count).replace('{start}', start);
+        templateKeys = { count, start };
+        questionSubtype = 'sum_odd';
       } else {
-        // Sum of even numbers
         const startEven = start % 2 === 0 ? start : start + 1;
         let sum = 0;
         for (let i = 0; i < count; i++) {
           sum += startEven + i * 2;
         }
         correctAnswer = sum;
+        const evenTemplates = sumTemplates.filter(t => t.includes('even'));
+        const template = evenTemplates[Math.floor(Math.random() * evenTemplates.length)];
         question = template.replace('{count}', count).replace('{start}', start);
+        templateKeys = { count, start };
+        questionSubtype = 'sum_even';
       }
     }
 
-    return {
+    return this._createQuestionResult(
       question,
       correctAnswer,
+      question,
+      templateKeys,
+      questionSubtype,
       options
-    };
+    );
   }
 
   updateOperation(operation) {

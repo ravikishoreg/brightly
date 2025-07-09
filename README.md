@@ -1,6 +1,6 @@
 # Brightly - Interactive Quiz Platform
 
-A simple quiz platform built with vanilla JavaScript and Vite. Answers for the questions might be available in the page itself. Intended audience is kids. Avoiding server infra altogether. Generated mostly with GenAI in couple of days. If you find any questions incorrect, please let me know.
+A simple quiz platform built with JavaScript and Vite. Answers for the static questions will be available in the page itself. Intended audience is kids. Avoiding server infra altogether. Generated mostly with GenAI, added tests for maths questions. If you find any questions incorrect, please raise a ticket/PR.
 
 ## Quick Start
 
