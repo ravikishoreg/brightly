@@ -238,7 +238,7 @@ button:focus-visible {
   background-color: #ffffff;
   border-bottom: 1px solid #dee2e6;
   padding: 1rem 0;
-  margin-bottom: 2rem;
+  margin-bottom: 0rem;
 }
 
 .header-content {
@@ -261,6 +261,21 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.learn-mode-btn {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.25s;
+}
+
+.learn-mode-btn:hover {
+  background-color: #138496;
 }
 
 .auth-btn {
@@ -294,7 +309,7 @@ button:focus-visible {
   background-color: #ffffff;
   border: 1px solid #dee2e6;
   border-radius: 8px;
-  padding: 2rem;
+  padding: 0.75rem 1.5rem;
   margin-bottom: 2rem;
 }
 
@@ -333,7 +348,7 @@ button:focus-visible {
   background-color: #e6ecf3;
   border: 1px solid #dee2e6;
   border-radius: 6px;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
@@ -654,6 +669,7 @@ button:focus-visible {
   flex-direction: column;
   gap: 0.5rem;
   /* width: 100%; */
+  font-size: 1.2rem;
 }
 
 .option {
@@ -704,8 +720,19 @@ button:focus-visible {
 /* Responsive design */
 @media (max-width: 768px) {
   .header-content {
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
+    align-items: center;
+  }
+  
+  .header-right {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  .learn-mode-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
   }
 
   .quiz-header {
@@ -721,6 +748,45 @@ button:focus-visible {
 
   .answer-input {
     flex-direction: column !important;
+  }
+  
+  .answer-input:has(input[type='number']) {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .answer-input:has(input[type='number']) .answer-label {
+    margin-bottom: 0;
+    margin-right: 0.5rem;
+    min-width: auto;
+  }
+  
+  .answer-input:has(input[type='number']) input[type='number'] {
+    width: 100px;
+  }
+
+  .answer-input:has(.options) .answer-label {
+    display: none;
+  }
+
+  .config-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .grammar-config-row {
+    flex-direction: column !important;
+    gap: 0.75rem;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .grammar-config-row .config-item {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
   }
 
   .results-actions {
@@ -1298,4 +1364,270 @@ button:focus-visible {
   flex: 1 1 0;
   min-width: 200px;
   max-width: 350px;
+}
+
+/* Learn Mode Modal Styles */
+.learn-mode-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f8f9fa;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.learn-mode-content {
+  background: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.learn-mode-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  flex-shrink: 0;
+}
+
+.learn-mode-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.category-filter {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.learn-mode-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.learn-mode-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 15px;
+}
+
+.questions-container {
+  display: grid;
+  gap: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.learn-question {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 0;
+}
+
+.learn-question h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.learn-question .question-text {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.learn-question .options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 0;
+}
+
+.learn-question .option {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 1.2rem;
+}
+
+.learn-question .option.correct {
+  background: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  font-weight: 500;
+}
+
+.learn-question .correct-answer {
+  padding: 8px 12px;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  background: #d4edda;
+  color: #155724;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+
+
+.learn-mode-footer {
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Dark theme support for Learn Mode */
+@media (prefers-color-scheme: dark) {
+  .learn-mode-content {
+    background: #1a1a1a;
+    border: 1px solid #333;
+  }
+
+  .learn-mode-header {
+    background: #242424;
+    border-bottom: 1px solid #333;
+  }
+
+  .learn-mode-header h2 {
+    color: #fff;
+  }
+
+  .close-btn {
+    color: #ccc;
+  }
+
+  .close-btn:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .learn-question {
+    background: #242424;
+    border: 1px solid #333;
+  }
+
+  .learn-question h3 {
+    color: #fff;
+  }
+
+  .learn-question .question-text {
+    color: #fff;
+  }
+
+  .learn-question .option {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+  }
+
+  .learn-question .option.correct {
+    background: #155724;
+    border-color: #1e7e34;
+    color: #fff;
+  }
+
+  .learn-question .correct-answer {
+    background: #155724;
+    border-color: #1e7e34;
+    color: #fff;
+  }
+
+
+
+  .learn-mode-footer {
+    background: #242424;
+    border-top: 1px solid #333;
+  }
+}
+
+/* Responsive design for Learn Mode */
+@media (max-width: 768px) {
+  .learn-mode-modal {
+    padding: 0;
+  }
+
+  .learn-mode-content {
+    height: 100vh;
+  }
+
+  .learn-mode-header {
+    padding: 8px 12px;
+  }
+
+  .learn-mode-header h2 {
+    font-size: 1rem;
+  }
+
+  .learn-mode-controls {
+    gap: 8px;
+  }
+
+  .category-filter {
+    min-width: 90px;
+    font-size: 12px;
+    padding: 5px 6px;
+  }
+
+  .learn-mode-body {
+    padding: 8px 12px;
+  }
+
+  .questions-container {
+    gap: 8px;
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .learn-question {
+    padding: 8px 10px;
+  }
+
+  .learn-question .question-text {
+    font-size: 0.85rem;
+  }
+
+  .learn-question .option {
+    padding: 6px 10px;
+    font-size: 1rem;
+  }
+
+
 }

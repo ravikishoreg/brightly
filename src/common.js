@@ -1,6 +1,7 @@
 // Common functionality for all pages
 import './style.css';
 import { quizStorage } from './quiz-storage.js';
+import { toggleLearnModeButton, setLearnModeButtonHandler } from './header.js';
 
 // Helper function to generate a unique key for a question
 export function generateQuestionKey(question) {
@@ -367,6 +368,9 @@ class CommonQuizManager {
     if (this.questionCounter) {
       this.questionCounter.style.display = 'none';
     }
+
+    // Setup Learn Mode button in app header
+    this.setupLearnModeButton();
   }
 
   bindEvents() {
@@ -443,6 +447,9 @@ class CommonQuizManager {
     if (questionCounter) {
       questionCounter.style.display = 'inline-block';
     }
+
+    // Hide Learn Mode button when quiz starts
+    toggleLearnModeButton(false);
   }
 
   displayQuestion() {
@@ -533,7 +540,7 @@ class CommonQuizManager {
               <div class="answer-label">A.</div>
               ${answerInputHTML}
             </div>
-            <button id="submit-answer" class="primary-btn mcq-submit" ${isAnswered ? 'disabled' : ''}>Submit Answer</button>
+            <button id="submit-answer" class="primary-btn mcq-submit" ${isAnswered ? 'disabled' : ''}>Submit</button>
           </div>
           <div id="answer-feedback"></div>
         </div>
@@ -546,7 +553,7 @@ class CommonQuizManager {
           <div class="answer-input">
             <div class="answer-label">A.</div>
             ${answerInputHTML}
-            <button id="submit-answer" class="primary-btn" ${isAnswered ? 'disabled' : ''}>Submit Answer</button>
+            <button id="submit-answer" class="primary-btn" ${isAnswered ? 'disabled' : ''}>Submit</button>
           </div>
           <div id="answer-feedback"></div>
         </div>
@@ -1006,6 +1013,9 @@ class CommonQuizManager {
       questionCounter.style.display = 'none';
     }
 
+    // Show Learn Mode button when quiz is reset
+    toggleLearnModeButton(true);
+
     if (this.timer) {
       this.timer.stop();
     }
@@ -1025,6 +1035,118 @@ class CommonQuizManager {
 
   setQuizTitle(title) {
     this.quizTitle = title;
+  }
+
+  setupLearnModeButton() {
+    // Set the click handler for Learn Mode button
+    setLearnModeButtonHandler(() => this.showLearnMode());
+    
+    // Show Learn Mode button initially (when config section is visible)
+    toggleLearnModeButton(true);
+  }
+
+  showLearnMode() {
+    if (!this.questionGenerator || !this.questionGenerator.getAllStaticQuestions) {
+      alert('Learn Mode is not available for this quiz type.');
+      return;
+    }
+
+    const staticQuestionsData = this.questionGenerator.getAllStaticQuestions();
+    
+    if (!staticQuestionsData || Object.keys(staticQuestionsData).length === 0) {
+      alert('No static questions available for Learn Mode.');
+      return;
+    }
+
+    // Create a modal or overlay to show all static questions
+    this.createLearnModeModal(staticQuestionsData);
+  }
+
+  createLearnModeModal(questionsData) {
+    // Remove existing modal if any
+    const existingModal = document.getElementById('learn-mode-modal');
+    if (existingModal) {
+      existingModal.remove();
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'learn-mode-modal';
+    modal.className = 'learn-mode-modal';
+
+    // Extract categories and flatten questions with their categories
+    const categories = Object.keys(questionsData);
+    const allQuestions = [];
+    
+    categories.forEach(category => {
+      questionsData[category].forEach(q => {
+        allQuestions.push({ ...q, category });
+      });
+    });
+
+    const questionsHTML = allQuestions.map((q, index) => {
+      const optionsHTML = q.options ? q.options.map(option => {
+        // Check if this option is correct (handle both single and multiple correct answers)
+        const isCorrect = Array.isArray(q.correctAnswer) 
+          ? q.correctAnswer.includes(option)
+          : option === q.correctAnswer;
+        return `<div class="option ${isCorrect ? 'correct' : ''}">${option}</div>`;
+      }).join('') : '';
+      
+      // Show correct answer for all questions, whether they have options or not
+      const correctAnswerHTML = q.options ? 
+        `<div class="options">${optionsHTML}</div>` : 
+        `<div class="correct-answer">Answer: <strong>${Array.isArray(q.correctAnswer) ? q.correctAnswer.join(', ') : q.correctAnswer}</strong></div>`;
+      
+      return `
+        <div class="learn-question" data-category="${q.category}">
+          <p class="question-text">${q.question}</p>
+          ${correctAnswerHTML}
+        </div>
+      `;
+    }).join('');
+
+    const categoryFilterHTML = ['All', ...categories].map(cat => 
+      `<option value="${cat}">${cat}</option>`
+    ).join('');
+
+    modal.innerHTML = `
+      <div class="learn-mode-content">
+        <div class="learn-mode-header">
+          <h2>Learn Mode</h2>
+          <div class="learn-mode-controls">
+            <select id="category-filter" class="category-filter">
+              ${categoryFilterHTML}
+            </select>
+            <button class="close-btn" onclick="this.closest('.learn-mode-modal').remove()">×</button>
+          </div>
+        </div>
+        <div class="learn-mode-body">
+          <div class="questions-container">
+            ${questionsHTML}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Add filter functionality
+    const categoryFilter = document.getElementById('category-filter');
+    const questionsContainer = modal.querySelector('.questions-container');
+    
+    categoryFilter.addEventListener('change', (e) => {
+      const selectedCategory = e.target.value;
+      const questions = questionsContainer.querySelectorAll('.learn-question');
+      
+      questions.forEach(q => {
+        const questionCategory = q.dataset.category;
+        if (selectedCategory === 'All' || questionCategory === selectedCategory) {
+          q.style.display = 'block';
+        } else {
+          q.style.display = 'none';
+        }
+      });
+    });
   }
 
   // Save quiz results to storage

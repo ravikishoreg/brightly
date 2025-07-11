@@ -250,74 +250,78 @@ class MathBasicsQuestionGenerator {
     }
   }
 
+  static get staticFractionQuestions() {
+    return [
+      // Basic fraction identification
+      { question: 'What fraction is shown: 1 out of 2 parts?', correctAnswer: '1/2' },
+      { question: 'What fraction is shown: 1 out of 3 parts?', correctAnswer: '1/3' },
+      { question: 'What fraction is shown: 1 out of 4 parts?', correctAnswer: '1/4' },
+      { question: 'What fraction is shown: 2 out of 4 parts?', correctAnswer: '2/4' },
+      { question: 'What fraction is shown: 3 out of 4 parts?', correctAnswer: '3/4' },
+      { question: 'What fraction is shown: 1 out of 5 parts?', correctAnswer: '1/5' },
+      { question: 'What fraction is shown: 2 out of 5 parts?', correctAnswer: '2/5' },
+      { question: 'What fraction is shown: 1 out of 6 parts?', correctAnswer: '1/6' },
+      { question: 'What fraction is shown: 1 out of 8 parts?', correctAnswer: '1/8' },
+      { question: 'What fraction is shown: 1 out of 10 parts?', correctAnswer: '1/10' },
+      
+      // Simple fraction comparison
+      { question: 'Which is bigger: 1/2 or 1/4?', correctAnswer: '1/2' },
+      { question: 'Which is smaller: 1/3 or 1/2?', correctAnswer: '1/3' },
+      { question: 'Which is bigger: 3/4 or 1/4?', correctAnswer: '3/4' },
+      { question: 'Which is smaller: 1/5 or 1/3?', correctAnswer: '1/5' },
+      { question: 'Which is bigger: 2/4 or 1/4?', correctAnswer: '2/4' },
+      
+      // Counting parts
+      { question: 'How many parts make a whole if each part is 1/2?', correctAnswer: 2 },
+      { question: 'How many parts make a whole if each part is 1/3?', correctAnswer: 3 },
+      { question: 'How many parts make a whole if each part is 1/4?', correctAnswer: 4 },
+      { question: 'How many parts make a whole if each part is 1/5?', correctAnswer: 5 },
+      { question: 'How many parts make a whole if each part is 1/6?', correctAnswer: 6 },
+      { question: 'How many parts make a whole if each part is 1/8?', correctAnswer: 8 },
+      { question: 'How many parts make a whole if each part is 1/10?', correctAnswer: 10 },
+      
+      // Simple fraction names
+      { question: 'What is another name for 1/2?', correctAnswer: 'half', options: ['half', 'quarter', 'third', 'fifth'] },
+      { question: 'What is another name for 1/4?', correctAnswer: 'quarter', options: ['quarter', 'half', 'third', 'fifth'] },
+      { question: 'What is another name for 2/4?', correctAnswer: 'half', options: ['half', 'quarter', 'third', 'fifth'] },
+      { question: 'What is another name for 3/4?', correctAnswer: 'three quarters', options: ['three quarters', 'half', 'quarter', 'two thirds'] },
+      
+      // Basic fraction addition (same denominator)
+      { question: 'What is 1/4 + 1/4?', correctAnswer: '2/4' },
+      { question: 'What is 1/3 + 1/3?', correctAnswer: '2/3' },
+      { question: 'What is 1/5 + 1/5?', correctAnswer: '2/5' },
+      { question: 'What is 1/6 + 1/6?', correctAnswer: '2/6' },
+      { question: 'What is 2/4 + 1/4?', correctAnswer: '3/4' },
+      { question: 'What is 1/4 + 2/4?', correctAnswer: '3/4' },
+      
+      // Visual fraction questions
+      { question: 'If a pizza is cut into 4 equal pieces and you eat 1 piece, what fraction did you eat?', correctAnswer: '1/4' },
+      { question: 'If a pizza is cut into 4 equal pieces and you eat 2 pieces, what fraction did you eat?', correctAnswer: '2/4' },
+      { question: 'If a pizza is cut into 4 equal pieces and you eat 3 pieces, what fraction did you eat?', correctAnswer: '3/4' },
+      { question: 'If a chocolate bar is divided into 6 equal parts and you eat 1 part, what fraction did you eat?', correctAnswer: '1/6' },
+      { question: 'If a chocolate bar is divided into 6 equal parts and you eat 2 parts, what fraction did you eat?', correctAnswer: '2/6' },
+      { question: 'If a cake is cut into 8 equal slices and you eat 1 slice, what fraction did you eat?', correctAnswer: '1/8' },
+      { question: 'If a cake is cut into 8 equal slices and you eat 2 slices, what fraction did you eat?', correctAnswer: '2/8' },
+      
+      // Simple fraction of small numbers
+      { question: 'What is half of 2?', correctAnswer: 1 },
+      { question: 'What is half of 4?', correctAnswer: 2 },
+      { question: 'What is half of 6?', correctAnswer: 3 },
+      { question: 'What is half of 8?', correctAnswer: 4 },
+      { question: 'What is half of 10?', correctAnswer: 5 },
+      { question: 'What is a quarter of 4?', correctAnswer: 1 },
+      { question: 'What is a quarter of 8?', correctAnswer: 2 },
+      { question: 'What is a quarter of 12?', correctAnswer: 3 },
+      { question: 'What is a third of 3?', correctAnswer: 1 },
+      { question: 'What is a third of 6?', correctAnswer: 2 },
+      { question: 'What is a third of 9?', correctAnswer: 3 }
+    ];
+  }
+
   // Fractions - Balanced approach for 10-year-olds
   generateFractionQuestion() {
     // Static questions for basic concepts
-    const staticQuestions = [
-      // Basic fraction identification
-      { question: 'What fraction is shown: 1 out of 2 parts?', answer: '1/2' },
-      { question: 'What fraction is shown: 1 out of 3 parts?', answer: '1/3' },
-      { question: 'What fraction is shown: 1 out of 4 parts?', answer: '1/4' },
-      { question: 'What fraction is shown: 2 out of 4 parts?', answer: '2/4' },
-      { question: 'What fraction is shown: 3 out of 4 parts?', answer: '3/4' },
-      { question: 'What fraction is shown: 1 out of 5 parts?', answer: '1/5' },
-      { question: 'What fraction is shown: 2 out of 5 parts?', answer: '2/5' },
-      { question: 'What fraction is shown: 1 out of 6 parts?', answer: '1/6' },
-      { question: 'What fraction is shown: 1 out of 8 parts?', answer: '1/8' },
-      { question: 'What fraction is shown: 1 out of 10 parts?', answer: '1/10' },
-      
-      // Simple fraction comparison
-      { question: 'Which is bigger: 1/2 or 1/4?', answer: '1/2' },
-      { question: 'Which is smaller: 1/3 or 1/2?', answer: '1/3' },
-      { question: 'Which is bigger: 3/4 or 1/4?', answer: '3/4' },
-      { question: 'Which is smaller: 1/5 or 1/3?', answer: '1/5' },
-      { question: 'Which is bigger: 2/4 or 1/4?', answer: '2/4' },
-      
-      // Counting parts
-      { question: 'How many parts make a whole if each part is 1/2?', answer: 2 },
-      { question: 'How many parts make a whole if each part is 1/3?', answer: 3 },
-      { question: 'How many parts make a whole if each part is 1/4?', answer: 4 },
-      { question: 'How many parts make a whole if each part is 1/5?', answer: 5 },
-      { question: 'How many parts make a whole if each part is 1/6?', answer: 6 },
-      { question: 'How many parts make a whole if each part is 1/8?', answer: 8 },
-      { question: 'How many parts make a whole if each part is 1/10?', answer: 10 },
-      
-      // Simple fraction names
-      { question: 'What is another name for 1/2?', answer: 'half', options: ['half', 'quarter', 'third', 'fifth'] },
-      { question: 'What is another name for 1/4?', answer: 'quarter', options: ['quarter', 'half', 'third', 'fifth'] },
-      { question: 'What is another name for 2/4?', answer: 'half', options: ['half', 'quarter', 'third', 'fifth'] },
-      { question: 'What is another name for 3/4?', answer: 'three quarters', options: ['three quarters', 'half', 'quarter', 'two thirds'] },
-      
-      // Basic fraction addition (same denominator)
-      { question: 'What is 1/4 + 1/4?', answer: '2/4' },
-      { question: 'What is 1/3 + 1/3?', answer: '2/3' },
-      { question: 'What is 1/5 + 1/5?', answer: '2/5' },
-      { question: 'What is 1/6 + 1/6?', answer: '2/6' },
-      { question: 'What is 2/4 + 1/4?', answer: '3/4' },
-      { question: 'What is 1/4 + 2/4?', answer: '3/4' },
-      
-      // Visual fraction questions
-      { question: 'If a pizza is cut into 4 equal pieces and you eat 1 piece, what fraction did you eat?', answer: '1/4' },
-      { question: 'If a pizza is cut into 4 equal pieces and you eat 2 pieces, what fraction did you eat?', answer: '2/4' },
-      { question: 'If a pizza is cut into 4 equal pieces and you eat 3 pieces, what fraction did you eat?', answer: '3/4' },
-      { question: 'If a chocolate bar is divided into 6 equal parts and you eat 1 part, what fraction did you eat?', answer: '1/6' },
-      { question: 'If a chocolate bar is divided into 6 equal parts and you eat 2 parts, what fraction did you eat?', answer: '2/6' },
-      { question: 'If a cake is cut into 8 equal slices and you eat 1 slice, what fraction did you eat?', answer: '1/8' },
-      { question: 'If a cake is cut into 8 equal slices and you eat 2 slices, what fraction did you eat?', answer: '2/8' },
-      
-      // Simple fraction of small numbers
-      { question: 'What is half of 2?', answer: 1 },
-      { question: 'What is half of 4?', answer: 2 },
-      { question: 'What is half of 6?', answer: 3 },
-      { question: 'What is half of 8?', answer: 4 },
-      { question: 'What is half of 10?', answer: 5 },
-      { question: 'What is a quarter of 4?', answer: 1 },
-      { question: 'What is a quarter of 8?', answer: 2 },
-      { question: 'What is a quarter of 12?', answer: 3 },
-      { question: 'What is a third of 3?', answer: 1 },
-      { question: 'What is a third of 6?', answer: 2 },
-      { question: 'What is a third of 9?', answer: 3 }
-    ];
+          const staticQuestions = MathBasicsQuestionGenerator.staticFractionQuestions;
 
     // Dynamic question templates for more advanced concepts
     const dynamicTemplates = [
@@ -425,15 +429,15 @@ class MathBasicsQuestionGenerator {
             templateKeys = { num: wholeNumber, fraction: fraction.fraction, fractionValue: fraction.value };
             questionSubtype = 'fraction_of_number';
           } else {
-            // Fallback to static question
-            const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
-            return this._createQuestionResult(
-              randomQuestion.question,
-              randomQuestion.answer,
-              randomQuestion.question,
-              null,
-              'static'
-            );
+                  // Fallback to static question
+      const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
+      return this._createQuestionResult(
+        randomQuestion.question,
+        randomQuestion.correctAnswer,
+        randomQuestion.question,
+        null,
+        'static'
+      );
           }
           break;
         }
@@ -536,7 +540,7 @@ class MathBasicsQuestionGenerator {
       if (randomQuestion.options) {
         return this._createQuestionResult(
           randomQuestion.question,
-          randomQuestion.answer,
+          randomQuestion.correctAnswer,
           randomQuestion.question,
           null,
           'static',
@@ -545,7 +549,7 @@ class MathBasicsQuestionGenerator {
       } else {
         return this._createQuestionResult(
           randomQuestion.question,
-          randomQuestion.answer,
+          randomQuestion.correctAnswer,
           randomQuestion.question,
           null,
           'static'
@@ -732,7 +736,65 @@ class MathBasicsQuestionGenerator {
         correctAnswer = expandedParts.join(' + ');
         templateKeys = { number };
         questionSubtype = 'expanded_form';
-        break;
+        
+        // Generate MCQ options for expanded form questions
+        const options = [correctAnswer];
+        
+        // Generate incorrect options by modifying the expanded form
+        const incorrectOptions = [];
+        
+        // Option 1: Remove one part
+        if (expandedParts.length > 1) {
+          const modifiedParts = expandedParts.slice(0, -1);
+          incorrectOptions.push(modifiedParts.join(' + '));
+        }
+        
+        // Option 2: Add an extra part
+        const extraPart = Math.pow(10, numStr.length);
+        incorrectOptions.push(expandedParts.join(' + ') + ' + ' + extraPart);
+        
+        // Option 3: Change one part
+        if (expandedParts.length > 0) {
+          const modifiedParts = [...expandedParts];
+          modifiedParts[0] = modifiedParts[0] * 2;
+          incorrectOptions.push(modifiedParts.join(' + '));
+        }
+        
+        // Option 4: Reverse the order
+        incorrectOptions.push([...expandedParts].reverse().join(' + '));
+        
+        // Add incorrect options until we have 4 total options
+        while (options.length < 4 && incorrectOptions.length > 0) {
+          const randomOption = incorrectOptions.splice(Math.floor(Math.random() * incorrectOptions.length), 1)[0];
+          if (!options.includes(randomOption)) {
+            options.push(randomOption);
+          }
+        }
+        
+        // If we still don't have enough options, add some generic ones
+        while (options.length < 4) {
+          const genericOption = `${number} + 0`;
+          if (!options.includes(genericOption)) {
+            options.push(genericOption);
+          } else {
+            const anotherOption = `${number} + 1`;
+            if (!options.includes(anotherOption)) {
+              options.push(anotherOption);
+            }
+          }
+        }
+        
+        // Shuffle the options
+        options.sort(() => Math.random() - 0.5);
+        
+        return this._createQuestionResult(
+          question,
+          correctAnswer,
+          question,
+          templateKeys,
+          questionSubtype,
+          options
+        );
       }
       case 'place_swap': {
         if (numStr.length >= 2) {
@@ -1765,201 +1827,204 @@ class MathBasicsQuestionGenerator {
     );
   }
 
-  // Shapes and Geometry
-  generateShapeQuestion() {
-    const shapeQuestions = [
+  static get staticShapeQuestions() {
+    return [
       // Basic 2D shape identification
-      { question: 'How many sides does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
-      { question: 'How many sides does a square have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many sides does a rectangle have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many sides does a pentagon have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many sides does a hexagon have?', answer: 6, options: [5, 6, 7, 8] },
-      { question: 'How many sides does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
-      { question: 'How many sides does a circle have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many sides does a diamond have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many sides does a star have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many sides does a heart have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many sides does a triangle have?', correctAnswer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many sides does a square have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a rectangle have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a pentagon have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many sides does a hexagon have?', correctAnswer: 6, options: [5, 6, 7, 8] },
+      { question: 'How many sides does an octagon have?', correctAnswer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many sides does a circle have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many sides does a diamond have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many sides does a star have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many sides does a heart have?', correctAnswer: 0, options: [0, 1, 2, 3] },
       
       // Shape properties - corners/vertices
-      { question: 'How many corners (vertices) does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
-      { question: 'How many corners (vertices) does a square have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many corners (vertices) does a rectangle have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many corners (vertices) does a pentagon have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many corners (vertices) does a hexagon have?', answer: 6, options: [5, 6, 7, 8] },
-      { question: 'How many corners (vertices) does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
-      { question: 'How many corners (vertices) does a circle have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many corners (vertices) does a diamond have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many corners (vertices) does a star have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many corners (vertices) does a heart have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many corners (vertices) does a triangle have?', correctAnswer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many corners (vertices) does a square have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a rectangle have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a pentagon have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many corners (vertices) does a hexagon have?', correctAnswer: 6, options: [5, 6, 7, 8] },
+      { question: 'How many corners (vertices) does an octagon have?', correctAnswer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many corners (vertices) does a circle have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many corners (vertices) does a diamond have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many corners (vertices) does a star have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many corners (vertices) does a heart have?', correctAnswer: 0, options: [0, 1, 2, 3] },
       
       // 3D shapes - faces
-      { question: 'How many faces does a cube have?', answer: 6, options: [4, 5, 6, 8] },
-      { question: 'How many faces does a rectangular prism have?', answer: 6, options: [4, 5, 6, 8] },
-      { question: 'How many faces does a triangular prism have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many faces does a pyramid have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many faces does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many faces does a cylinder have?', answer: 3, options: [2, 3, 4, 5] },
-      { question: 'How many faces does a cone have?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many faces does a triangular pyramid have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many faces does a square pyramid have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many faces does a hexagonal prism have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many faces does a cube have?', correctAnswer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many faces does a rectangular prism have?', correctAnswer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many faces does a triangular prism have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a pyramid have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a sphere have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many faces does a cylinder have?', correctAnswer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many faces does a cone have?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many faces does a triangular pyramid have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many faces does a square pyramid have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many faces does a hexagonal prism have?', correctAnswer: 8, options: [6, 7, 8, 9] },
       
       // 3D shapes - edges
-      { question: 'How many edges does a cube have?', answer: 12, options: [8, 10, 12, 14] },
-      { question: 'How many edges does a rectangular prism have?', answer: 12, options: [8, 10, 12, 14] },
-      { question: 'How many edges does a triangular prism have?', answer: 9, options: [6, 8, 9, 10] },
-      { question: 'How many edges does a pyramid have?', answer: 8, options: [6, 7, 8, 9] },
-      { question: 'How many edges does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many edges does a cylinder have?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many edges does a cone have?', answer: 1, options: [0, 1, 2, 3] },
-      { question: 'How many edges does a triangular pyramid have?', answer: 6, options: [4, 5, 6, 7] },
-      { question: 'How many edges does a square pyramid have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many edges does a cube have?', correctAnswer: 12, options: [8, 10, 12, 14] },
+      { question: 'How many edges does a rectangular prism have?', correctAnswer: 12, options: [8, 10, 12, 14] },
+      { question: 'How many edges does a triangular prism have?', correctAnswer: 9, options: [6, 8, 9, 10] },
+      { question: 'How many edges does a pyramid have?', correctAnswer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many edges does a sphere have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many edges does a cylinder have?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many edges does a cone have?', correctAnswer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many edges does a triangular pyramid have?', correctAnswer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many edges does a square pyramid have?', correctAnswer: 8, options: [6, 7, 8, 9] },
       
       // 3D shapes - vertices
-      { question: 'How many vertices does a cube have?', answer: 8, options: [6, 7, 8, 9] },
-      { question: 'How many vertices does a rectangular prism have?', answer: 8, options: [6, 7, 8, 9] },
-      { question: 'How many vertices does a triangular prism have?', answer: 6, options: [4, 5, 6, 7] },
-      { question: 'How many vertices does a pyramid have?', answer: 5, options: [4, 5, 6, 7] },
-      { question: 'How many vertices does a sphere have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many vertices does a cylinder have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many vertices does a cone have?', answer: 1, options: [0, 1, 2, 3] },
-      { question: 'How many vertices does a triangular pyramid have?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many vertices does a square pyramid have?', answer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many vertices does a cube have?', correctAnswer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many vertices does a rectangular prism have?', correctAnswer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many vertices does a triangular prism have?', correctAnswer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many vertices does a pyramid have?', correctAnswer: 5, options: [4, 5, 6, 7] },
+      { question: 'How many vertices does a sphere have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a cylinder have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a cone have?', correctAnswer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many vertices does a triangular pyramid have?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many vertices does a square pyramid have?', correctAnswer: 5, options: [4, 5, 6, 7] },
       
       // Shape identification by properties
-      { question: 'What shape has 4 equal sides and 4 right angles?', answer: 'square', options: ['triangle', 'square', 'rectangle', 'diamond'] },
-      { question: 'What shape has 3 sides?', answer: 'triangle', options: ['square', 'triangle', 'pentagon', 'hexagon'] },
-      { question: 'What shape has 6 sides?', answer: 'hexagon', options: ['pentagon', 'hexagon', 'octagon', 'decagon'] },
-      { question: 'What shape has 8 sides?', answer: 'octagon', options: ['hexagon', 'heptagon', 'octagon', 'nonagon'] },
-      { question: 'What shape has 5 sides?', answer: 'pentagon', options: ['square', 'pentagon', 'hexagon', 'octagon'] },
-      { question: 'What shape has 4 sides but not all equal?', answer: 'rectangle', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
-      { question: 'What shape has no sides and no corners?', answer: 'circle', options: ['triangle', 'square', 'circle', 'star'] },
-      { question: 'What shape has 4 equal sides but no right angles?', answer: 'diamond', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
-      { question: 'What shape has 5 pointed sides?', answer: 'star', options: ['pentagon', 'star', 'hexagon', 'octagon'] },
-      { question: 'What shape has 4 sides and looks like a kite?', answer: 'diamond', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
+      { question: 'What shape has 4 equal sides and 4 right angles?', correctAnswer: 'square', options: ['triangle', 'square', 'rectangle', 'diamond'] },
+      { question: 'What shape has 3 sides?', correctAnswer: 'triangle', options: ['square', 'triangle', 'pentagon', 'hexagon'] },
+      { question: 'What shape has 6 sides?', correctAnswer: 'hexagon', options: ['pentagon', 'hexagon', 'octagon', 'decagon'] },
+      { question: 'What shape has 8 sides?', correctAnswer: 'octagon', options: ['hexagon', 'heptagon', 'octagon', 'nonagon'] },
+      { question: 'What shape has 5 sides?', correctAnswer: 'pentagon', options: ['square', 'pentagon', 'hexagon', 'octagon'] },
+      { question: 'What shape has 4 sides but not all equal?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
+      { question: 'What shape has no sides and no corners?', correctAnswer: 'circle', options: ['triangle', 'square', 'circle', 'star'] },
+      { question: 'What shape has 4 equal sides but no right angles?', correctAnswer: 'diamond', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
+      { question: 'What shape has 5 pointed sides?', correctAnswer: 'star', options: ['pentagon', 'star', 'hexagon', 'octagon'] },
+      { question: 'What shape has 4 sides and looks like a kite?', correctAnswer: 'diamond', options: ['square', 'rectangle', 'diamond', 'trapezoid'] },
       
       // Real-world object shapes
-      { question: 'What shape is a basketball?', answer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
-      { question: 'What shape is a soccer ball?', answer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
-      { question: 'What shape is a book?', answer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
-      { question: 'What shape is a pencil?', answer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
-      { question: 'What shape is a pizza?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'What shape is a door?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a window?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a stop sign?', answer: 'octagon', options: ['hexagon', 'heptagon', 'octagon', 'nonagon'] },
-      { question: 'What shape is a traffic cone?', answer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
-      { question: 'What shape is a birthday hat?', answer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
-      { question: 'What shape is a can of soda?', answer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
-      { question: 'What shape is a dice?', answer: 'cube', options: ['cube', 'rectangular prism', 'pyramid', 'sphere'] },
-      { question: 'What shape is a pyramid in Egypt?', answer: 'pyramid', options: ['cube', 'cylinder', 'pyramid', 'cone'] },
-      { question: 'What shape is a tent?', answer: 'triangular prism', options: ['rectangular prism', 'triangular prism', 'pyramid', 'cone'] },
-      { question: 'What shape is a box?', answer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
-      { question: 'What shape is a coin?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'What shape is a table?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a clock?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'What shape is a TV screen?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a plate?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'What shape is a cookie?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'What shape is a sandwich?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a slice of bread?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape is a balloon?', answer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
-      { question: 'What shape is a tree trunk?', answer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
-      { question: 'What shape is a mountain?', answer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
-      { question: 'What shape is a star in the sky?', answer: 'star', options: ['pentagon', 'star', 'hexagon', 'octagon'] },
-      { question: 'What shape is a heart symbol?', answer: 'heart', options: ['circle', 'heart', 'star', 'diamond'] },
+      { question: 'What shape is a basketball?', correctAnswer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
+      { question: 'What shape is a soccer ball?', correctAnswer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
+      { question: 'What shape is a book?', correctAnswer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
+      { question: 'What shape is a pencil?', correctAnswer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
+      { question: 'What shape is a pizza?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'What shape is a door?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a window?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a stop sign?', correctAnswer: 'octagon', options: ['hexagon', 'heptagon', 'octagon', 'nonagon'] },
+      { question: 'What shape is a traffic cone?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
+      { question: 'What shape is a birthday hat?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
+      { question: 'What shape is a can of soda?', correctAnswer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
+      { question: 'What shape is a dice?', correctAnswer: 'cube', options: ['cube', 'rectangular prism', 'pyramid', 'sphere'] },
+      { question: 'What shape is a pyramid in Egypt?', correctAnswer: 'pyramid', options: ['cube', 'cylinder', 'pyramid', 'cone'] },
+      { question: 'What shape is a tent?', correctAnswer: 'triangular prism', options: ['rectangular prism', 'triangular prism', 'pyramid', 'cone'] },
+      { question: 'What shape is a box?', correctAnswer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
+      { question: 'What shape is a coin?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'What shape is a table?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a clock?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'What shape is a TV screen?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a plate?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'What shape is a cookie?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'What shape is a sandwich?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a slice of bread?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape is a balloon?', correctAnswer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
+      { question: 'What shape is a tree trunk?', correctAnswer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
+      { question: 'What shape is a mountain?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
+      { question: 'What shape is a star in the sky?', correctAnswer: 'star', options: ['pentagon', 'star', 'hexagon', 'octagon'] },
+      { question: 'What shape is a heart symbol?', correctAnswer: 'heart', options: ['circle', 'heart', 'star', 'diamond'] },
       
       // 3D shape names
-      { question: 'What is the name of a 3D shape that looks like a ball?', answer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
-      { question: 'What is the name of a 3D shape that looks like a box?', answer: 'cube', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
-      { question: 'What is the name of a 3D shape that looks like a can?', answer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
-      { question: 'What is the name of a 3D shape that looks like a party hat?', answer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
-      { question: 'What is the name of a 3D shape that looks like a pyramid?', answer: 'pyramid', options: ['cube', 'cylinder', 'pyramid', 'cone'] },
-      { question: 'What is the name of a 3D shape that looks like a tent?', answer: 'triangular prism', options: ['rectangular prism', 'triangular prism', 'pyramid', 'cone'] },
-      { question: 'What is the name of a 3D shape that looks like a book?', answer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
-      { question: 'What is the name of a 3D shape that looks like a dice?', answer: 'cube', options: ['cube', 'rectangular prism', 'pyramid', 'sphere'] },
-      { question: 'What is the name of a 3D shape that looks like a pencil?', answer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
-      { question: 'What is the name of a 3D shape that looks like a traffic cone?', answer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
+      { question: 'What is the name of a 3D shape that looks like a ball?', correctAnswer: 'sphere', options: ['cube', 'sphere', 'cylinder', 'cone'] },
+      { question: 'What is the name of a 3D shape that looks like a box?', correctAnswer: 'cube', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
+      { question: 'What is the name of a 3D shape that looks like a can?', correctAnswer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
+      { question: 'What is the name of a 3D shape that looks like a party hat?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
+      { question: 'What is the name of a 3D shape that looks like a pyramid?', correctAnswer: 'pyramid', options: ['cube', 'cylinder', 'pyramid', 'cone'] },
+      { question: 'What is the name of a 3D shape that looks like a tent?', correctAnswer: 'triangular prism', options: ['rectangular prism', 'triangular prism', 'pyramid', 'cone'] },
+      { question: 'What is the name of a 3D shape that looks like a book?', correctAnswer: 'rectangular prism', options: ['cube', 'rectangular prism', 'cylinder', 'pyramid'] },
+      { question: 'What is the name of a 3D shape that looks like a dice?', correctAnswer: 'cube', options: ['cube', 'rectangular prism', 'pyramid', 'sphere'] },
+      { question: 'What is the name of a 3D shape that looks like a pencil?', correctAnswer: 'cylinder', options: ['cube', 'cylinder', 'cone', 'sphere'] },
+      { question: 'What is the name of a 3D shape that looks like a traffic cone?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'pyramid', 'sphere'] },
       
       // Shape comparisons
-      { question: 'Which of these shapes has no corners: square, circle, triangle?', answer: 'circle', options: ['square', 'circle', 'triangle'] },
-      { question: 'Which of these shapes has the most sides: triangle, square, hexagon?', answer: 'hexagon', options: ['triangle', 'square', 'hexagon'] },
-      { question: 'Which of these shapes has the fewest sides: pentagon, triangle, octagon?', answer: 'triangle', options: ['pentagon', 'triangle', 'octagon'] },
-      { question: 'Which of these shapes has no sides: star, circle, diamond?', answer: 'circle', options: ['star', 'circle', 'diamond'] },
-      { question: 'Which of these shapes has 4 sides: triangle, square, pentagon?', answer: 'square', options: ['triangle', 'square', 'pentagon'] },
-      { question: 'Which of these shapes has 5 sides: hexagon, pentagon, octagon?', answer: 'pentagon', options: ['hexagon', 'pentagon', 'octagon'] },
-      { question: 'Which of these shapes has 6 sides: pentagon, hexagon, octagon?', answer: 'hexagon', options: ['pentagon', 'hexagon', 'octagon'] },
-      { question: 'Which of these shapes has 8 sides: hexagon, octagon, decagon?', answer: 'octagon', options: ['hexagon', 'octagon', 'decagon'] },
-      { question: 'Which of these shapes has equal sides: rectangle, square, triangle?', answer: 'square', options: ['rectangle', 'square', 'triangle'] },
-      { question: 'Which of these shapes has right angles: circle, triangle, square?', answer: 'square', options: ['circle', 'triangle', 'square'] },
+      { question: 'Which of these shapes has no corners: square, circle, triangle?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle'] },
+      { question: 'Which of these shapes has the most sides: triangle, square, hexagon?', correctAnswer: 'hexagon', options: ['triangle', 'square', 'hexagon'] },
+      { question: 'Which of these shapes has the fewest sides: pentagon, triangle, octagon?', correctAnswer: 'triangle', options: ['pentagon', 'triangle', 'octagon'] },
+      { question: 'Which of these shapes has no sides: star, circle, diamond?', correctAnswer: 'circle', options: ['star', 'circle', 'diamond'] },
+      { question: 'Which of these shapes has 4 sides: triangle, square, pentagon?', correctAnswer: 'square', options: ['triangle', 'square', 'pentagon'] },
+      { question: 'Which of these shapes has 5 sides: hexagon, pentagon, octagon?', correctAnswer: 'pentagon', options: ['hexagon', 'pentagon', 'octagon'] },
+      { question: 'Which of these shapes has 6 sides: pentagon, hexagon, octagon?', correctAnswer: 'hexagon', options: ['pentagon', 'hexagon', 'octagon'] },
+      { question: 'Which of these shapes has 8 sides: hexagon, octagon, decagon?', correctAnswer: 'octagon', options: ['hexagon', 'octagon', 'decagon'] },
+      { question: 'Which of these shapes has equal sides: rectangle, square, triangle?', correctAnswer: 'square', options: ['rectangle', 'square', 'triangle'] },
+      { question: 'Which of these shapes has right angles: circle, triangle, square?', correctAnswer: 'square', options: ['circle', 'triangle', 'square'] },
       
       // Shape properties - angles
-      { question: 'How many right angles does a square have?', answer: 4, options: [2, 3, 4, 5] },
-      { question: 'How many right angles does a rectangle have?', answer: 4, options: [2, 3, 4, 5] },
-      { question: 'How many right angles does a triangle have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a circle have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a pentagon have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a hexagon have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does an octagon have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a diamond have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a star have?', answer: 0, options: [0, 1, 2, 3] },
-      { question: 'How many right angles does a heart have?', answer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a square have?', correctAnswer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many right angles does a rectangle have?', correctAnswer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many right angles does a triangle have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a circle have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a pentagon have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a hexagon have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does an octagon have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a diamond have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a star have?', correctAnswer: 0, options: [0, 1, 2, 3] },
+      { question: 'How many right angles does a heart have?', correctAnswer: 0, options: [0, 1, 2, 3] },
       
       // Shape counting
-      { question: 'How many triangles are in a star?', answer: 5, options: [3, 4, 5, 6] },
-      { question: 'How many squares are in a cube?', answer: 6, options: [4, 5, 6, 8] },
-      { question: 'How many rectangles are in a rectangular prism?', answer: 6, options: [4, 5, 6, 8] },
-      { question: 'How many triangles are in a triangular prism?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many triangles are in a triangular pyramid?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many squares are in a square pyramid?', answer: 1, options: [1, 2, 3, 4] },
-      { question: 'How many circles are in a cylinder?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many circles are in a cone?', answer: 1, options: [1, 2, 3, 4] },
-      { question: 'How many triangles are in a pyramid?', answer: 4, options: [3, 4, 5, 6] },
-      { question: 'How many rectangles are in a rectangular prism?', answer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many triangles are in a star?', correctAnswer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many squares are in a cube?', correctAnswer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many rectangles are in a rectangular prism?', correctAnswer: 6, options: [4, 5, 6, 8] },
+      { question: 'How many triangles are in a triangular prism?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many triangles are in a triangular pyramid?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many squares are in a square pyramid?', correctAnswer: 1, options: [1, 2, 3, 4] },
+      { question: 'How many circles are in a cylinder?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many circles are in a cone?', correctAnswer: 1, options: [1, 2, 3, 4] },
+      { question: 'How many triangles are in a pyramid?', correctAnswer: 4, options: [3, 4, 5, 6] },
+      { question: 'How many rectangles are in a rectangular prism?', correctAnswer: 6, options: [4, 5, 6, 8] },
       
       // Shape patterns and sequences
-      { question: 'What shape comes next: triangle, square, triangle, square, __?', answer: 'triangle', options: ['square', 'triangle', 'circle', 'star'] },
-      { question: 'What shape comes next: circle, square, circle, square, __?', answer: 'circle', options: ['square', 'circle', 'triangle', 'star'] },
-      { question: 'What shape comes next: star, heart, star, heart, __?', answer: 'star', options: ['heart', 'star', 'diamond', 'circle'] },
-      { question: 'What shape comes next: diamond, triangle, diamond, triangle, __?', answer: 'diamond', options: ['triangle', 'diamond', 'square', 'circle'] },
-      { question: 'What shape comes next: rectangle, circle, rectangle, circle, __?', answer: 'rectangle', options: ['circle', 'rectangle', 'triangle', 'square'] },
+      { question: 'What shape comes next: triangle, square, triangle, square, __?', correctAnswer: 'triangle', options: ['square', 'triangle', 'circle', 'star'] },
+      { question: 'What shape comes next: circle, square, circle, square, __?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'star'] },
+      { question: 'What shape comes next: star, heart, star, heart, __?', correctAnswer: 'star', options: ['heart', 'star', 'diamond', 'circle'] },
+      { question: 'What shape comes next: diamond, triangle, diamond, triangle, __?', correctAnswer: 'diamond', options: ['triangle', 'diamond', 'square', 'circle'] },
+      { question: 'What shape comes next: rectangle, circle, rectangle, circle, __?', correctAnswer: 'rectangle', options: ['circle', 'rectangle', 'triangle', 'square'] },
       
       // Shape sorting and classification
-      { question: 'Which shape does not belong: square, circle, triangle, rectangle?', answer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
-      { question: 'Which shape does not belong: triangle, square, pentagon, circle?', answer: 'circle', options: ['triangle', 'square', 'pentagon', 'circle'] },
-      { question: 'Which shape does not belong: star, heart, diamond, square?', answer: 'square', options: ['star', 'heart', 'diamond', 'square'] },
-      { question: 'Which shape does not belong: sphere, cube, cylinder, triangle?', answer: 'triangle', options: ['sphere', 'cube', 'cylinder', 'triangle'] },
-      { question: 'Which shape does not belong: cone, pyramid, sphere, rectangle?', answer: 'rectangle', options: ['cone', 'pyramid', 'sphere', 'rectangle'] },
+      { question: 'Which shape does not belong: square, circle, triangle, rectangle?', correctAnswer: 'circle', options: ['square', 'circle', 'triangle', 'rectangle'] },
+      { question: 'Which shape does not belong: triangle, square, pentagon, circle?', correctAnswer: 'circle', options: ['triangle', 'square', 'pentagon', 'circle'] },
+      { question: 'Which shape does not belong: star, heart, diamond, square?', correctAnswer: 'square', options: ['star', 'heart', 'diamond', 'square'] },
+      { question: 'Which shape does not belong: sphere, cube, cylinder, triangle?', correctAnswer: 'triangle', options: ['sphere', 'cube', 'cylinder', 'triangle'] },
+      { question: 'Which shape does not belong: cone, pyramid, sphere, rectangle?', correctAnswer: 'rectangle', options: ['cone', 'pyramid', 'sphere', 'rectangle'] },
       
       // Shape symmetry
-      { question: 'How many lines of symmetry does a square have?', answer: 4, options: [2, 3, 4, 5] },
-      { question: 'How many lines of symmetry does a rectangle have?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many lines of symmetry does a triangle have?', answer: 3, options: [2, 3, 4, 5] },
-      { question: 'How many lines of symmetry does a circle have?', answer: 'infinite', options: ['2', '4', 'infinite', '8'] },
-      { question: 'How many lines of symmetry does a pentagon have?', answer: 5, options: [3, 4, 5, 6] },
-      { question: 'How many lines of symmetry does a hexagon have?', answer: 6, options: [4, 5, 6, 7] },
-      { question: 'How many lines of symmetry does a star have?', answer: 5, options: [3, 4, 5, 6] },
-      { question: 'How many lines of symmetry does a heart have?', answer: 1, options: [0, 1, 2, 3] },
-      { question: 'How many lines of symmetry does a diamond have?', answer: 2, options: [1, 2, 3, 4] },
-      { question: 'How many lines of symmetry does an octagon have?', answer: 8, options: [6, 7, 8, 9] },
+      { question: 'How many lines of symmetry does a square have?', correctAnswer: 4, options: [2, 3, 4, 5] },
+      { question: 'How many lines of symmetry does a rectangle have?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many lines of symmetry does a triangle have?', correctAnswer: 3, options: [2, 3, 4, 5] },
+      { question: 'How many lines of symmetry does a circle have?', correctAnswer: 'infinite', options: ['2', '4', 'infinite', '8'] },
+      { question: 'How many lines of symmetry does a pentagon have?', correctAnswer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many lines of symmetry does a hexagon have?', correctAnswer: 6, options: [4, 5, 6, 7] },
+      { question: 'How many lines of symmetry does a star have?', correctAnswer: 5, options: [3, 4, 5, 6] },
+      { question: 'How many lines of symmetry does a heart have?', correctAnswer: 1, options: [0, 1, 2, 3] },
+      { question: 'How many lines of symmetry does a diamond have?', correctAnswer: 2, options: [1, 2, 3, 4] },
+      { question: 'How many lines of symmetry does an octagon have?', correctAnswer: 8, options: [6, 7, 8, 9] },
       
       // Advanced shape properties
-      { question: 'What shape has all sides equal and all angles equal?', answer: 'square', options: ['rectangle', 'square', 'diamond', 'triangle'] },
-      { question: 'What shape has opposite sides equal and parallel?', answer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
-      { question: 'What shape has all sides equal but angles not equal?', answer: 'diamond', options: ['square', 'rectangle', 'diamond', 'triangle'] },
-      { question: 'What shape has no straight sides?', answer: 'circle', options: ['triangle', 'square', 'circle', 'star'] },
-      { question: 'What shape has exactly one curved side?', answer: 'cone', options: ['cylinder', 'cone', 'sphere', 'cube'] },
-      { question: 'What shape has exactly two curved sides?', answer: 'cylinder', options: ['cone', 'cylinder', 'sphere', 'cube'] },
-      { question: 'What shape has no curved sides?', answer: 'cube', options: ['sphere', 'cylinder', 'cone', 'cube'] },
-      { question: 'What shape has the most faces: cube, pyramid, sphere?', answer: 'cube', options: ['cube', 'pyramid', 'sphere'] },
-      { question: 'What shape has the most edges: cube, pyramid, cylinder?', answer: 'cube', options: ['cube', 'pyramid', 'cylinder'] },
-      { question: 'What shape has the most vertices: cube, pyramid, sphere?', answer: 'cube', options: ['cube', 'pyramid', 'sphere'] }
+      { question: 'What shape has all sides equal and all angles equal?', correctAnswer: 'square', options: ['rectangle', 'square', 'diamond', 'triangle'] },
+      { question: 'What shape has opposite sides equal and parallel?', correctAnswer: 'rectangle', options: ['square', 'rectangle', 'triangle', 'circle'] },
+      { question: 'What shape has all sides equal but angles not equal?', correctAnswer: 'diamond', options: ['square', 'rectangle', 'diamond', 'triangle'] },
+      { question: 'What shape has no straight sides?', correctAnswer: 'circle', options: ['triangle', 'square', 'circle', 'star'] },
+      { question: 'What shape has exactly one curved side?', correctAnswer: 'cone', options: ['cylinder', 'cone', 'sphere', 'cube'] },
+      { question: 'What shape has exactly two curved sides?', correctAnswer: 'cylinder', options: ['cone', 'cylinder', 'sphere', 'cube'] },
+      { question: 'What shape has no curved sides?', correctAnswer: 'cube', options: ['sphere', 'cylinder', 'cone', 'cube'] },
+      { question: 'What shape has the most faces: cube, pyramid, sphere?', correctAnswer: 'cube', options: ['cube', 'pyramid', 'sphere'] },
+      { question: 'What shape has the most edges: cube, pyramid, cylinder?', correctAnswer: 'cube', options: ['cube', 'pyramid', 'cylinder'] },
+      { question: 'What shape has the most vertices: cube, pyramid, sphere?', correctAnswer: 'cube', options: ['cube', 'pyramid', 'sphere'] }
     ];
+  }
+  // Shapes and Geometry
+  generateShapeQuestion() {
+    const shapeQuestions = MathBasicsQuestionGenerator.staticShapeQuestions;
 
     const randomQuestion = shapeQuestions[Math.floor(Math.random() * shapeQuestions.length)];
     
     return this._createQuestionResult(
       randomQuestion.question,
-      randomQuestion.answer,
+      randomQuestion.correctAnswer,
       randomQuestion.question,
       null, // Static questions have no template keys
       'static',
@@ -1967,6 +2032,83 @@ class MathBasicsQuestionGenerator {
     );
   }
 
+  static get staticMeasurementQuestions() {
+    return [
+      // Time measurements
+      { question: 'How many minutes are in 1 hour?', correctAnswer: 60 },
+      { question: 'How many hours are in 1 day?', correctAnswer: 24 },
+      { question: 'How many days are in 1 week?', correctAnswer: 7 },
+      { question: 'How many months are in 1 year?', correctAnswer: 12 },
+      { question: 'How many seconds are in 1 minute?', correctAnswer: 60 },
+      { question: 'How many weeks are in 1 month?', correctAnswer: 4 },
+      { question: 'How many days are in 1 month?', correctAnswer: 30 },
+      { question: 'How many years are in 1 decade?', correctAnswer: 10 },
+      { question: 'How many years are in 1 century?', correctAnswer: 100 },
+      { question: 'How many minutes are in half an hour?', correctAnswer: 30 },
+      
+      // Length measurements
+      { question: 'How many centimeters are in 1 meter?', correctAnswer: 100 },
+      { question: 'How many meters are in 1 kilometer?', correctAnswer: 1000 },
+      { question: 'How many millimeters are in 1 centimeter?', correctAnswer: 10 },
+      { question: 'How many centimeters are in 1 kilometer?', correctAnswer: 100000 },
+      { question: 'How many inches are in 1 foot?', correctAnswer: 12 },
+      { question: 'How many feet are in 1 yard?', correctAnswer: 3 },
+      { question: 'How many yards are in 1 mile?', correctAnswer: 1760 },
+      
+      // Weight measurements
+      { question: 'How many grams are in 1 kilogram?', correctAnswer: 1000 },
+      { question: 'How many milligrams are in 1 gram?', correctAnswer: 1000 },
+      { question: 'How many kilograms are in 1 ton?', correctAnswer: 1000 },
+      { question: 'How many ounces are in 1 pound?', correctAnswer: 16 },
+      { question: 'How many pounds are in 1 ton?', correctAnswer: 2000 },
+      
+      // Capacity measurements
+      { question: 'How many milliliters are in 1 liter?', correctAnswer: 1000 },
+      { question: 'How many liters are in 1 kiloliter?', correctAnswer: 1000 },
+      { question: 'How many cups are in 1 liter?', correctAnswer: 4 },
+      { question: 'How many tablespoons are in 1 cup?', correctAnswer: 16 },
+      { question: 'How many teaspoons are in 1 tablespoon?', correctAnswer: 3 },
+      { question: 'How many fluid ounces are in 1 cup?', correctAnswer: 8 },
+      
+      // Simple comparisons
+      { question: 'Which is longer: 50 cm or 100 cm?', correctAnswer: 100 },
+      { question: 'Which is shorter: 200 cm or 100 cm?', correctAnswer: 100 },
+      { question: 'Which is longer: 500 meters or 1000 meters?', correctAnswer: 1000 },
+      { question: 'Which is heavier: a 5 kg bag or a 2 kg bag?', correctAnswer: 5 },
+      { question: 'Which is lighter: a 3 kg book or a 7 kg book?', correctAnswer: 3 },
+      { question: 'Which is heavier: a 1000 g apple or a 500 g apple?', correctAnswer: 1000 },
+      { question: 'Which holds more: 500 ml bottle or 1000 ml bottle?', correctAnswer: 1000 },
+      { question: 'Which holds less: 2 liter jug or 1 liter jug?', correctAnswer: 1 },
+      { question: 'Which is longer: 30 cm or 100 cm?', correctAnswer: 100 },
+      { question: 'Which is heavier: 1 pound or 2 pounds?', correctAnswer: 2 },
+      
+      // Temperature
+      { question: 'What is the freezing point of water in Celsius?', correctAnswer: 0 },
+      { question: 'What is the boiling point of water in Celsius?', correctAnswer: 100 },
+      { question: 'What is the freezing point of water in Fahrenheit?', correctAnswer: 32 },
+      { question: 'What is the boiling point of water in Fahrenheit?', correctAnswer: 212 },
+      { question: 'What is room temperature in Celsius?', correctAnswer: 20 },
+      { question: 'What is body temperature in Celsius?', correctAnswer: 37 },
+      
+      // Area and volume
+      { question: 'How many square centimeters are in 1 square meter?', correctAnswer: 10000 },
+      { question: 'How many square meters are in 1 square kilometer?', correctAnswer: 1000000 },
+      { question: 'How many cubic centimeters are in 1 cubic meter?', correctAnswer: 1000000 },
+      { question: 'How many cubic meters are in 1 cubic kilometer?', correctAnswer: 1000000000 },
+      
+      // Money and currency
+      { question: 'How many paisa are in 1 rupee?', correctAnswer: 100 },
+      { question: 'How many rupees are in 100 paisa?', correctAnswer: 1 },
+      { question: 'How many cents are in 1 dollar?', correctAnswer: 100 },
+      { question: 'How many dollars are in 100 cents?', correctAnswer: 1 },
+      
+      // Speed and distance
+      { question: 'How many kilometers per hour is 1 meter per second?', correctAnswer: 3.6 },
+      { question: 'How many meters per second is 1 kilometer per hour?', correctAnswer: 0.28 },
+      { question: 'How many miles per hour is 1 kilometer per hour?', correctAnswer: 0.62 },
+      { question: 'How many kilometers per hour is 1 mile per hour?', correctAnswer: 1.61 }
+    ];
+  }
   // Measurement
   generateMeasurementQuestion() {
     // Helper function to get measurement ranges based on difficulty
@@ -2156,81 +2298,7 @@ class MathBasicsQuestionGenerator {
     ];
 
     // Static questions for variety
-    const staticQuestions = [
-      // Time measurements
-      { question: 'How many minutes are in 1 hour?', answer: 60 },
-      { question: 'How many hours are in 1 day?', answer: 24 },
-      { question: 'How many days are in 1 week?', answer: 7 },
-      { question: 'How many months are in 1 year?', answer: 12 },
-      { question: 'How many seconds are in 1 minute?', answer: 60 },
-      { question: 'How many weeks are in 1 month?', answer: 4 },
-      { question: 'How many days are in 1 month?', answer: 30 },
-      { question: 'How many years are in 1 decade?', answer: 10 },
-      { question: 'How many years are in 1 century?', answer: 100 },
-      { question: 'How many minutes are in half an hour?', answer: 30 },
-      
-      // Length measurements
-      { question: 'How many centimeters are in 1 meter?', answer: 100 },
-      { question: 'How many meters are in 1 kilometer?', answer: 1000 },
-      { question: 'How many millimeters are in 1 centimeter?', answer: 10 },
-      { question: 'How many centimeters are in 1 kilometer?', answer: 100000 },
-      { question: 'How many inches are in 1 foot?', answer: 12 },
-      { question: 'How many feet are in 1 yard?', answer: 3 },
-      { question: 'How many yards are in 1 mile?', answer: 1760 },
-      
-      // Weight measurements
-      { question: 'How many grams are in 1 kilogram?', answer: 1000 },
-      { question: 'How many milligrams are in 1 gram?', answer: 1000 },
-      { question: 'How many kilograms are in 1 ton?', answer: 1000 },
-      { question: 'How many ounces are in 1 pound?', answer: 16 },
-      { question: 'How many pounds are in 1 ton?', answer: 2000 },
-      
-      // Capacity measurements
-      { question: 'How many milliliters are in 1 liter?', answer: 1000 },
-      { question: 'How many liters are in 1 kiloliter?', answer: 1000 },
-      { question: 'How many cups are in 1 liter?', answer: 4 },
-      { question: 'How many tablespoons are in 1 cup?', answer: 16 },
-      { question: 'How many teaspoons are in 1 tablespoon?', answer: 3 },
-      { question: 'How many fluid ounces are in 1 cup?', answer: 8 },
-      
-      // Simple comparisons
-      { question: 'Which is longer: 50 cm or 100 cm?', answer: 100 },
-      { question: 'Which is shorter: 200 cm or 100 cm?', answer: 100 },
-      { question: 'Which is longer: 500 meters or 1000 meters?', answer: 1000 },
-      { question: 'Which is heavier: a 5 kg bag or a 2 kg bag?', answer: 5 },
-      { question: 'Which is lighter: a 3 kg book or a 7 kg book?', answer: 3 },
-      { question: 'Which is heavier: a 1000 g apple or a 500 g apple?', answer: 1000 },
-      { question: 'Which holds more: 500 ml bottle or 1000 ml bottle?', answer: 1000 },
-      { question: 'Which holds less: 2 liter jug or 1 liter jug?', answer: 1 },
-      { question: 'Which is longer: 30 cm or 100 cm?', answer: 100 },
-      { question: 'Which is heavier: 1 pound or 2 pounds?', answer: 2 },
-      
-      // Temperature
-      { question: 'What is the freezing point of water in Celsius?', answer: 0 },
-      { question: 'What is the boiling point of water in Celsius?', answer: 100 },
-      { question: 'What is the freezing point of water in Fahrenheit?', answer: 32 },
-      { question: 'What is the boiling point of water in Fahrenheit?', answer: 212 },
-      { question: 'What is room temperature in Celsius?', answer: 20 },
-      { question: 'What is body temperature in Celsius?', answer: 37 },
-      
-      // Area and volume
-      { question: 'How many square centimeters are in 1 square meter?', answer: 10000 },
-      { question: 'How many square meters are in 1 square kilometer?', answer: 1000000 },
-      { question: 'How many cubic centimeters are in 1 cubic meter?', answer: 1000000 },
-      { question: 'How many cubic meters are in 1 cubic kilometer?', answer: 1000000000 },
-      
-      // Money and currency
-      { question: 'How many paisa are in 1 rupee?', answer: 100 },
-      { question: 'How many rupees are in 100 paisa?', answer: 1 },
-      { question: 'How many cents are in 1 dollar?', answer: 100 },
-      { question: 'How many dollars are in 100 cents?', answer: 1 },
-      
-      // Speed and distance
-      { question: 'How many kilometers per hour is 1 meter per second?', answer: 3.6 },
-      { question: 'How many meters per second is 1 kilometer per hour?', answer: 0.28 },
-      { question: 'How many miles per hour is 1 kilometer per hour?', answer: 0.62 },
-      { question: 'How many kilometers per hour is 1 mile per hour?', answer: 1.61 }
-    ];
+          const staticQuestions = MathBasicsQuestionGenerator.staticMeasurementQuestions;
 
     // Decide whether to use static or dynamic question
     const useDynamic = Math.random() < 0.7; // 70% chance for dynamic questions
@@ -2389,64 +2457,67 @@ class MathBasicsQuestionGenerator {
         case 'real_world': {
           const num1 = getRandomNumber(range.min, Math.min(range.max, 20));
           const conversionType = Math.floor(Math.random() * 10);
+          // Select the specific template that matches the conversion type
+          const specificTemplate = questionType.templates[conversionType];
+          
           switch (conversionType) {
             case 0: // cups in liters
               correctAnswer = num1 * 4;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_cups_in_liters';
               break;
             case 1: // tablespoons in cups
               correctAnswer = num1 * 16;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_tablespoons_in_cups';
               break;
             case 2: // teaspoons in tablespoons
               correctAnswer = num1 * 3;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_teaspoons_in_tablespoons';
               break;
             case 3: // inches in feet
               correctAnswer = num1 * 12;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_inches_in_feet';
               break;
             case 4: // feet in yards
               correctAnswer = num1 * 3;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_feet_in_yards';
               break;
             case 5: // ounces in pounds
               correctAnswer = num1 * 16;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_ounces_in_pounds';
               break;
             case 6: // pounds in tons
               correctAnswer = num1 * 2000;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_pounds_in_tons';
               break;
             case 7: // seconds in minutes
               correctAnswer = num1 * 60;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_seconds_in_minutes';
               break;
             case 8: // minutes in hours
               correctAnswer = num1 * 60;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_minutes_in_hours';
               break;
             case 9: // hours in days
               correctAnswer = num1 * 24;
-              question = template.replace('{num1}', num1);
+              question = specificTemplate.replace('{num1}', num1);
               templateKeys = { num1 };
               questionSubtype = 'real_world_hours_in_days';
               break;
@@ -2469,12 +2540,44 @@ class MathBasicsQuestionGenerator {
       const randomQuestion = staticQuestions[Math.floor(Math.random() * staticQuestions.length)];
       return this._createQuestionResult(
         randomQuestion.question,
-        randomQuestion.answer,
+        randomQuestion.correctAnswer,
         randomQuestion.question,
         null,
         'static'
       );
     }
+  }
+
+  static get staticTimeQuestions() {
+    return [
+      // Basic time units (truly static knowledge)
+      { question: 'How many seconds are in one minute?', correctAnswer: 60 },
+      { question: 'How many minutes are in one hour?', correctAnswer: 60 },
+      { question: 'How many hours are in one day?', correctAnswer: 24 },
+      { question: 'How many days are in one week?', correctAnswer: 7 },
+      { question: 'How many weeks are in one month?', correctAnswer: 4 },
+      { question: 'How many months are in one year?', correctAnswer: 12 },
+      { question: 'How many years are in one decade?', correctAnswer: 10 },
+      { question: 'How many years are in one century?', correctAnswer: 100 },
+      { question: 'How many decades are in one century?', correctAnswer: 10 },
+      
+      // Common time fractions
+      { question: 'How many minutes are in half an hour?', correctAnswer: 30 },
+      { question: 'How many minutes are in a quarter hour?', correctAnswer: 15 },
+      { question: 'How many seconds are in half a minute?', correctAnswer: 30 },
+      
+      // Standard times in 12-hour format
+      { question: 'What time is midnight?', correctAnswer: '12:00 AM' },
+      { question: 'What time is noon?', correctAnswer: '12:00 PM' },
+      { question: 'What time is lunch time typically?', correctAnswer: '12:00 PM' },
+      { question: 'What time is dinner time typically?', correctAnswer: '7:00 PM' },
+      { question: 'What time is bedtime typically?', correctAnswer: '9:00 PM' },
+      { question: 'What time is wake up time typically?', correctAnswer: '7:00 AM' },
+      
+      // Time boundaries
+      { question: 'What time comes after 11:59 PM?', correctAnswer: '12:00 AM' },
+      { question: 'What time comes before 12:00 AM?', correctAnswer: '11:59 PM' }
+    ];
   }
 
   generateTimeQuestion() {
@@ -2531,35 +2634,7 @@ class MathBasicsQuestionGenerator {
 
     // Time question templates organized by subtype
     const timeTemplatesBySubtype = {
-      static: [
-        // Basic time units (truly static knowledge)
-        { question: 'How many seconds are in one minute?', answer: 60 },
-        { question: 'How many minutes are in one hour?', answer: 60 },
-        { question: 'How many hours are in one day?', answer: 24 },
-        { question: 'How many days are in one week?', answer: 7 },
-        { question: 'How many weeks are in one month?', answer: 4 },
-        { question: 'How many months are in one year?', answer: 12 },
-        { question: 'How many years are in one decade?', answer: 10 },
-        { question: 'How many years are in one century?', answer: 100 },
-        { question: 'How many decades are in one century?', answer: 10 },
-        
-        // Common time fractions
-        { question: 'How many minutes are in half an hour?', answer: 30 },
-        { question: 'How many minutes are in a quarter hour?', answer: 15 },
-        { question: 'How many seconds are in half a minute?', answer: 30 },
-        
-        // Standard times in 12-hour format
-        { question: 'What time is midnight?', answer: '12:00 AM' },
-        { question: 'What time is noon?', answer: '12:00 PM' },
-        { question: 'What time is lunch time typically?', answer: '12:00 PM' },
-        { question: 'What time is dinner time typically?', answer: '7:00 PM' },
-        { question: 'What time is bedtime typically?', answer: '9:00 PM' },
-        { question: 'What time is wake up time typically?', answer: '7:00 AM' },
-        
-        // Time boundaries
-        { question: 'What time comes after 11:59 PM?', answer: '12:00 AM' },
-        { question: 'What time comes before 12:00 AM?', answer: '11:59 PM' }
-      ],
+              static: MathBasicsQuestionGenerator.staticTimeQuestions,
       clock_reading: [
         'What time is shown on a clock with the hour hand at {hour} and the minute hand at {minute}?',
         'If the hour hand points to {hour} and the minute hand points to {minute}, what time is it?',
@@ -2707,7 +2782,7 @@ class MathBasicsQuestionGenerator {
           const staticQuestion = template;
           return { 
             question: staticQuestion.question, 
-            correctAnswer: staticQuestion.answer, 
+            correctAnswer: staticQuestion.correctAnswer, 
             templateKeys: null 
           };
         }
@@ -3011,6 +3086,16 @@ class MathBasicsQuestionGenerator {
 
   updateDifficulty(difficulty) {
     this.difficulty = difficulty;
+  }
+
+  getAllStaticQuestions() {
+    // Return all static questions organized by category
+    return {
+      'Fractions': MathBasicsQuestionGenerator.staticFractionQuestions,
+      'Shapes': MathBasicsQuestionGenerator.staticShapeQuestions,
+      'Measurement': MathBasicsQuestionGenerator.staticMeasurementQuestions,
+      'Time': MathBasicsQuestionGenerator.staticTimeQuestions
+    };
   }
 }
 

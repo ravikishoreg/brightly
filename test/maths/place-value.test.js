@@ -205,6 +205,16 @@ describe('MathBasicsQuestionGenerator - Place Value', () => {
           }
           const expectedExpandedFormAnswer = expandedParts.join(' + ');
           expect(q.correctAnswer).toBe(expectedExpandedFormAnswer);
+          // MCQ options checks
+          expect(q.options).toBeDefined();
+          expect(Array.isArray(q.options)).toBe(true);
+          expect(q.options.length).toBeGreaterThanOrEqual(3);
+          // All options should be strings and unique
+          const uniqueOptions = new Set(q.options);
+          expect(uniqueOptions.size).toBe(q.options.length);
+          q.options.forEach(opt => expect(typeof opt).toBe('string'));
+          // Correct answer must be in options
+          expect(q.options).toContain(q.correctAnswer);
           break;
           
         case 'place_swap':
