@@ -1181,7 +1181,10 @@ button:focus-visible {
 }
 @media (max-width: 768px) {
   .mcq-submit {
-    margin-left: 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    width: 97%;
   }
 }
 

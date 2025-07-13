@@ -658,7 +658,7 @@ class CommonQuizManager {
       } else {
         isCorrect = this.checkAnswerEquivalence(userAnswer, question.correctAnswer, question);
       }
-      const delay = isCorrect ? 1000 : 2000; // - 2 seconds for correct, 5 seconds for incorrect
+      const delay = isCorrect ? 1000 : 2500; // - 2 seconds for correct, 5 seconds for incorrect
 
       // Create progress indicator on Next button
       const nextBtn = document.getElementById('next-question');

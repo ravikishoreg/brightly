@@ -310,7 +310,7 @@ class HabitsQuestionGenerator {
       {
         question: "What should you do after flushing the toilet?",
         options: ["Leave immediately", "Wait to see it's fully clear", "Wash hands once", "Wash hands twice"],
-        correctAnswer: "Wash hands twice"
+        correctAnswer: ["Wash hands twice", "Wait to see it's fully clear"]
       },
       {
         question: "How should you hang a wet towel to avoid damp smell?",
@@ -451,6 +451,86 @@ class HabitsQuestionGenerator {
         question: "What should you avoid doing with waste?",
         options: ["Throwing it in the bin", "Dumping it on the floor", "Recycling it", "Composting it"],
         correctAnswer: "Dumping it on the floor"
+      },
+      {
+        question: "What should you avoid doing when studying?",
+        options: ["Keeping book open and not studying", "Reading carefully", "Taking notes", "Asking questions"],
+        correctAnswer: "Keeping book open and not studying"
+      },
+      {
+        question: "What is a sign of financial maturity for kids?",
+        options: ["Spending all pocket money immediately", "Saving money for important things", "Borrowing from friends", "Not caring about money"],
+        correctAnswer: "Saving money for important things"
+      },
+      {
+        question: "What should you do before making a purchase?",
+        options: ["Buy immediately", "Think if you really need it", "Ask everyone's opinion", "Wait for someone to buy it for you"],
+        correctAnswer: "Think if you really need it"
+      },
+      {
+        question: "What is a good financial habit for kids?",
+        options: ["Spending more than you have", "Keeping track of your money", "Borrowing from everyone", "Never saving anything"],
+        correctAnswer: "Keeping track of your money"
+      },
+      {
+        question: "What should you do with money you receive as gifts?",
+        options: ["Spend it all immediately", "Save some for future needs", "Give it all to friends", "Lose it"],
+        correctAnswer: "Save some for future needs"
+      },
+      {
+        question: "What should you avoid doing with your nose?",
+        options: ["Cleaning it in the bathroom", "Putting fingers in it", "Using a tissue", "Washing hands after"],
+        correctAnswer: "Putting fingers in it"
+      },
+      {
+        question: "Where should you clean your nose?",
+        options: ["Anywhere in the house", "In the bathroom", "In the classroom", "In front of others"],
+        correctAnswer: "In the bathroom"
+      },
+      {
+        question: "What should you do after cleaning your nose?",
+        options: ["Wipe hands on clothes", "Wash hands properly", "Touch everything", "Skip handwashing"],
+        correctAnswer: "Wash hands properly"
+      },
+      {
+        question: "What should you do with electrical appliances when not in use?",
+        options: ["Leave them on", "Switch them off", "Ignore them", "Cover them"],
+        correctAnswer: "Switch them off"
+      },
+      {
+        question: "What should you do if you see a fan running in an empty room?",
+        options: ["Leave it on", "Switch it off", "Tell someone else", "Ignore it"],
+        correctAnswer: "Switch it off"
+      },
+      {
+        question: "What should you do with lights when leaving a room?",
+        options: ["Leave them on", "Switch them off", "Dim them", "Change the color"],
+        correctAnswer: "Switch them off"
+      },
+      {
+        question: "What should you do with TV when no one is watching?",
+        options: ["Leave it on for background noise", "Switch it off", "Turn volume down", "Change the channel"],
+        correctAnswer: "Switch it off"
+      },
+      {
+        question: "What should you do before taking a quiz?",
+        options: ["Come without practicing", "Practice at least one yourself", "Ask others for answers", "Skip the quiz"],
+        correctAnswer: "Practice at least one yourself"
+      },
+      {
+        question: "What should you avoid doing when facing difficulties?",
+        options: ["Giving up easily", "Trying different approaches", "Asking for help", "Taking a break"],
+        correctAnswer: "Giving up easily"
+      },
+      {
+        question: "What should you do when something seems difficult?",
+        options: ["Give up immediately", "Keep trying and practicing", "Blame others", "Avoid the task"],
+        correctAnswer: "Keep trying and practicing"
+      },
+      {
+        question: "What is the right attitude when learning something new?",
+        options: ["Give up if it's hard", "Persist and practice", "Avoid challenges", "Wait for someone to help"],
+        correctAnswer: "Persist and practice"
       }
     ];
   }
