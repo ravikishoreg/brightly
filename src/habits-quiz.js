@@ -531,6 +531,256 @@ class HabitsQuestionGenerator {
         question: "What is the right attitude when learning something new?",
         options: ["Give up if it's hard", "Persist and practice", "Avoid challenges", "Wait for someone to help"],
         correctAnswer: "Persist and practice"
+      },
+      {
+        question: "What should you avoid doing while eating?",
+        options: ["Sitting properly", "Standing and eating", "Using utensils", "Chewing slowly"],
+        correctAnswer: "Standing and eating"
+      },
+      {
+        question: "Why should you avoid standing while eating?",
+        options: ["It's uncomfortable", "You will definitely spill food", "It's bad manners", "It takes longer"],
+        correctAnswer: "You will definitely spill food"
+      },
+      {
+        question: "What should you do to avoid spilling food outside the plate?",
+        options: ["Eat quickly", "Eat slowly and carefully", "Use your hands", "Stand while eating"],
+        correctAnswer: "Eat slowly and carefully"
+      },
+      {
+        question: "What should you avoid doing while eating?",
+        options: ["Chewing properly", "Talking or watching TV", "Sitting straight", "Using napkin"],
+        correctAnswer: "Talking or watching TV"
+      },
+      {
+        question: "Why should you not talk while eating?",
+        options: ["It's rude", "You might choke", "Food gets cold", "All of the above"],
+        correctAnswer: "All of the above"
+      },
+      {
+        question: "What should you avoid doing while eating?",
+        options: ["Chewing properly", "Watching TV", "Sitting properly", "Using utensils"],
+        correctAnswer: "Watching TV"
+      },
+      {
+        question: "How should you chew your food?",
+        options: ["Quickly without chewing", "Properly and thoroughly", "Only soft foods", "Only hard foods"],
+        correctAnswer: "Properly and thoroughly"
+      },
+      {
+        question: "What happens if you don't chew food properly?",
+        options: ["Food tastes better", "You eat faster", "You might have digestion problems", "Nothing happens"],
+        correctAnswer: "You might have digestion problems"
+      },
+      {
+        question: "How fast should you eat?",
+        options: ["As fast as possible", "Very slowly", "Decently fast", "Without stopping"],
+        correctAnswer: "Decently fast"
+      },
+      {
+        question: "What should you avoid eating?",
+        options: ["Home-cooked meals", "Junk food from outside", "Fruits and vegetables", "Healthy snacks"],
+        correctAnswer: "Junk food from outside"
+      },
+      {
+        question: "Why should you avoid junk food from outside?",
+        options: ["It's expensive", "It's not healthy", "It's not tasty", "It's hard to find"],
+        correctAnswer: "It's not healthy"
+      },
+      {
+        question: "What should you do if food falls outside your plate?",
+        options: ["Leave it there", "Pick it up and eat it", "Clean it up immediately", "Ignore it"],
+        correctAnswer: "Clean it up immediately"
+      },
+      {
+        question: "What should you do before starting to eat?",
+        options: ["Wash your hands", "Turn on TV", "Stand up", "Call friends"],
+        correctAnswer: "Wash your hands"
+      },
+      {
+        question: "What should you do if you're eating and someone talks to you?",
+        options: ["Answer immediately", "Finish chewing first", "Ignore them", "Talk with food in mouth"],
+        correctAnswer: "Finish chewing first"
+      },
+      {
+        question: "What should you avoid doing with your mouth while eating?",
+        options: ["Chewing properly", "Talking with food in mouth", "Swallowing", "Using utensils"],
+        correctAnswer: "Talking with food in mouth"
+      },
+      {
+        question: "What should you do if you see someone eating junk food?",
+        options: ["Join them", "Tell them it's unhealthy", "Ignore them", "Ask for some"],
+        correctAnswer: "Tell them it's unhealthy"
+      },
+      {
+        question: "What should you do if you're offered junk food?",
+        options: ["Eat it immediately", "Politely refuse", "Take it home", "Share with friends"],
+        correctAnswer: "Politely refuse"
+      },
+      {
+        question: "What should you do if you accidentally spill food?",
+        options: ["Leave it for someone else", "Clean it up yourself", "Blame others", "Ignore it"],
+        correctAnswer: "Clean it up yourself"
+      },
+      {
+        question: "What should you do after finishing your meal?",
+        options: ["Leave the plate on table", "Clean your plate and area", "Go to sleep", "Watch TV"],
+        correctAnswer: "Clean your plate and area"
+      },
+      {
+        question: "What should you remember to bring back from school?",
+        options: ["Only your bag", "All things you took - coat, water bottle, sharpener, pencil, eraser", "Only books", "Only lunch box"],
+        correctAnswer: "All things you took - coat, water bottle, sharpener, pencil, eraser"
+      },
+      {
+        question: "What should you do before leaving school?",
+        options: ["Run out quickly", "Check if you have all your things", "Leave everything behind", "Ask others to carry your things"],
+        correctAnswer: "Check if you have all your things"
+      },
+      {
+        question: "What should you do with toys after playing outside?",
+        options: ["Leave them there", "Bring them back home", "Give them to friends", "Hide them"],
+        correctAnswer: "Bring them back home"
+      },
+      {
+        question: "What should you avoid doing to your books?",
+        options: ["Reading them", "Folding them in opposite direction", "Writing in them", "Carrying them"],
+        correctAnswer: "Folding them in opposite direction"
+      },
+      {
+        question: "What should you avoid drawing in your books?",
+        options: ["Important notes", "Bad things", "Study diagrams", "Page numbers"],
+        correctAnswer: "Bad things"
+      },
+      {
+        question: "How should you maintain your books?",
+        options: ["Keep them dirty", "Keep them clean and neat", "Tear pages", "Write everywhere"],
+        correctAnswer: "Keep them clean and neat"
+      },
+      {
+        question: "What should you avoid doing with book pages?",
+        options: ["Reading them", "Skipping pages", "Numbering them", "Marking important points"],
+        correctAnswer: "Skipping pages"
+      },
+      {
+        question: "How should you write in your books?",
+        options: ["Anywhere on the page", "In lines clearly", "In big letters", "In different colors"],
+        correctAnswer: "In lines clearly"
+      },
+      {
+        question: "What should you do with important points in your books?",
+        options: ["Ignore them", "Mark them so you can revise", "Erase them", "Cover them"],
+        correctAnswer: "Mark them so you can revise"
+      },
+      {
+        question: "What should you do with things you don't understand?",
+        options: ["Skip them", "Mark them to ask later", "Tear that page", "Ignore them"],
+        correctAnswer: "Mark them to ask later"
+      },
+      {
+        question: "What should you NOT do while teacher is teaching?",
+        options: ["Listen carefully", "Take notes", "Play", "Ask questions"],
+        correctAnswer: "Play"
+      },
+      {
+        question: "What should you do when teacher is explaining something?",
+        options: ["Talk to friends", "Play with things", "Pay attention and listen", "Draw pictures"],
+        correctAnswer: "Pay attention and listen"
+      },
+      {
+        question: "Why is it important to remember names of people?",
+        options: ["To show off", "It's basic respect when talking to them", "To win games", "To avoid punishment"],
+        correctAnswer: "It's basic respect when talking to them"
+      },
+      {
+        question: "What happens if you don't remember someone's name?",
+        options: ["They think you don't give enough value", "They give you a gift", "They become your friend", "Nothing happens"],
+        correctAnswer: "They think you don't give enough value"
+      },
+      {
+        question: "What should you remember about places?",
+        options: ["Their names", "Their colors", "Their size", "Their weather"],
+        correctAnswer: "Their names"
+      },
+      {
+        question: "What is a very bad habit you should avoid?",
+        options: ["Telling the truth", "Lying", "Being polite", "Helping others"],
+        correctAnswer: "Lying"
+      },
+      {
+        question: "What should you do before taking secret stuff to school?",
+        options: ["Hide it in your bag", "Ask permission", "Take it without telling", "Give it to friends"],
+        correctAnswer: "Ask permission"
+      },
+      {
+        question: "What should you do before taking things outside?",
+        options: ["Just take them", "Ask permission first", "Hide them", "Give them away"],
+        correctAnswer: "Ask permission first"
+      },
+      {
+        question: "What should you be careful about while playing?",
+        options: ["Winning the game", "Safety of your body", "Making friends", "Having fun"],
+        correctAnswer: "Safety of your body"
+      },
+      {
+        question: "What is more important than thrill while playing?",
+        options: ["Winning", "Safety of body", "Making noise", "Running fast"],
+        correctAnswer: "Safety of body"
+      },
+      {
+        question: "What should you avoid doing for small things?",
+        options: ["Being happy", "Showing frustration", "Being helpful", "Being polite"],
+        correctAnswer: "Showing frustration"
+      },
+      {
+        question: "What does it mean to show frustration?",
+        options: ["Being happy and cheerful", "Being emotionally upset and moody", "Being helpful", "Being quiet"],
+        correctAnswer: "Being emotionally upset and moody"
+      },
+      {
+        question: "What should you do when small things don't go your way?",
+        options: ["Get upset and moody", "Stay calm and patient", "Blame others", "Give up"],
+        correctAnswer: "Stay calm and patient"
+      },
+      {
+        question: "What should you avoid doing when frustrated?",
+        options: ["Talking to someone", "Being distant and silent", "Taking deep breaths", "Thinking about solutions"],
+        correctAnswer: "Being distant and silent"
+      },
+      {
+        question: "What should you do if you forget someone's name?",
+        options: ["Pretend you know it", "Politely ask them again", "Avoid talking to them", "Make up a name"],
+        correctAnswer: "Politely ask them again"
+      },
+      {
+        question: "What should you do if you accidentally damage a book?",
+        options: ["Hide it", "Tell the truth about it", "Blame someone else", "Throw it away"],
+        correctAnswer: "Tell the truth about it"
+      },
+      {
+        question: "What should you do if you see someone playing during class?",
+        options: ["Join them", "Tell them to pay attention", "Ignore them", "Tell the teacher"],
+        correctAnswer: "Tell them to pay attention"
+      },
+      {
+        question: "What should you do if you're tempted to lie?",
+        options: ["Tell the truth instead", "Make up a better lie", "Stay silent", "Blame others"],
+        correctAnswer: "Tell the truth instead"
+      },
+      {
+        question: "What should you do if you want to take something valuable to school?",
+        options: ["Just take it secretly", "Ask parents for permission", "Hide it in your bag", "Give it to a friend"],
+        correctAnswer: "Ask parents for permission"
+      },
+      {
+        question: "What should you do if a game seems dangerous?",
+        options: ["Play anyway for fun", "Stop and suggest a safer game", "Force others to play", "Ignore the danger"],
+        correctAnswer: "Stop and suggest a safer game"
+      },
+      {
+        question: "What should you do if you feel frustrated about something small?",
+        options: ["Express it loudly", "Take a moment to calm down", "Blame everyone", "Give up completely"],
+        correctAnswer: "Take a moment to calm down"
       }
     ];
   }

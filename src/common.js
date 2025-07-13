@@ -1086,11 +1086,17 @@ class CommonQuizManager {
     const categories = Object.keys(questionsData);
     const allQuestions = [];
     
+    // Calculate question counts for each category
+    const categoryCounts = {};
     categories.forEach(category => {
+      categoryCounts[category] = questionsData[category].length;
       questionsData[category].forEach(q => {
         allQuestions.push({ ...q, category });
       });
     });
+    
+    // Calculate total questions for "All" category
+    const totalQuestions = allQuestions.length;
 
     const questionsHTML = allQuestions.map((q, index) => {
       const optionsHTML = q.options ? q.options.map(option => {
@@ -1114,9 +1120,10 @@ class CommonQuizManager {
       `;
     }).join('');
 
-    const categoryFilterHTML = ['All', ...categories].map(cat => 
-      `<option value="${cat}">${cat}</option>`
-    ).join('');
+    const categoryFilterHTML = ['All', ...categories].map(cat => {
+      const count = cat === 'All' ? totalQuestions : categoryCounts[cat];
+      return `<option value="${cat}">${cat} (${count})</option>`;
+    }).join('');
 
     modal.innerHTML = `
       <div class="learn-mode-content">
