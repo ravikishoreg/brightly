@@ -111,6 +111,34 @@ class GeneralKnowledgeQuestionGenerator {
       { question: "What is the capital of Pakistan?", correctAnswer: "Islamabad", options: ["Karachi", "Lahore", "Islamabad", "Faisalabad"] },
       { question: "What is the capital of Bangladesh?", correctAnswer: "Dhaka", options: ["Chittagong", "Dhaka", "Sylhet", "Rajshahi"] },
       { question: "What is the capital of Sri Lanka?", correctAnswer: "Colombo", options: ["Kandy", "Colombo", "Galle", "Jaffna"] },
+      // MORE ASIAN CAPITALS
+      { question: "What is the capital of Iran?", correctAnswer: "Tehran", options: ["Mashhad", "Tehran", "Isfahan", "Tabriz"] },
+      { question: "What is the capital of Iraq?", correctAnswer: "Baghdad", options: ["Basra", "Baghdad", "Mosul", "Erbil"] },
+      { question: "What is the capital of Saudi Arabia?", correctAnswer: "Riyadh", options: ["Jeddah", "Riyadh", "Mecca", "Medina"] },
+      { question: "What is the capital of United Arab Emirates?", correctAnswer: "Abu Dhabi", options: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"] },
+      { question: "What is the capital of Qatar?", correctAnswer: "Doha", options: ["Al Wakrah", "Doha", "Al Khor", "Lusail"] },
+      { question: "What is the capital of Kuwait?", correctAnswer: "Kuwait City", options: ["Salmiya", "Kuwait City", "Hawally", "Jahra"] },
+      { question: "What is the capital of Oman?", correctAnswer: "Muscat", options: ["Salalah", "Muscat", "Sohar", "Nizwa"] },
+      { question: "What is the capital of Yemen?", correctAnswer: "Sana'a", options: ["Aden", "Sana'a", "Taiz", "Hodeidah"] },
+      { question: "What is the capital of Lebanon?", correctAnswer: "Beirut", options: ["Tripoli", "Beirut", "Sidon", "Tyre"] },
+      { question: "What is the capital of Jordan?", correctAnswer: "Amman", options: ["Zarqa", "Amman", "Irbid", "Salt"] },
+      { question: "What is the capital of Israel?", correctAnswer: "Jerusalem", options: ["Tel Aviv", "Jerusalem", "Haifa", "Beersheba"] },
+      { question: "What is the capital of Syria?", correctAnswer: "Damascus", options: ["Aleppo", "Damascus", "Homs", "Latakia"] },
+      { question: "What is the capital of Afghanistan?", correctAnswer: "Kabul", options: ["Kandahar", "Kabul", "Herat", "Mazar-i-Sharif"] },
+      { question: "What is the capital of Nepal?", correctAnswer: "Kathmandu", options: ["Pokhara", "Kathmandu", "Lalitpur", "Bharatpur"] },
+      { question: "What is the capital of Bhutan?", correctAnswer: "Thimphu", options: ["Phuntsholing", "Thimphu", "Paro", "Punakha"] },
+      { question: "What is the capital of Myanmar?", correctAnswer: "Naypyidaw", options: ["Yangon", "Naypyidaw", "Mandalay", "Bago"] },
+      { question: "What is the capital of Cambodia?", correctAnswer: "Phnom Penh", options: ["Siem Reap", "Phnom Penh", "Battambang", "Sihanoukville"] },
+      { question: "What is the capital of Laos?", correctAnswer: "Vientiane", options: ["Luang Prabang", "Vientiane", "Savannakhet", "Pakse"] },
+      { question: "What is the capital of Mongolia?", correctAnswer: "Ulaanbaatar", options: ["Darkhan", "Ulaanbaatar", "Erdenet", "Choibalsan"] },
+      { question: "What is the capital of Kazakhstan?", correctAnswer: "Nur-Sultan", options: ["Almaty", "Nur-Sultan", "Shymkent", "Aktobe"] },
+      { question: "What is the capital of Uzbekistan?", correctAnswer: "Tashkent", options: ["Samarkand", "Tashkent", "Namangan", "Andijan"] },
+      { question: "What is the capital of Kyrgyzstan?", correctAnswer: "Bishkek", options: ["Osh", "Bishkek", "Jalal-Abad", "Karakol"] },
+      { question: "What is the capital of Tajikistan?", correctAnswer: "Dushanbe", options: ["Khujand", "Dushanbe", "Kulob", "Qurghonteppa"] },
+      { question: "What is the capital of Turkmenistan?", correctAnswer: "Ashgabat", options: ["Türkmenabat", "Ashgabat", "Dasoguz", "Mary"] },
+      { question: "What is the capital of Azerbaijan?", correctAnswer: "Baku", options: ["Ganja", "Baku", "Sumqayit", "Mingachevir"] },
+      { question: "What is the capital of Georgia?", correctAnswer: "Tbilisi", options: ["Batumi", "Tbilisi", "Kutaisi", "Rustavi"] },
+      { question: "What is the capital of Armenia?", correctAnswer: "Yerevan", options: ["Gyumri", "Yerevan", "Vanadzor", "Vagharshapat"] }
       ],
       'european-countries-capitals': [
       // EUROPEAN COUNTRIES AND CAPITALS
@@ -124,6 +152,16 @@ class GeneralKnowledgeQuestionGenerator {
       { question: "What is the capital of Poland?", correctAnswer: "Warsaw", options: ["Krakow", "Warsaw", "Wroclaw", "Poznan"] },
       { question: "What is the capital of Czech Republic?", correctAnswer: "Prague", options: ["Brno", "Prague", "Ostrava", "Plzen"] },
       { question: "What is the capital of Hungary?", correctAnswer: "Budapest", options: ["Debrecen", "Budapest", "Szeged", "Miskolc"] },
+      // MORE EUROPEAN CAPITALS
+      { question: "What is the capital of Sweden?", correctAnswer: "Stockholm", options: ["Gothenburg", "Stockholm", "Malmö", "Uppsala"] },
+      { question: "What is the capital of Norway?", correctAnswer: "Oslo", options: ["Bergen", "Oslo", "Trondheim", "Stavanger"] },
+      { question: "What is the capital of Denmark?", correctAnswer: "Copenhagen", options: ["Aarhus", "Copenhagen", "Odense", "Aalborg"] },
+      { question: "What is the capital of Finland?", correctAnswer: "Helsinki", options: ["Tampere", "Helsinki", "Turku", "Oulu"] },
+      { question: "What is the capital of Iceland?", correctAnswer: "Reykjavik", options: ["Akureyri", "Reykjavik", "Keflavik", "Hafnarfjordur"] },
+      { question: "What is the capital of Ireland?", correctAnswer: "Dublin", options: ["Cork", "Dublin", "Galway", "Limerick"] },
+      { question: "What is the capital of Portugal?", correctAnswer: "Lisbon", options: ["Porto", "Lisbon", "Coimbra", "Braga"] },
+      { question: "What is the capital of Greece?", correctAnswer: "Athens", options: ["Thessaloniki", "Athens", "Patras", "Piraeus"] },
+      { question: "What is the capital of Turkey?", correctAnswer: "Ankara", options: ["Istanbul", "Ankara", "Izmir", "Bursa"] },
       ],
       'african-countries-capitals': [
       // AFRICAN COUNTRIES AND CAPITALS
@@ -182,49 +220,7 @@ class GeneralKnowledgeQuestionGenerator {
       { question: "Which is the most populous country in Europe?", correctAnswer: "Russia", options: ["Germany", "France", "Russia", "United Kingdom"] },
       { question: "Which is the most populous country in South America?", correctAnswer: "Brazil", options: ["Argentina", "Brazil", "Colombia", "Peru"] },
       { question: "Which is the most populous country in Oceania?", correctAnswer: "Australia", options: ["New Zealand", "Australia", "Papua New Guinea", "Fiji"] },
-      ],
-      'european-capitals': [
-      // MORE EUROPEAN CAPITALS
-      { question: "What is the capital of Sweden?", correctAnswer: "Stockholm", options: ["Gothenburg", "Stockholm", "Malmö", "Uppsala"] },
-      { question: "What is the capital of Norway?", correctAnswer: "Oslo", options: ["Bergen", "Oslo", "Trondheim", "Stavanger"] },
-      { question: "What is the capital of Denmark?", correctAnswer: "Copenhagen", options: ["Aarhus", "Copenhagen", "Odense", "Aalborg"] },
-      { question: "What is the capital of Finland?", correctAnswer: "Helsinki", options: ["Tampere", "Helsinki", "Turku", "Oulu"] },
-      { question: "What is the capital of Iceland?", correctAnswer: "Reykjavik", options: ["Akureyri", "Reykjavik", "Keflavik", "Hafnarfjordur"] },
-      { question: "What is the capital of Ireland?", correctAnswer: "Dublin", options: ["Cork", "Dublin", "Galway", "Limerick"] },
-      { question: "What is the capital of Portugal?", correctAnswer: "Lisbon", options: ["Porto", "Lisbon", "Coimbra", "Braga"] },
-      { question: "What is the capital of Greece?", correctAnswer: "Athens", options: ["Thessaloniki", "Athens", "Patras", "Piraeus"] },
-      { question: "What is the capital of Turkey?", correctAnswer: "Ankara", options: ["Istanbul", "Ankara", "Izmir", "Bursa"] },
-      ],
-      'asian-captials': [
-      // MORE ASIAN CAPITALS
-      { question: "What is the capital of Iran?", correctAnswer: "Tehran", options: ["Mashhad", "Tehran", "Isfahan", "Tabriz"] },
-      { question: "What is the capital of Iraq?", correctAnswer: "Baghdad", options: ["Basra", "Baghdad", "Mosul", "Erbil"] },
-      { question: "What is the capital of Saudi Arabia?", correctAnswer: "Riyadh", options: ["Jeddah", "Riyadh", "Mecca", "Medina"] },
-      { question: "What is the capital of United Arab Emirates?", correctAnswer: "Abu Dhabi", options: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"] },
-      { question: "What is the capital of Qatar?", correctAnswer: "Doha", options: ["Al Wakrah", "Doha", "Al Khor", "Lusail"] },
-      { question: "What is the capital of Kuwait?", correctAnswer: "Kuwait City", options: ["Salmiya", "Kuwait City", "Hawally", "Jahra"] },
-      { question: "What is the capital of Oman?", correctAnswer: "Muscat", options: ["Salalah", "Muscat", "Sohar", "Nizwa"] },
-      { question: "What is the capital of Yemen?", correctAnswer: "Sana'a", options: ["Aden", "Sana'a", "Taiz", "Hodeidah"] },
-      { question: "What is the capital of Lebanon?", correctAnswer: "Beirut", options: ["Tripoli", "Beirut", "Sidon", "Tyre"] },
-      { question: "What is the capital of Jordan?", correctAnswer: "Amman", options: ["Zarqa", "Amman", "Irbid", "Salt"] },
-      { question: "What is the capital of Israel?", correctAnswer: "Jerusalem", options: ["Tel Aviv", "Jerusalem", "Haifa", "Beersheba"] },
-      { question: "What is the capital of Syria?", correctAnswer: "Damascus", options: ["Aleppo", "Damascus", "Homs", "Latakia"] },
-      { question: "What is the capital of Afghanistan?", correctAnswer: "Kabul", options: ["Kandahar", "Kabul", "Herat", "Mazar-i-Sharif"] },
-      { question: "What is the capital of Nepal?", correctAnswer: "Kathmandu", options: ["Pokhara", "Kathmandu", "Lalitpur", "Bharatpur"] },
-      { question: "What is the capital of Bhutan?", correctAnswer: "Thimphu", options: ["Phuntsholing", "Thimphu", "Paro", "Punakha"] },
-      { question: "What is the capital of Myanmar?", correctAnswer: "Naypyidaw", options: ["Yangon", "Naypyidaw", "Mandalay", "Bago"] },
-      { question: "What is the capital of Cambodia?", correctAnswer: "Phnom Penh", options: ["Siem Reap", "Phnom Penh", "Battambang", "Sihanoukville"] },
-      { question: "What is the capital of Laos?", correctAnswer: "Vientiane", options: ["Luang Prabang", "Vientiane", "Savannakhet", "Pakse"] },
-      { question: "What is the capital of Mongolia?", correctAnswer: "Ulaanbaatar", options: ["Darkhan", "Ulaanbaatar", "Erdenet", "Choibalsan"] },
-      { question: "What is the capital of Kazakhstan?", correctAnswer: "Nur-Sultan", options: ["Almaty", "Nur-Sultan", "Shymkent", "Aktobe"] },
-      { question: "What is the capital of Uzbekistan?", correctAnswer: "Tashkent", options: ["Samarkand", "Tashkent", "Namangan", "Andijan"] },
-      { question: "What is the capital of Kyrgyzstan?", correctAnswer: "Bishkek", options: ["Osh", "Bishkek", "Jalal-Abad", "Karakol"] },
-      { question: "What is the capital of Tajikistan?", correctAnswer: "Dushanbe", options: ["Khujand", "Dushanbe", "Kulob", "Qurghonteppa"] },
-      { question: "What is the capital of Turkmenistan?", correctAnswer: "Ashgabat", options: ["Türkmenabat", "Ashgabat", "Dasoguz", "Mary"] },
-      { question: "What is the capital of Azerbaijan?", correctAnswer: "Baku", options: ["Ganja", "Baku", "Sumqayit", "Mingachevir"] },
-      { question: "What is the capital of Georgia?", correctAnswer: "Tbilisi", options: ["Batumi", "Tbilisi", "Kutaisi", "Rustavi"] },
-      { question: "What is the capital of Armenia?", correctAnswer: "Yerevan", options: ["Gyumri", "Yerevan", "Vanadzor", "Vagharshapat"] }
-    ]
+      ]
     };
 
     return countriesQuestions;
@@ -774,8 +770,7 @@ class GeneralKnowledgeQuestionGenerator {
       'Capital Cities by Population': this.allQuestions['capital-cities-by-population'],
       'Countries by Area': this.allQuestions['countries-by-area'],
       'Countries by Population': this.allQuestions['countries-by-population'],
-      'More European Capitals': this.allQuestions['european-capitals'],
-      'More Asian Capitals': this.allQuestions['asian-captials'],
+
       
       // Basic General Knowledge
       'Continents': this.allQuestions['continents'],
