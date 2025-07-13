@@ -1,4 +1,4 @@
-import"./style-DxF7o9N_.js";import{i as p,q as l}from"./quiz-storage-BXD1QFHU.js";p();class v{constructor(){this.currentView="list",this.currentResultId=null,this.init()}init(){this.createViewerHTML(),this.bindEvents(),this.showResultsList()}createViewerHTML(){const t=document.getElementById("quiz-results-viewer");t&&t.remove();const s=`
+import"./style-C5kYM9vb.js";import{i as p,q as l}from"./quiz-storage-BXD1QFHU.js";p();class v{constructor(){this.currentView="list",this.currentResultId=null,this.init()}init(){this.createViewerHTML(),this.bindEvents(),this.showResultsList()}createViewerHTML(){const t=document.getElementById("quiz-results-viewer");t&&t.remove();const s=`
       <div id="quiz-results-viewer" class="quiz-results-viewer">
         <div class="viewer-header">
           <h2>Quiz Results History</h2>

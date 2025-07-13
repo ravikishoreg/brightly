@@ -295,6 +295,166 @@ class HabitsQuestionGenerator {
     ];
   }
 
+  static get customQuestions() {
+    return [
+      {
+        question: "How long should you wash your hands with soap?",
+        options: ["5 seconds", "15 seconds", "30 seconds", "1 minute"],
+        correctAnswer: "15 seconds"
+      },
+      {
+        question: "What happens if you don't wash your hands thoroughly?",
+        options: ["Soap residue stays on hands", "Hands become cleaner", "Nothing happens", "Hands dry faster"],
+        correctAnswer: "Soap residue stays on hands"
+      },
+      {
+        question: "What should you do after flushing the toilet?",
+        options: ["Leave immediately", "Wait to see it's fully clear", "Wash hands once", "Wash hands twice"],
+        correctAnswer: "Wash hands twice"
+      },
+      {
+        question: "How should you hang a wet towel to avoid damp smell?",
+        options: ["Fold it on a chair", "Spread it out clearly on wire", "Leave it in a pile", "Put it in a drawer"],
+        correctAnswer: "Spread it out clearly on wire"
+      },
+      {
+        question: "Where should you NOT keep water bottles?",
+        options: ["On the table", "On the sofa", "On the bed", "All of the above"],
+        correctAnswer: "All of the above"
+      },
+      {
+        question: "What should you do immediately after coming from school?",
+        options: ["Watch TV", "Unpack your bag", "Take a nap", "Play games"],
+        correctAnswer: "Unpack your bag"
+      },
+      {
+        question: "Where should you put your lunch box after school?",
+        options: ["In the sink", "On the table", "In the fridge", "In your room"],
+        correctAnswer: "In the sink"
+      },
+      {
+        question: "How should you brush your teeth?",
+        options: ["Quickly without looking", "Seeing in mirror and touching all teeth", "Only front teeth", "Without toothpaste"],
+        correctAnswer: "Seeing in mirror and touching all teeth"
+      },
+      {
+        question: "What should you avoid when bathing?",
+        options: ["Using soap gently", "Using soap properly", "Using warm water", "Using shampoo"],
+        correctAnswer: "Using soap gently"
+      },
+      {
+        question: "What should you do after using toys or books?",
+        options: ["Leave them where they are", "Keep them back in place", "Throw them away", "Hide them"],
+        correctAnswer: "Keep them back in place"
+      },
+      {
+        question: "What should you avoid touching unnecessarily when outside?",
+        options: ["Your face", "Your hands", "Your clothes", "All of the above"],
+        correctAnswer: "All of the above"
+      },
+      {
+        question: "What should you avoid doing to your nails?",
+        options: ["Cutting them", "Biting or damaging them", "Cleaning them", "Painting them"],
+        correctAnswer: "Biting or damaging them"
+      },
+      {
+        question: "Why should you avoid touching your face with hands?",
+        options: ["Hands are usually dirty", "Face gets oily", "It's uncomfortable", "It's a bad habit"],
+        correctAnswer: "Hands are usually dirty"
+      },
+      {
+        question: "How should you drink water?",
+        options: ["Only when told", "Enough without being told", "Only at meals", "Only when thirsty"],
+        correctAnswer: "Enough without being told"
+      },
+      {
+        question: "How should you organize your time?",
+        options: ["Time box study and play", "Study all day", "Play all day", "Do whatever you want"],
+        correctAnswer: "Time box study and play"
+      },
+      {
+        question: "Where should you leave your shoes?",
+        options: ["Anywhere on the floor", "Properly in shoe stand", "Under the bed", "In the bathroom"],
+        correctAnswer: "Properly in shoe stand"
+      },
+      {
+        question: "How should you get ready in the morning?",
+        options: ["Take your time", "Do things quickly", "Skip breakfast", "Stay in bed"],
+        correctAnswer: "Do things quickly"
+      },
+      {
+        question: "Where should you put clothes after bath?",
+        options: ["In the wardrobe", "In the bin", "On the floor", "In the drawer"],
+        correctAnswer: "In the bin"
+      },
+      {
+        question: "How should you approach studying?",
+        options: ["Wait for someone to guide you", "Be proactive with structure and plan", "Study only before exams", "Avoid studying"],
+        correctAnswer: "Be proactive with structure and plan"
+      },
+      {
+        question: "What should you do about spelling mistakes?",
+        options: ["Ignore them", "Repeat the same mistakes", "Avoid making the same mistakes again", "Blame others"],
+        correctAnswer: "Avoid making the same mistakes again"
+      },
+      {
+        question: "What is the proper way to wash hands before eating?",
+        options: ["Just rinse with water", "Use soap for 15 seconds thoroughly", "Wipe with tissue", "Use hand sanitizer only"],
+        correctAnswer: "Use soap for 15 seconds thoroughly"
+      },
+      {
+        question: "Why is it important to wait after flushing the toilet?",
+        options: ["To save water", "To see it's fully clear", "To waste time", "To avoid noise"],
+        correctAnswer: "To see it's fully clear"
+      },
+      {
+        question: "What happens if you keep bottles on furniture?",
+        options: ["They might leak or leave marks", "They stay cleaner", "They get colder", "Nothing happens"],
+        correctAnswer: "They might leak or leave marks"
+      },
+      {
+        question: "What should you do with old clothes and socks after school?",
+        options: ["Leave them in the bag", "Put them in the bin", "Wear them again", "Give them away"],
+        correctAnswer: "Put them in the bin"
+      },
+      {
+        question: "Why should you brush teeth in front of a mirror?",
+        options: ["To look good", "To ensure brush touches all teeth", "To waste time", "To avoid toothpaste"],
+        correctAnswer: "To ensure brush touches all teeth"
+      },
+      {
+        question: "What should you do with pillows and bedsheets after use?",
+        options: ["Leave them messy", "Keep them back in place", "Throw them away", "Hide them"],
+        correctAnswer: "Keep them back in place"
+      },
+      {
+        question: "How should you handle time management in general?",
+        options: ["Waste time", "Do things quickly", "Procrastinate", "Avoid planning"],
+        correctAnswer: "Do things quickly"
+      },
+      {
+        question: "What is the benefit of being proactive in studying?",
+        options: ["You don't need help", "You have structure and plan", "You can avoid studying", "You get better grades"],
+        correctAnswer: "You have structure and plan"
+      },
+      {
+        question: "What should you do when you make a spelling mistake?",
+        options: ["Forget about it", "Learn from it and avoid repeating", "Blame the teacher", "Copy from others"],
+        correctAnswer: "Learn from it and avoid repeating"
+      },
+      {
+        question: "Where should you sharpen your pencil?",
+        options: ["Anywhere in the room", "Near the dustbin", "On the table", "On the floor"],
+        correctAnswer: "Near the dustbin"
+      },
+      {
+        question: "What should you avoid doing with waste?",
+        options: ["Throwing it in the bin", "Dumping it on the floor", "Recycling it", "Composting it"],
+        correctAnswer: "Dumping it on the floor"
+      }
+    ];
+  }
+
   generateQuestion(usedQuestions = new Set()) {
     let questionPool;
     switch (this.difficulty) {
@@ -306,6 +466,9 @@ class HabitsQuestionGenerator {
         break;
       case 'hard':
         questionPool = HabitsQuestionGenerator.hardQuestions;
+        break;
+      case 'custom':
+        questionPool = HabitsQuestionGenerator.customQuestions;
         break;
       default:
         questionPool = HabitsQuestionGenerator.easyQuestions;
@@ -332,7 +495,8 @@ class HabitsQuestionGenerator {
     return {
       'Easy': HabitsQuestionGenerator.easyQuestions,
       'Medium': HabitsQuestionGenerator.mediumQuestions,
-      'Hard': HabitsQuestionGenerator.hardQuestions
+      'Hard': HabitsQuestionGenerator.hardQuestions,
+      'Custom': HabitsQuestionGenerator.customQuestions
     };
   }
 }
