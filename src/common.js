@@ -29,10 +29,11 @@ const GITHUB_SCOPE = 'repo';
 const COMMON_CONFIG_OPTIONS = {
   questionCount: [
     { value: '2', label: '2 Questions' },
-    { value: '5', label: '5 Questions', selected: true },
-    { value: '10', label: '10 Questions' },
+    { value: '5', label: '5 Questions' },
+    { value: '10', label: '10 Questions', selected: true },
     { value: '15', label: '15 Questions' },
     { value: '20', label: '20 Questions' },
+    { value: '30', label: '30 Questions' },
   ],
   timeLimit: [
     { value: '0', label: 'No Limit', selected: true },
@@ -699,6 +700,14 @@ class CommonQuizManager {
     // Direct equality check first
     if (userAnswer === correctAnswer) {
       return true;
+    }
+
+    // Check for text-based questions (case insensitive comparison)
+    if (typeof correctAnswer === 'string' && typeof userAnswer === 'string') {
+      // Skip fraction comparison for text questions like 3/4
+      if (!correctAnswer.includes('/')) {
+        return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim();
+      }
     }
 
     // Check for fraction equivalency
