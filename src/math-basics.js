@@ -321,7 +321,7 @@ class MathBasicsQuestionGenerator {
   // Fractions - Balanced approach for 10-year-olds
   generateFractionQuestion() {
     // Static questions for basic concepts
-          const staticQuestions = MathBasicsQuestionGenerator.staticFractionQuestions;
+    const staticQuestions = MathBasicsQuestionGenerator.staticFractionQuestions;
 
     // Dynamic question templates for more advanced concepts
     const dynamicTemplates = [
@@ -2298,7 +2298,7 @@ class MathBasicsQuestionGenerator {
     ];
 
     // Static questions for variety
-          const staticQuestions = MathBasicsQuestionGenerator.staticMeasurementQuestions;
+    const staticQuestions = MathBasicsQuestionGenerator.staticMeasurementQuestions;
 
     // Decide whether to use static or dynamic question
     const useDynamic = Math.random() < 0.7; // 70% chance for dynamic questions

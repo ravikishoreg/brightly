@@ -16,6 +16,7 @@ class HabitsQuestionGenerator {
 
     for (let i = 0; i < count; i++) {
       const question = this.generateQuestion(usedQuestions);
+      if (!question) break; // Stop if no more unique questions
       questions.push(question);
       usedQuestions.add(generateQuestionKey(question));
     }
@@ -313,9 +314,9 @@ class HabitsQuestionGenerator {
     // Get available questions (filter out already used ones in this quiz)
     const availableQuestions = getAvailableQuestions(questionPool, usedQuestions);
     
-    // If no available questions, use all questions
+    // If no available questions, return null
     if (availableQuestions.length === 0) {
-      return questionPool[Math.floor(Math.random() * questionPool.length)];
+      return null;
     }
     
     // Return a random available question

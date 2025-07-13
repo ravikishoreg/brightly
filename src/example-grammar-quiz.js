@@ -11,6 +11,7 @@ class GrammarQuestionGenerator {
     const questions = [];
     for (let i = 0; i < count; i++) {
       const question = this.generateGrammarQuestion(usedQuestions);
+      if (!question) break; // Stop if no more unique questions
       questions.push(question);
       usedQuestions.add(generateQuestionKey(question));
     }
@@ -21,7 +22,7 @@ class GrammarQuestionGenerator {
     const allQuestions = Object.values(this.getAllStaticQuestions()).flat();
     const availableQuestions = allQuestions.filter(q => !usedQuestions.has(generateQuestionKey(q)));
     if (availableQuestions.length === 0) {
-      return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+      return null;
     }
     return availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
   }

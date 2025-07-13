@@ -26,6 +26,7 @@ class GeneralKnowledgeQuestionGenerator {
 
     for (let i = 0; i < count; i++) {
       const question = this.generateQuestion(usedQuestions);
+      if (!question) break; // Stop if no more unique questions
       questions.push(question);
       usedQuestions.add(generateQuestionKey(question));
     }
@@ -59,7 +60,7 @@ class GeneralKnowledgeQuestionGenerator {
     
     // If no unused questions available, return a random question from all
     if (unusedQuestions.length === 0) {
-      return this.selectRandomQuestion(availableQuestions);
+      return null;
     }
     
     // Return a random unused question
